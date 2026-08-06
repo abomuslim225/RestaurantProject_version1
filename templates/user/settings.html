@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Royal Taste — Sozlamalar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap"
+          rel="stylesheet"/>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #080c0a;
+            --surface: rgba(255, 255, 255, 0.04);
+            --surface2: rgba(255, 255, 255, 0.07);
+            --border: rgba(255, 255, 255, 0.08);
+            --border2: rgba(255, 255, 255, 0.14);
+            --text: #f0ede6;
+            --muted: #8a9488;
+            --accent: #b5d27a;
+            --accent2: #d4a853;
+            --danger: #e06060;
+            --success: #6ee7a0
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(8, 12, 10, 0.85);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 700
+        }
+
+        .nav-brand span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            color: var(--accent)
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px
+        }
+
+        .nav-links a {
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--muted);
+            transition: all 0.2s
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text);
+            background: var(--surface)
+        }
+
+        .nav-badge {
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: rgba(181, 210, 122, 0.12);
+            border: 1px solid rgba(181, 210, 122, 0.2);
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 500
+        }
+
+        .page-layout {
+            display: grid;
+            grid-template-columns:260px 1fr;
+            min-height: calc(100vh - 70px);
+            max-width: 1200px;
+            margin: 0 auto
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            padding: 32px 20px;
+            border-right: 1px solid var(--border);
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px);
+            overflow-y: auto
+        }
+
+        .sidebar-section {
+            margin-bottom: 8px
+        }
+
+        .sidebar-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0 12px;
+            margin-bottom: 6px;
+            margin-top: 16px
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left
+        }
+
+        .sidebar-item:hover {
+            background: var(--surface);
+            color: var(--text)
+        }
+
+        .sidebar-item.active {
+            background: rgba(181, 210, 122, 0.1);
+            color: var(--accent)
+        }
+
+        .sidebar-icon {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0
+        }
+
+        .sidebar-badge {
+            margin-left: auto;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(212, 168, 83, 0.14);
+            color: var(--accent2);
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        /* CONTENT */
+        .content {
+            padding: 40px 48px 80px
+        }
+
+        .content-section {
+            display: none
+        }
+
+        .content-section.active {
+            display: block
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 8px
+        }
+
+        .section-desc {
+            color: var(--muted);
+            font-size: 15px;
+            margin-bottom: 36px
+        }
+
+        /* SETTING BLOCK */
+        .setting-block {
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            margin-bottom: 20px;
+            overflow: hidden
+        }
+
+        .setting-block-title {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted)
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .setting-row:last-child {
+            border-bottom: none
+        }
+
+        .setting-row-left h4 {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px
+        }
+
+        .setting-row-left p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6
+        }
+
+        /* TOGGLE */
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            flex-shrink: 0
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0
+        }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.2s
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--muted);
+            left: 3px;
+            top: 3px;
+            transition: all 0.2s
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: rgba(181, 210, 122, 0.25)
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(22px);
+            background: var(--accent)
+        }
+
+        /* INPUT */
+        .setting-input {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            width: 240px;
+            transition: border-color 0.2s
+        }
+
+        .setting-input:focus {
+            border-color: rgba(181, 210, 122, 0.4)
+        }
+
+        .setting-select {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            width: 200px;
+            cursor: pointer
+        }
+
+        /* SAVE BTN */
+        .save-btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #1a2410;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s
+        }
+
+        .save-btn:hover {
+            background: #c8e48a
+        }
+
+        /* DANGER */
+        .danger-btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            background: rgba(224, 96, 96, 0.1);
+            border: 1px solid rgba(224, 96, 96, 0.2);
+            color: var(--danger);
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s
+        }
+
+        .danger-btn:hover {
+            background: rgba(224, 96, 96, 0.15)
+        }
+
+        /* PROFILE AVATAR */
+        .avatar-wrap {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 32px;
+            padding: 24px;
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid var(--border)
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(181, 210, 122, 0.12);
+            border: 2px solid rgba(181, 210, 122, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            color: var(--accent);
+            flex-shrink: 0
+        }
+
+        .avatar-info h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px
+        }
+
+        .avatar-info p {
+            font-size: 14px;
+            color: var(--muted)
+        }
+
+        .avatar-change {
+            margin-top: 10px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            font-size: 12px;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s
+        }
+
+        .avatar-change:hover {
+            color: var(--text);
+            border-color: var(--border2)
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            padding: 16px 24px;
+            border-radius: 16px;
+            background: #0e1410;
+            border: 1px solid rgba(181, 210, 122, 0.2);
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 500;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 300
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1
+        }
+
+        /* HOURS TABLE */
+        .hours-table {
+            width: 100%
+        }
+
+        .hours-row {
+            display: grid;
+            grid-template-columns:160px 1fr 1fr;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+            font-size: 14px
+        }
+
+        .hours-row:last-child {
+            border-bottom: none
+        }
+
+        .hours-day {
+            color: var(--muted);
+            font-weight: 500
+        }
+
+        .hours-row input[type=time] {
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            width: 140px
+        }
+
+        .hours-row input[type=time]:focus {
+            border-color: rgba(181, 210, 122, 0.4)
+        }
+
+        @media (max-width: 900px) {
+            .page-layout {
+                grid-template-columns:1fr
+            }
+
+            .sidebar {
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 20px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px
+            }
+
+            .sidebar-label {
+                display: none
+            }
+
+            .sidebar-item {
+                width: auto;
+                padding: 10px 14px
+            }
+        }
+
+        @media (max-width: 600px) {
+            .content {
+                padding: 24px 20px
+            }
+
+            .sidebar-item span:not(.sidebar-icon) {
+                display: none
+            }
+
+            nav {
+                padding: 0 16px
+            }
+
+            .nav-links {
+                display: none
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-brand"><span>R</span> Royal Taste</div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="menu.html">Menyu</a>
+        <a href="reservation.html">Rezervatsiya</a>
+        <a href="about.html">Haqimizda</a>
+        <a href="settings.html" class="active">Sozlamalar</a>
+    </div>
+    <div class="nav-badge">⏰ 09:00 — 23:00</div>
+</nav>
+
+<div class="page-layout">
+    <aside class="sidebar">
+        <div class="sidebar-label">Asosiy</div>
+        <button class="sidebar-item active" onclick="showTab(this,'profile')"><span class="sidebar-icon">👤</span><span>Profil</span>
+        </button>
+        <button class="sidebar-item" onclick="showTab(this,'restaurant')"><span class="sidebar-icon">🏠</span><span>Restoran ma'lumotlari</span>
+        </button>
+        <button class="sidebar-item" onclick="showTab(this,'hours')"><span
+                class="sidebar-icon">🕐</span><span>Ish vaqti</span></button>
+
+        <div class="sidebar-label">Tizim</div>
+        <button class="sidebar-item" onclick="showTab(this,'notifications')"><span class="sidebar-icon">🔔</span><span>Bildirishnomalar</span><span
+                class="sidebar-badge">3</span></button>
+        <button class="sidebar-item" onclick="showTab(this,'tables')"><span class="sidebar-icon">🪑</span><span>Stollar sozlamasi</span>
+        </button>
+        <button class="sidebar-item" onclick="showTab(this,'security')"><span class="sidebar-icon">🔒</span><span>Xavfsizlik</span>
+        </button>
+
+        <div class="sidebar-label">Boshqa</div>
+        <button class="sidebar-item" onclick="showTab(this,'language')"><span class="sidebar-icon">🌐</span><span>Til va hududiy</span>
+        </button>
+        <button class="sidebar-item" onclick="showTab(this,'danger')"><span class="sidebar-icon">⚠️</span><span>Xatarli zonalar</span>
+        </button>
+    </aside>
+
+    <main class="content">
+
+        <!-- PROFILE -->
+        <div class="content-section active" id="tab-profile">
+            <h2 class="section-title">Profil</h2>
+            <p class="section-desc">Shaxsiy ma'lumotlaringizni yangilang.</p>
+
+            <div class="avatar-wrap">
+                <div class="avatar">J</div>
+                <div class="avatar-info">
+                    <h3>Jamshid Karimov</h3>
+                    <p>admin@royaltaste.uz · Bosh administrator</p>
+                    <button class="avatar-change">Rasmni o'zgartirish</button>
+                </div>
+            </div>
+
+            <div class="setting-block">
+                <div class="setting-block-title">Shaxsiy ma'lumotlar</div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Ism</h4>
+                        <p>Tizimga kiruvchi foydalanuvchi ismi</p></div>
+                    <input class="setting-input" value="Jamshid Karimov"/>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Email</h4>
+                        <p>Bildirishnomalar shu emailga yuboriladi</p></div>
+                    <input class="setting-input" type="email" value="admin@royaltaste.uz"/>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Telefon</h4>
+                        <p>Aloqa uchun telefon raqam</p></div>
+                    <input class="setting-input" type="tel" value="+998 90 123 45 67"/>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Rol</h4>
+                        <p>Tizimda foydalanuvchi roli</p></div>
+                    <select class="setting-select">
+                        <option>Administrator</option>
+                        <option>Menejer</option>
+                        <option>Oshpaz</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="showToast('Profil saqlandi ✓')">Saqlash</button>
+        </div>
+
+        <!-- RESTAURANT INFO -->
+        <div class="content-section" id="tab-restaurant">
+            <h2 class="section-title">Restoran ma'lumotlari</h2>
+            <p class="section-desc">Mehmonlarga ko'rinadigan asosiy ma'lumotlar.</p>
+            <div class="setting-block">
+                <div class="setting-block-title">Asosiy</div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Restoran nomi</h4>
+                        <p>Sayt va ekranlarda ko'rinadigan nom</p></div>
+                    <input class="setting-input" value="Royal Taste"/>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Telefon</h4></div>
+                    <input class="setting-input" value="+998 90 123 45 67"/>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Email</h4></div>
+                    <input class="setting-input" value="info@royaltaste.uz"/>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Manzil</h4></div>
+                    <input class="setting-input" value="Toshkent, Amir Temur 12"/>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Instagram</h4></div>
+                    <input class="setting-input" value="@royaltaste.uz"/>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Telegram</h4></div>
+                    <input class="setting-input" value="@royaltastebot"/>
+                </div>
+            </div>
+            <button class="save-btn" onclick="showToast('Saqlandi ✓')">Saqlash</button>
+        </div>
+
+        <!-- HOURS -->
+        <div class="content-section" id="tab-hours">
+            <h2 class="section-title">Ish vaqti</h2>
+            <p class="section-desc">Hafta kunlari bo'yicha ish vaqtini sozlang.</p>
+            <div class="setting-block">
+                <div class="setting-block-title">Kunlik jadval</div>
+                <div style="padding:8px 24px 16px">
+                    <div class="hours-table" id="hoursTable"></div>
+                </div>
+            </div>
+            <button class="save-btn" onclick="showToast('Ish vaqti saqlandi ✓')">Saqlash</button>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div class="content-section" id="tab-notifications">
+            <h2 class="section-title">Bildirishnomalar</h2>
+            <p class="section-desc">Qaysi holatlarda xabar olishni xohlashingizni tanlang.</p>
+            <div class="setting-block">
+                <div class="setting-block-title">Email bildirishnomalari</div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Yangi rezervatsiya</h4>
+                        <p>Har bir yangi bron qilishda email yuboriladi</p></div>
+                    <label class="toggle"><input type="checkbox" checked/>
+                        <div class="toggle-slider"></div>
+                    </label></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Rezervatsiya bekor qilinishi</h4>
+                        <p>Bekor qilingan bronlar haqida xabar</p></div>
+                    <label class="toggle"><input type="checkbox" checked/>
+                        <div class="toggle-slider"></div>
+                    </label></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Kunlik hisobot</h4>
+                        <p>Har kuni ertalab kunlik statistika</p></div>
+                    <label class="toggle"><input type="checkbox"/>
+                        <div class="toggle-slider"></div>
+                    </label></div>
+            </div>
+            <div class="setting-block">
+                <div class="setting-block-title">Tizim bildirishnomalari</div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Ovqat tugashi ogohlantirishasi</h4>
+                        <p>Menyu elementi qolmaganida ogohlantirish</p></div>
+                    <label class="toggle"><input type="checkbox" checked/>
+                        <div class="toggle-slider"></div>
+                    </label></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Stol holati o'zgarishi</h4>
+                        <p>Stol band/bo'sh bo'lganda bildirishnoma</p></div>
+                    <label class="toggle"><input type="checkbox"/>
+                        <div class="toggle-slider"></div>
+                    </label></div>
+            </div>
+            <button class="save-btn" onclick="showToast('Sozlamalar saqlandi ✓')">Saqlash</button>
+        </div>
+
+        <!-- TABLES -->
+        <div class="content-section" id="tab-tables">
+            <h2 class="section-title">Stollar sozlamasi</h2>
+            <p class="section-desc">Stollar soni, sig'imi va holati.</p>
+            <div class="setting-block">
+                <div class="setting-block-title">Asosiy sozlamalar</div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Rezervatsiya davomiyligi</h4>
+                        <p>Har bir rezervatsiya necha daqiqa davom etadi</p></div>
+                    <select class="setting-select">
+                        <option>90 daqiqa</option>
+                        <option selected>120 daqiqa</option>
+                        <option>150 daqiqa</option>
+                        <option>180 daqiqa</option>
+                    </select></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Minimal bron vaqti</h4>
+                        <p>Bronni necha daqiqa oldindan qabul qilish</p></div>
+                    <select class="setting-select">
+                        <option>30 daqiqa</option>
+                        <option selected>1 soat</option>
+                        <option>2 soat</option>
+                        <option>1 kun</option>
+                    </select></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Onlayn rezervatsiya</h4>
+                        <p>Sayt orqali bron qilishni yoqish/o'chirish</p></div>
+                    <label class="toggle"><input type="checkbox" checked/>
+                        <div class="toggle-slider"></div>
+                    </label></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Avtomatik tasdiq</h4>
+                        <p>Bronni avtomatik tasdiqlash (admin tasdiqsiz)</p></div>
+                    <label class="toggle"><input type="checkbox" checked/>
+                        <div class="toggle-slider"></div>
+                    </label></div>
+            </div>
+            <div class="setting-block">
+                <div class="setting-block-title">Stollar ro'yxati</div>
+                <div id="tablesSettingList" style="padding:0 24px 8px"></div>
+            </div>
+            <button class="save-btn" onclick="showToast('Stollar sozlamasi saqlandi ✓')">Saqlash</button>
+        </div>
+
+        <!-- SECURITY -->
+        <div class="content-section" id="tab-security">
+            <h2 class="section-title">Xavfsizlik</h2>
+            <p class="section-desc">Parol va kirish nazorati.</p>
+            <div class="setting-block">
+                <div class="setting-block-title">Parol o'zgartirish</div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Joriy parol</h4></div>
+                    <input class="setting-input" type="password" placeholder="••••••••"/></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Yangi parol</h4>
+                        <p>Kamida 8 belgi, raqam va harf</p></div>
+                    <input class="setting-input" type="password" placeholder="Yangi parol"/></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Parolni tasdiqlash</h4></div>
+                    <input class="setting-input" type="password" placeholder="Yangi parolni takrorlang"/></div>
+            </div>
+            <div class="setting-block">
+                <div class="setting-block-title">Kirish sozlamalari</div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Ikki bosqichli autentifikatsiya</h4>
+                        <p>SMS orqali qo'shimcha tekshiruv</p></div>
+                    <label class="toggle"><input type="checkbox"/>
+                        <div class="toggle-slider"></div>
+                    </label></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Sessiya muddati</h4>
+                        <p>Faolsizlikdan keyin avtomatik chiqish</p></div>
+                    <select class="setting-select">
+                        <option>1 soat</option>
+                        <option selected>8 soat</option>
+                        <option>24 soat</option>
+                        <option>Hech qachon</option>
+                    </select></div>
+            </div>
+            <button class="save-btn" onclick="showToast('Xavfsizlik sozlamalari saqlandi ✓')">Saqlash</button>
+        </div>
+
+        <!-- LANGUAGE -->
+        <div class="content-section" id="tab-language">
+            <h2 class="section-title">Til va hududiy</h2>
+            <p class="section-desc">Interfeys tili va formatlash sozlamalari.</p>
+            <div class="setting-block">
+                <div class="setting-block-title">Til</div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Interfeys tili</h4></div>
+                    <select class="setting-select">
+                        <option selected>O'zbek (Lotin)</option>
+                        <option>O'zbek (Кирилл)</option>
+                        <option>Русский</option>
+                        <option>English</option>
+                    </select></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Vaqt mintaqasi</h4></div>
+                    <select class="setting-select">
+                        <option selected>UTC+5 (Toshkent)</option>
+                        <option>UTC+6</option>
+                    </select></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Valyuta</h4></div>
+                    <select class="setting-select">
+                        <option selected>UZS (so'm)</option>
+                        <option>USD ($)</option>
+                    </select></div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Sana formati</h4></div>
+                    <select class="setting-select">
+                        <option selected>DD.MM.YYYY</option>
+                        <option>MM/DD/YYYY</option>
+                        <option>YYYY-MM-DD</option>
+                    </select></div>
+            </div>
+            <button class="save-btn" onclick="showToast('Saqlandi ✓')">Saqlash</button>
+        </div>
+
+        <!-- DANGER -->
+        <div class="content-section" id="tab-danger">
+            <h2 class="section-title">Xatarli zonalar</h2>
+            <p class="section-desc">Bu amalllar qaytarib bo'lmaydi. Ehtiyot bo'ling.</p>
+            <div class="setting-block" style="border-color:rgba(224,96,96,0.2)">
+                <div class="setting-block-title" style="color:var(--danger)">Ma'lumotlarni tozalash</div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Barcha rezervatsiyalarni o'chirish</h4>
+                        <p>Barcha mavjud bronlar o'chib ketadi</p></div>
+                    <button class="danger-btn"
+                            onclick="if(confirm('Haqiqatan ham barcha rezervatsiyalarni o\'chirmoqchimisiz?')){localStorage.removeItem('reservations');showToast('Rezervatsiyalar o\'chirildi');}">
+                        O'chirish
+                    </button>
+                </div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Menyu keshni tozalash</h4>
+                        <p>Menyu ma'lumotlari keshi tozalanadi</p></div>
+                    <button class="danger-btn" onclick="showToast('Kesh tozalandi ✓')">Tozalash</button>
+                </div>
+            </div>
+            <div class="setting-block" style="border-color:rgba(224,96,96,0.3)">
+                <div class="setting-block-title" style="color:var(--danger)">Hisobni o'chirish</div>
+                <div class="setting-row">
+                    <div class="setting-row-left"><h4>Hisobni to'liq o'chirish</h4>
+                        <p>Barcha ma'lumotlar va sozlamalar o'chirilib ketadi. Bu amal qaytarib bo'lmaydi.</p></div>
+                    <button class="danger-btn" onclick="alert('Bu funksiya admin tomonidan amalga oshiriladi.')">Hisobni
+                        o'chirish
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    function showTab(btn, id) {
+        document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + id).classList.add('active');
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    // Hours table
+    const days = ['Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba', 'Yakshanba'];
+    const defaults = [['09:00', '23:00'], ['09:00', '23:00'], ['09:00', '23:00'], ['09:00', '23:00'], ['09:00', '23:00'], ['10:00', '00:00'], ['10:00', '00:00']];
+    document.getElementById('hoursTable').innerHTML = days.map((d, i) => `
+  <div class="hours-row">
+    <span class="hours-day">${d}</span>
+    <input type="time" value="${defaults[i][0]}"/>
+    <input type="time" value="${defaults[i][1]}"/>
+  </div>`).join('');
+
+    // Tables setting list
+    const TABLES = [{num: '01', cap: 4}, {num: '02', cap: 2}, {num: '03', cap: 6}, {num: '04', cap: 8}, {
+        num: '05',
+        cap: 4
+    }, {num: '06', cap: 2}, {num: '07', cap: 10}, {num: '08', cap: 4}];
+    document.getElementById('tablesSettingList').innerHTML = TABLES.map(t => `
+  <div class="setting-row">
+    <div class="setting-row-left"><h4>Stol №${t.num}</h4><p>${t.cap} kishilik</p></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <select class="setting-select" style="width:130px"><option>Faol</option><option>Nofaol</option><option>Ta'mirlashda</option></select>
+      <label class="toggle"><input type="checkbox" ${t.num !== '02' && t.num !== '06' ? 'checked' : ''}><div class="toggle-slider"></div></label>
+    </div>
+  </div>`).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,3484 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Signum · Kassa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #080c0a;
+            --bg2: #0d1210;
+            --sur: rgba(255, 255, 255, .04);
+            --sur2: rgba(255, 255, 255, .07);
+            --sur3: rgba(255, 255, 255, .10);
+            --brd: rgba(255, 255, 255, .08);
+            --brd2: rgba(255, 255, 255, .15);
+            --txt: #f0ede6;
+            --muted: #8a9488;
+            --muted2: #6a7468;
+            --accent: #b5d27a;
+            --accent2: #d4a853;
+            --accent-dim: rgba(181, 210, 122, .12);
+            --accent-brd: rgba(181, 210, 122, .24);
+            --danger: #e06060;
+            --danger-dim: rgba(224, 96, 96, .12);
+            --success: #6ee7a0;
+            --success-dim: rgba(110, 231, 160, .12);
+            --amber: #d4a853;
+            --amber-dim: rgba(212, 168, 83, .12);
+            --blue: #7ab8d2;
+            --blue-dim: rgba(122, 184, 210, .12);
+            --r: 8px;
+            --r2: 12px;
+            --r3: 16px;
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--txt);
+            min-height: 100svh;
+            overflow-x: hidden;
+            font-size: 15px
+        }
+
+        button {
+            font-family: 'Inter', sans-serif;
+            cursor: pointer
+        }
+
+        input, select, textarea {
+            font-family: 'Inter', sans-serif
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--brd2);
+            border-radius: 2px
+        }
+
+        /* ══ HEADER ══ */
+        .hd1 {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 56px;
+            background: rgba(8, 12, 10, .92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--brd);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 12px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: var(--accent);
+            display: grid;
+            place-items: center;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #1a2410;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .brand-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .brand-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--txt);
+            letter-spacing: -.01em;
+            line-height: 1.2
+        }
+
+        .brand-sub {
+            font-size: .7rem;
+            color: var(--muted);
+            letter-spacing: .04em;
+            margin-top: 0
+        }
+
+        .hd1-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: auto
+        }
+
+        .ws-pill {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 11px;
+            border-radius: 999px;
+            border: 1px solid var(--brd);
+            background: var(--sur);
+            font-size: .74rem;
+            font-weight: 500;
+            color: var(--muted);
+            letter-spacing: .02em;
+        }
+
+        .ws-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+            flex-shrink: 0
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1
+            }
+            50% {
+                opacity: .3
+            }
+        }
+
+        .icon-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--r);
+            border: 1px solid var(--brd);
+            background: transparent;
+            display: grid;
+            place-items: center;
+            color: var(--muted);
+            font-size: .95rem;
+            transition: .15s;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: var(--sur2);
+            color: var(--txt);
+            border-color: var(--brd2)
+        }
+
+        .notif-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--danger);
+            border: 1.5px solid var(--bg);
+        }
+
+        .prof-wrap {
+            position: relative
+        }
+
+        .prof-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 11px 4px 5px;
+            border-radius: var(--r);
+            border: 1px solid var(--brd);
+            background: transparent;
+            color: var(--txt);
+            transition: .15s;
+        }
+
+        .prof-btn:hover {
+            background: var(--sur);
+            border-color: var(--brd2)
+        }
+
+        .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: grid;
+            place-items: center;
+            font-size: .85rem;
+            font-weight: 700;
+            color: #1a2410;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .prof-name {
+            font-size: .82rem;
+            font-weight: 500;
+            color: var(--muted)
+        }
+
+        .prof-chevron {
+            font-size: .6rem;
+            color: var(--muted2);
+            margin-left: 2px
+        }
+
+        .dd {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 190px;
+            background: var(--bg2);
+            border: 1px solid var(--brd2);
+            border-radius: var(--r3);
+            overflow: hidden;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, .6);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-6px);
+            transition: .18s;
+            z-index: 200;
+        }
+
+        .dd.open {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0)
+        }
+
+        .dd-hd {
+            padding: .75rem 1rem .6rem;
+            border-bottom: 1px solid var(--brd);
+            background: var(--sur)
+        }
+
+        .dd-name {
+            font-size: .86rem;
+            font-weight: 600;
+            color: var(--txt)
+        }
+
+        .dd-role {
+            font-size: .7rem;
+            color: var(--muted);
+            margin-top: 1px
+        }
+
+        .dd-item {
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            padding: .55rem 1rem;
+            font-size: .82rem;
+            font-weight: 500;
+            color: var(--muted);
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            transition: .14s;
+        }
+
+        .dd-item:hover {
+            background: var(--sur2);
+            color: var(--txt)
+        }
+
+        .dd-sep {
+            height: 1px;
+            background: var(--brd)
+        }
+
+        .dd-danger {
+            color: var(--danger)
+        }
+
+        .dd-danger:hover {
+            background: var(--danger-dim) !important;
+            color: var(--danger) !important
+        }
+
+        /* ══ NAV TABS ══ */
+        .hd2 {
+            background: rgba(8, 12, 10, .85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--brd);
+            overflow-x: auto;
+            scrollbar-width: none;
+            position: sticky;
+            top: 56px;
+            z-index: 90;
+        }
+
+        .hd2::-webkit-scrollbar {
+            display: none
+        }
+
+        .nav {
+            display: flex;
+            padding: 0 16px;
+            min-width: max-content
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 15px;
+            height: 44px;
+            border: none;
+            background: transparent;
+            font-size: .84rem;
+            font-weight: 600;
+            color: var(--muted);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: .15s;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--txt)
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent)
+        }
+
+        .nav-badge {
+            min-width: 17px;
+            height: 17px;
+            padding: 0 4px;
+            background: var(--danger);
+            border-radius: 8px;
+            font-size: .64rem;
+            color: #fff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ══ LAYOUT ══ */
+        .content {
+            padding: 16px;
+            min-height: calc(100svh - 100px)
+        }
+
+        /* ══ KASSA PAGE ══ */
+        .kassa-layout {
+            display: grid;
+            grid-template-columns:1fr 380px;
+            gap: 14px;
+            align-items: start
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap
+        }
+
+        .ftag {
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--brd);
+            background: transparent;
+            font-size: .78rem;
+            font-weight: 600;
+            color: var(--muted);
+            transition: .15s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .ftag:hover {
+            border-color: var(--brd2);
+            color: var(--txt)
+        }
+
+        .ftag.active {
+            background: var(--accent-dim);
+            border-color: var(--accent-brd);
+            color: var(--accent)
+        }
+
+        .ftag-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%
+        }
+
+        .orders-list {
+            display: grid;
+            grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+            gap: 8px;
+        }
+
+        .order-card {
+            background: var(--sur);
+            border: 1px solid var(--brd);
+            border-radius: var(--r2);
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: .18s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .order-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: transparent;
+            transition: .15s;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .order-card:hover {
+            border-color: var(--brd2);
+            background: var(--sur2)
+        }
+
+        .order-card.selected {
+            border-color: rgba(181, 210, 122, .3);
+            background: rgba(181, 210, 122, .04)
+        }
+
+        .order-card.selected::before {
+            background: var(--accent)
+        }
+
+        .order-card.is-ready {
+            border-color: rgba(110, 231, 160, .2)
+        }
+
+        .order-card.is-ready::before {
+            background: var(--success)
+        }
+
+        .new-badge {
+            position: absolute;
+            top: 7px;
+            right: 8px;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: var(--danger);
+            color: #fff;
+            font-size: .58rem;
+            font-weight: 700;
+            letter-spacing: .03em;
+            text-transform: uppercase;
+            animation: newpulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes newpulse {
+            0%, 100% {
+                opacity: 1
+            }
+            50% {
+                opacity: .6
+            }
+        }
+
+        .oc-top {
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .oc-num {
+            font-size: .92rem;
+            font-weight: 700;
+            color: var(--txt)
+        }
+
+        .oc-table {
+            font-size: .74rem;
+            font-weight: 500;
+            color: var(--muted);
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .status-tag {
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .03em;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .tag-ready {
+            background: var(--success-dim);
+            color: var(--success)
+        }
+
+        .tag-cooking {
+            background: var(--blue-dim);
+            color: var(--blue)
+        }
+
+        .tag-pending {
+            background: var(--amber-dim);
+            color: var(--amber)
+        }
+
+        .tag-confirmed {
+            background: rgba(160, 140, 210, .12);
+            color: #b0a0e0
+        }
+
+        .tag-paid {
+            background: var(--sur2);
+            color: var(--muted)
+        }
+
+        .oc-items {
+            font-size: .72rem;
+            color: var(--muted);
+            line-height: 1.45;
+            min-height: 1.2em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .oc-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto
+        }
+
+        .oc-price {
+            font-size: .88rem;
+            font-weight: 700;
+            color: var(--txt)
+        }
+
+        .oc-time {
+            font-size: .66rem;
+            font-weight: 500;
+            color: var(--muted2)
+        }
+
+        /* ══ DETAIL PANEL ══ */
+        .detail-panel {
+            background: var(--bg2);
+            border: 1px solid var(--brd);
+            border-radius: var(--r3);
+            overflow: hidden;
+            position: sticky;
+            top: 116px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dp-head {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--brd);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--sur);
+        }
+
+        .dp-title {
+            font-size: .88rem;
+            font-weight: 700;
+            color: var(--txt);
+            flex: 1
+        }
+
+        .dp-body {
+            padding: 12px 14px;
+            flex: 1
+        }
+
+        .dp-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            gap: 8px;
+            color: var(--muted2);
+            text-align: center;
+        }
+
+        .dp-empty-ico {
+            font-size: 2rem;
+            opacity: .4;
+            margin-bottom: .3rem
+        }
+
+        .dp-empty-txt {
+            font-size: .84rem;
+            font-weight: 500;
+            line-height: 1.7
+        }
+
+        .oi-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px
+        }
+
+        .oi-head th {
+            font-size: .62rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--muted2);
+            padding: 0 0 6px;
+            border-bottom: 1px solid var(--brd);
+            text-align: left;
+        }
+
+        .oi-head th:last-child {
+            text-align: right
+        }
+
+        .oi-row td {
+            padding: 7px 0;
+            border-bottom: 1px solid var(--brd);
+            vertical-align: top
+        }
+
+        .oi-row:last-child td {
+            border-bottom: none
+        }
+
+        .oi-name-cell {
+            display: flex;
+            flex-direction: column;
+            padding-right: 10px
+        }
+
+        .oi-name {
+            font-size: .84rem;
+            font-weight: 500;
+            color: var(--txt);
+            line-height: 1.4;
+            word-break: break-word
+        }
+
+        .oi-chef {
+            font-size: .67rem;
+            color: var(--muted2);
+            margin-top: 1px
+        }
+
+        .oi-qty {
+            font-size: .8rem;
+            font-weight: 500;
+            color: var(--muted);
+            text-align: center;
+            padding: 0 8px;
+            white-space: nowrap;
+            vertical-align: top;
+            padding-top: 3px
+        }
+
+        .oi-price {
+            font-size: .84rem;
+            font-weight: 600;
+            color: var(--txt);
+            text-align: right;
+            white-space: nowrap;
+            vertical-align: top;
+            padding-top: 3px
+        }
+
+        .staff-row {
+            display: flex;
+            gap: 14px;
+            padding: 8px 0;
+            border-top: 1px solid var(--brd);
+            margin-top: 2px;
+        }
+
+        .si {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: .74rem;
+            font-weight: 500;
+            color: var(--muted)
+        }
+
+        .si-ico {
+            font-size: .8rem;
+            color: var(--accent);
+            opacity: .7
+        }
+
+        .total-block {
+            padding: 10px 14px;
+            border-top: 1px solid var(--brd);
+            background: var(--sur);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: .78rem;
+            font-weight: 500;
+            color: var(--muted);
+            padding: 3px 0;
+        }
+
+        .total-main {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--txt);
+            padding-top: 7px;
+            margin-top: 4px;
+            border-top: 1px solid var(--brd2);
+        }
+
+        .pay-block {
+            padding: 12px 14px;
+            border-top: 1px solid var(--brd)
+        }
+
+        .pay-label {
+            font-size: .64rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--muted2);
+            margin-bottom: 7px
+        }
+
+        .pay-methods {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px
+        }
+
+        .pay-btn {
+            flex: 1;
+            height: 38px;
+            border-radius: var(--r);
+            border: 1px solid var(--brd);
+            background: transparent;
+            font-size: .78rem;
+            font-weight: 600;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: .15s;
+        }
+
+        .pay-btn:hover {
+            border-color: var(--brd2);
+            color: var(--txt)
+        }
+
+        .pay-btn.active {
+            border-color: var(--accent-brd);
+            background: var(--accent-dim);
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            height: 44px;
+            border-radius: var(--r2);
+            border: none;
+            background: var(--accent);
+            color: #1a2410;
+            font-size: .86rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: .15s;
+        }
+
+        .confirm-btn:hover {
+            background: #c8e48a;
+            transform: translateY(-1px)
+        }
+
+        .confirm-btn:disabled {
+            opacity: .35;
+            cursor: not-allowed;
+            transform: none
+        }
+
+        .tg-section {
+            padding: 10px 14px;
+            border-top: 1px solid var(--brd);
+            background: rgba(122, 184, 210, .04);
+        }
+
+        .tg-label {
+            font-size: .64rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--muted2);
+            margin-bottom: 7px
+        }
+
+        .tg-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 7px
+        }
+
+        .tg-tab {
+            flex: 1;
+            height: 30px;
+            border-radius: var(--r);
+            border: 1px solid var(--brd);
+            background: transparent;
+            font-size: .72rem;
+            font-weight: 600;
+            color: var(--muted);
+            transition: .15s;
+        }
+
+        .tg-tab:hover {
+            border-color: var(--brd2);
+            color: var(--txt)
+        }
+
+        .tg-tab.active {
+            border-color: rgba(122, 184, 210, .3);
+            background: var(--blue-dim);
+            color: var(--blue)
+        }
+
+        .tg-input-row {
+            display: flex;
+            gap: 6px
+        }
+
+        .tg-input {
+            flex: 1;
+            height: 36px;
+            border-radius: var(--r);
+            border: 1px solid var(--brd);
+            background: var(--sur);
+            color: var(--txt);
+            font-size: .8rem;
+            font-weight: 500;
+            padding: 0 10px;
+            outline: none;
+            transition: .15s;
+        }
+
+        .tg-input:focus {
+            border-color: rgba(122, 184, 210, .4)
+        }
+
+        .tg-input::placeholder {
+            color: var(--muted2)
+        }
+
+        .tg-send-btn {
+            height: 36px;
+            padding: 0 12px;
+            border-radius: var(--r);
+            border: 1px solid rgba(122, 184, 210, .3);
+            background: var(--blue-dim);
+            color: var(--blue);
+            font-size: .76rem;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: .15s;
+        }
+
+        .tg-send-btn:hover {
+            background: rgba(122, 184, 210, .2)
+        }
+
+        /* ══ STOLLAR PAGE ══ */
+        .table-grid {
+            display: grid;
+            grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px
+        }
+
+        .tbl-card {
+            background: var(--sur);
+            border: 1.5px solid var(--brd);
+            border-radius: var(--r3);
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: .18s;
+        }
+
+        .tbl-card:hover {
+            border-color: var(--brd2);
+            transform: translateY(-2px)
+        }
+
+        .tbl-card.free {
+            opacity: .5
+        }
+
+        .tbl-card.occupied {
+            border-color: rgba(212, 168, 83, .25)
+        }
+
+        .tbl-card.ready {
+            border-color: rgba(110, 231, 160, .3);
+            background: var(--success-dim);
+            animation: tblglow 2s ease-in-out infinite;
+        }
+
+        @keyframes tblglow {
+            0%, 100% {
+                box-shadow: 0 0 0 rgba(110, 231, 160, 0)
+            }
+            50% {
+                box-shadow: 0 0 12px rgba(110, 231, 160, .18)
+            }
+        }
+
+        .tbl-num {
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 1
+        }
+
+        .tbl-cap {
+            font-size: .64rem;
+            font-weight: 500;
+            color: var(--muted);
+            margin-top: 3px
+        }
+
+        .tbl-status {
+            font-size: .66rem;
+            font-weight: 700;
+            margin-top: 5px;
+            letter-spacing: .02em
+        }
+
+        .tbl-price {
+            font-size: .74rem;
+            color: var(--accent);
+            margin-top: 2px;
+            font-weight: 600
+        }
+
+        .map-legend {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 14px;
+            flex-wrap: wrap
+        }
+
+        .leg {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: .74rem;
+            font-weight: 500;
+            color: var(--muted)
+        }
+
+        .leg-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            flex-shrink: 0
+        }
+
+        /* ══ HISOBOT PAGE ══ */
+        .report-stats {
+            display: grid;
+            grid-template-columns:repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 16px
+        }
+
+        .rstat {
+            background: var(--sur);
+            border: 1px solid var(--brd);
+            border-radius: var(--r3);
+            padding: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rstat::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+
+        .rstat.g::after {
+            background: linear-gradient(90deg, var(--accent), transparent)
+        }
+
+        .rstat.a::after {
+            background: linear-gradient(90deg, var(--accent2), transparent)
+        }
+
+        .rstat.b::after {
+            background: linear-gradient(90deg, var(--blue), transparent)
+        }
+
+        .rstat.r::after {
+            background: linear-gradient(90deg, var(--danger), transparent)
+        }
+
+        .rstat-val {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--txt);
+            line-height: 1;
+            letter-spacing: -.01em
+        }
+
+        .rstat-label {
+            font-size: .68rem;
+            font-weight: 600;
+            color: var(--muted);
+            margin-top: 4px;
+            letter-spacing: .02em
+        }
+
+        .hist-table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        .hist-table th {
+            padding: 8px 12px;
+            text-align: left;
+            font-size: .64rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--muted2);
+            border-bottom: 1px solid var(--brd);
+            background: var(--sur);
+        }
+
+        .hist-table td {
+            padding: 9px 12px;
+            border-bottom: 1px solid var(--brd);
+            font-size: .8rem;
+            font-weight: 500;
+            color: var(--txt)
+        }
+
+        .hist-table tr:last-child td {
+            border-bottom: none
+        }
+
+        .hist-table tr:hover td {
+            background: var(--sur)
+        }
+
+        .hist-table td:last-child {
+            text-align: right
+        }
+
+        /* ══ CHEK PAGE ══ */
+        .chek-layout {
+            display: grid;
+            grid-template-columns:320px 1fr;
+            gap: 16px;
+            align-items: start
+        }
+
+        .receipt-wrap {
+            background: var(--bg2);
+            border: 1px solid var(--brd);
+            border-radius: var(--r3);
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .receipt-head {
+            padding: 18px 16px;
+            text-align: center;
+            border-bottom: 1px dashed var(--brd2);
+            background: linear-gradient(180deg, var(--sur2), transparent);
+        }
+
+        .receipt-logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin: 0 auto 8px
+        }
+
+        .receipt-logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--txt);
+            letter-spacing: .02em
+        }
+
+        .receipt-sub {
+            font-size: .66rem;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.7;
+            font-family: 'Inter', sans-serif
+        }
+
+        .receipt-meta {
+            padding: 10px 16px;
+            border-bottom: 1px dashed var(--brd);
+            font-size: .72rem;
+            color: var(--muted);
+            line-height: 1.9;
+            font-family: 'Inter', sans-serif
+        }
+
+        .receipt-body {
+            padding: 12px 16px
+        }
+
+        .receipt-items {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 4px
+        }
+
+        .receipt-items td {
+            padding: 4px 0;
+            font-size: .74rem;
+            vertical-align: top;
+            font-family: 'Inter', sans-serif;
+            border-bottom: 1px dotted rgba(255, 255, 255, .06)
+        }
+
+        .receipt-items tr:last-child td {
+            border-bottom: none
+        }
+
+        .ri-name {
+            color: var(--txt);
+            word-break: break-word;
+            padding-right: 8px;
+            line-height: 1.45;
+            font-weight: 500
+        }
+
+        .ri-qty {
+            color: var(--muted);
+            text-align: center;
+            white-space: nowrap;
+            padding: 0 6px;
+            min-width: 28px
+        }
+
+        .ri-price {
+            color: var(--txt);
+            text-align: right;
+            font-weight: 600;
+            white-space: nowrap;
+            min-width: 80px
+        }
+
+        .receipt-div {
+            height: 1px;
+            background: var(--brd2);
+            margin: 8px 0;
+            background-image: repeating-linear-gradient(90deg, var(--brd2) 0, var(--brd2) 6px, transparent 6px, transparent 10px)
+        }
+
+        .receipt-sum-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: .72rem;
+            font-weight: 500;
+            color: var(--muted);
+            padding: 2px 0;
+            font-family: 'Inter', sans-serif
+        }
+
+        .receipt-total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: .92rem;
+            font-weight: 800;
+            color: var(--txt);
+            font-family: 'Inter', sans-serif;
+            padding: 5px 0 0;
+            margin-top: 3px;
+            border-top: 2px solid var(--brd2)
+        }
+
+        .receipt-paymethod {
+            font-size: .7rem;
+            font-weight: 500;
+            color: var(--muted);
+            margin-top: 6px;
+            font-family: 'Inter', sans-serif
+        }
+
+        .receipt-staff {
+            font-size: .7rem;
+            font-weight: 500;
+            color: var(--muted);
+            margin-top: 2px;
+            font-family: 'Inter', sans-serif
+        }
+
+        .receipt-foot {
+            padding: 12px 16px;
+            text-align: center;
+            border-top: 1px dashed var(--brd);
+            font-size: .66rem;
+            color: var(--muted2);
+            line-height: 1.9;
+            font-family: 'Inter', sans-serif
+        }
+
+        .chek-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .card {
+            background: var(--bg2);
+            border: 1px solid var(--brd);
+            border-radius: var(--r3);
+            overflow: hidden
+        }
+
+        .card-head {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--brd);
+            background: var(--sur);
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .card-head-title {
+            font-size: .86rem;
+            font-weight: 700;
+            color: var(--txt);
+            flex: 1
+        }
+
+        .card-body {
+            padding: 14px
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--brd)
+        }
+
+        .setting-row:last-child {
+            border-bottom: none
+        }
+
+        .setting-label {
+            font-size: .8rem;
+            font-weight: 500;
+            color: var(--txt)
+        }
+
+        .setting-sub {
+            font-size: .68rem;
+            color: var(--muted);
+            margin-top: 1px
+        }
+
+        .toggle {
+            position: relative;
+            width: 36px;
+            height: 20px;
+            flex-shrink: 0
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute
+        }
+
+        .toggle-track {
+            position: absolute;
+            inset: 0;
+            border-radius: 10px;
+            background: var(--sur3);
+            border: 1px solid var(--brd);
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .toggle input:checked + .toggle-track {
+            background: var(--accent);
+            border-color: var(--accent)
+        }
+
+        .toggle-track::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #fff;
+            transition: .2s
+        }
+
+        .toggle input:checked + .toggle-track::after {
+            transform: translateX(16px)
+        }
+
+        .pct-input {
+            width: 58px;
+            height: 30px;
+            border-radius: var(--r);
+            border: 1px solid var(--brd);
+            background: var(--sur);
+            color: var(--txt);
+            font-size: .8rem;
+            font-weight: 600;
+            text-align: center;
+            outline: none;
+            padding: 0 4px
+        }
+
+        .pct-input:focus {
+            border-color: var(--accent-brd)
+        }
+
+        .tg-card-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 14px
+        }
+
+        .tg-tabs2 {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 2px
+        }
+
+        .tg-tab2 {
+            flex: 1;
+            height: 32px;
+            border-radius: var(--r);
+            border: 1px solid var(--brd);
+            background: transparent;
+            font-size: .74rem;
+            font-weight: 600;
+            color: var(--muted);
+            transition: .15s
+        }
+
+        .tg-tab2:hover {
+            border-color: var(--brd2);
+            color: var(--txt)
+        }
+
+        .tg-tab2.active {
+            border-color: rgba(122, 184, 210, .3);
+            background: var(--blue-dim);
+            color: var(--blue)
+        }
+
+        .tg-inp {
+            width: 100%;
+            height: 38px;
+            border-radius: var(--r);
+            border: 1px solid var(--brd);
+            background: var(--sur);
+            color: var(--txt);
+            font-size: .82rem;
+            font-weight: 500;
+            padding: 0 12px;
+            outline: none;
+            transition: .15s
+        }
+
+        .tg-inp:focus {
+            border-color: rgba(122, 184, 210, .4)
+        }
+
+        .tg-inp::placeholder {
+            color: var(--muted2)
+        }
+
+        .tg-info {
+            font-size: .7rem;
+            color: var(--muted2);
+            line-height: 1.6
+        }
+
+        .tg-send {
+            width: 100%;
+            height: 40px;
+            border-radius: var(--r2);
+            border: none;
+            background: rgba(122, 184, 210, .15);
+            border: 1px solid rgba(122, 184, 210, .25);
+            color: var(--blue);
+            font-size: .82rem;
+            font-weight: 700;
+            transition: .15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px
+        }
+
+        .tg-send:hover {
+            background: rgba(122, 184, 210, .25)
+        }
+
+        .tg-send:disabled {
+            opacity: .35;
+            cursor: not-allowed
+        }
+
+        .print-btn {
+            width: 100%;
+            height: 40px;
+            border-radius: var(--r2);
+            border: none;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-brd);
+            color: var(--accent);
+            font-size: .82rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: .15s
+        }
+
+        .print-btn:hover {
+            background: rgba(181, 210, 122, .2)
+        }
+
+        /* ══ NOTIFICATION PANEL ══ */
+        .notif-item {
+            display: flex;
+            gap: 10px;
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--brd)
+        }
+
+        .notif-item:last-child {
+            border-bottom: none
+        }
+
+        .notif-item.unread {
+            background: rgba(181, 210, 122, .03)
+        }
+
+        .ni-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin-top: 4px;
+            flex-shrink: 0
+        }
+
+        .ni-dot.read {
+            background: var(--brd2)
+        }
+
+        .ni-text {
+            font-size: .8rem;
+            font-weight: 500;
+            color: var(--txt);
+            line-height: 1.5;
+            flex: 1
+        }
+
+        .ni-time {
+            font-size: .67rem;
+            color: var(--muted2);
+            margin-top: 2px
+        }
+
+        .sec-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--txt);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -.01em
+        }
+
+        .sec-title small {
+            font-size: .74rem;
+            color: var(--muted);
+            font-weight: 500
+        }
+
+        /* ══ TOAST ══ */
+        .toast {
+            position: fixed;
+            bottom: 1.4rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(8px);
+            background: var(--bg2);
+            border: 1px solid var(--brd2);
+            color: var(--txt);
+            padding: .65rem 1.2rem;
+            font-size: .82rem;
+            font-weight: 500;
+            opacity: 0;
+            transition: .25s;
+            z-index: 9999;
+            pointer-events: none;
+            border-radius: 999px;
+            white-space: nowrap;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .5);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0)
+        }
+
+        .toast.success {
+            border-color: var(--accent-brd);
+            color: var(--accent)
+        }
+
+        .toast.err {
+            border-color: rgba(224, 96, 96, .3);
+            color: var(--danger)
+        }
+
+        /* ══ SETTINGS MODAL ══ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: .2s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all
+        }
+
+        .modal {
+            background: var(--bg2);
+            border: 1px solid var(--brd2);
+            border-radius: 20px;
+            width: 520px;
+            max-width: calc(100vw - 32px);
+            max-height: 85svh;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(12px);
+            transition: .2s;
+            overflow: hidden;
+        }
+
+        .modal-overlay.open .modal {
+            transform: translateY(0)
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--brd);
+            background: var(--sur);
+            flex-shrink: 0;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--txt);
+            flex: 1
+        }
+
+        .modal-close {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--r);
+            border: 1px solid var(--brd);
+            background: transparent;
+            color: var(--muted);
+            font-size: 1rem;
+            display: grid;
+            place-items: center;
+            transition: .14s;
+        }
+
+        .modal-close:hover {
+            background: var(--sur2);
+            color: var(--txt)
+        }
+
+        .modal-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--brd);
+            flex-shrink: 0;
+            background: var(--sur)
+        }
+
+        .modal-tab {
+            flex: 1;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: .82rem;
+            font-weight: 600;
+            color: var(--muted);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: .15s;
+        }
+
+        .modal-tab:hover {
+            color: var(--txt)
+        }
+
+        .modal-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent)
+        }
+
+        .modal-body {
+            padding: 18px;
+            overflow-y: auto;
+            flex: 1
+        }
+
+        .profile-avatar-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: grid;
+            place-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a2410;
+            overflow: hidden;
+            border: 3px solid var(--brd2);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .profile-name-big {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--txt)
+        }
+
+        .profile-role-tag {
+            padding: 3px 12px;
+            border-radius: 999px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-brd);
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .form-group {
+            margin-bottom: 14px
+        }
+
+        .form-label {
+            display: block;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            color: var(--muted2);
+            margin-bottom: 5px
+        }
+
+        .form-input {
+            width: 100%;
+            height: 40px;
+            border-radius: var(--r2);
+            border: 1px solid var(--brd);
+            background: var(--sur);
+            color: var(--txt);
+            font-size: .86rem;
+            font-weight: 500;
+            padding: 0 12px;
+            outline: none;
+            transition: .15s;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-brd);
+            background: var(--sur2)
+        }
+
+        .form-input:disabled {
+            opacity: .45;
+            cursor: not-allowed
+        }
+
+        .form-input::placeholder {
+            color: var(--muted2)
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns:1fr 1fr;
+            gap: 10px
+        }
+
+        .save-btn {
+            width: 100%;
+            height: 42px;
+            border-radius: var(--r2);
+            border: none;
+            background: var(--accent);
+            color: #1a2410;
+            font-size: .86rem;
+            font-weight: 700;
+            margin-top: 4px;
+            transition: .15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .save-btn:hover {
+            background: #c8e48a
+        }
+
+        .save-btn:disabled {
+            opacity: .4;
+            cursor: not-allowed
+        }
+
+        .device-card {
+            background: var(--sur);
+            border: 1px solid var(--brd);
+            border-radius: var(--r2);
+            padding: 12px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .device-card.current {
+            border-color: var(--accent-brd);
+            background: var(--accent-dim)
+        }
+
+        .device-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--r);
+            background: var(--sur2);
+            border: 1px solid var(--brd);
+            display: grid;
+            place-items: center;
+            font-size: 1.1rem;
+            flex-shrink: 0
+        }
+
+        .device-info {
+            flex: 1;
+            min-width: 0
+        }
+
+        .device-name {
+            font-size: .86rem;
+            font-weight: 600;
+            color: var(--txt);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap
+        }
+
+        .device-current-tag {
+            padding: 1px 7px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #1a2410;
+            font-size: .6rem;
+            font-weight: 700;
+            letter-spacing: .03em
+        }
+
+        .device-meta {
+            font-size: .72rem;
+            color: var(--muted);
+            margin-top: 2px;
+            line-height: 1.6
+        }
+
+        .device-remove-btn {
+            height: 30px;
+            padding: 0 10px;
+            border-radius: var(--r);
+            border: 1px solid rgba(224, 96, 96, .3);
+            background: var(--danger-dim);
+            color: var(--danger);
+            font-size: .72rem;
+            font-weight: 600;
+            transition: .15s;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .device-remove-btn:hover {
+            background: rgba(224, 96, 96, .2)
+        }
+
+        .device-remove-btn:disabled {
+            opacity: .35;
+            cursor: not-allowed
+        }
+
+        .code-confirm-box {
+            margin-top: 8px;
+            padding: 10px 12px;
+            background: var(--bg);
+            border: 1px solid var(--brd2);
+            border-radius: var(--r)
+        }
+
+        .code-confirm-label {
+            font-size: .72rem;
+            color: var(--muted);
+            margin-bottom: 6px;
+            line-height: 1.6
+        }
+
+        .code-input-row {
+            display: flex;
+            gap: 6px
+        }
+
+        .code-input {
+            flex: 1;
+            height: 36px;
+            border-radius: var(--r);
+            border: 1px solid var(--brd);
+            background: var(--sur2);
+            color: var(--txt);
+            font-size: .9rem;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: .1em;
+            outline: none;
+            transition: .15s;
+        }
+
+        .code-input:focus {
+            border-color: var(--accent-brd)
+        }
+
+        .code-confirm-btn {
+            height: 36px;
+            padding: 0 12px;
+            border-radius: var(--r);
+            border: none;
+            background: var(--danger);
+            color: #fff;
+            font-size: .76rem;
+            font-weight: 700;
+            transition: .15s
+        }
+
+        .code-confirm-btn:disabled {
+            opacity: .4;
+            cursor: not-allowed
+        }
+
+        .devices-empty {
+            text-align: center;
+            padding: 2.5rem 1rem;
+            color: var(--muted);
+            font-size: .84rem
+        }
+
+        .section-divider {
+            height: 1px;
+            background: var(--brd);
+            margin: 16px 0
+        }
+
+        .pwd-section-title {
+            font-size: .8rem;
+            font-weight: 700;
+            color: var(--muted);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        /* ══ RESPONSIVE ══ */
+        @media (max-width: 900px) {
+            .kassa-layout {
+                grid-template-columns:1fr
+            }
+
+            .detail-panel {
+                position: static
+            }
+
+            .chek-layout {
+                grid-template-columns:1fr
+            }
+
+            .report-stats {
+                grid-template-columns:repeat(2, 1fr)
+            }
+        }
+
+        @media (max-width: 560px) {
+            .content {
+                padding: 10px
+            }
+
+            .orders-list {
+                grid-template-columns:repeat(auto-fill, minmax(160px, 1fr))
+            }
+
+            .report-stats {
+                grid-template-columns:1fr 1fr
+            }
+
+            .table-grid {
+                grid-template-columns:repeat(auto-fill, minmax(90px, 1fr))
+            }
+
+            .hd1 {
+                padding: 0 12px
+            }
+
+            .prof-name {
+                display: none
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══ SETTINGS MODAL ══ -->
+<div class="modal-overlay" id="settings-modal" onclick="closeSettingsOutside(event)">
+    <div class="modal">
+        <div class="modal-head">
+            <span style="font-size:1rem">⚙️</span>
+            <span class="modal-title">Sozlamalar</span>
+            <button class="modal-close" onclick="closeSettings()">✕</button>
+        </div>
+        <div class="modal-tabs">
+            <button class="modal-tab active" data-stab="profile" onclick="switchSettingsTab('profile',this)">👤 Profil
+            </button>
+            <button class="modal-tab" data-stab="devices" onclick="switchSettingsTab('devices',this)">📱 Qurilmalar
+            </button>
+        </div>
+
+        <!-- PROFILE TAB -->
+        <div class="modal-body" id="stab-profile">
+            <div class="profile-avatar-wrap">
+                <div class="profile-avatar" id="s-avatar">K</div>
+                <div class="profile-name-big" id="s-fullname">—</div>
+                <div class="profile-role-tag" id="s-role-tag">Kassir</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Ism</label>
+                    <input class="form-input" id="s-firstname" placeholder="Ism" type="text">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Familiya</label>
+                    <input class="form-input" id="s-lastname" placeholder="Familiya" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Telefon raqam</label>
+                <input class="form-input" id="s-phone" placeholder="+998 90 123 45 67" type="tel">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" id="s-email" placeholder="email@example.com" type="email">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Bank karta raqami</label>
+                <input class="form-input" id="s-bank" placeholder="8600 **** **** ****" type="text" maxlength="16">
+            </div>
+            <div class="section-divider"></div>
+            <div class="pwd-section-title">🔒 Parolni o'zgartirish (ixtiyoriy)</div>
+            <div class="form-group">
+                <label class="form-label">Yangi parol</label>
+                <input class="form-input" id="s-pwd" placeholder="Bo'sh qoldirsangiz o'zgarmaydi" type="password">
+            </div>
+            <button class="save-btn" id="s-save-btn" onclick="saveProfile()">✓ Saqlash</button>
+        </div>
+
+        <!-- DEVICES TAB -->
+        <div class="modal-body" id="stab-devices" style="display:none">
+            <div style="font-size:.78rem;font-weight:500;color:var(--muted);margin-bottom:14px;line-height:1.7;padding:10px 12px;background:var(--sur);border-radius:var(--r);border:1px solid var(--brd)">
+                🔒 Boshqa qurilmani o'chirish uchun email ga tasdiqlash kodi yuboriladi. Kod 15 daqiqa amal qiladi.
+            </div>
+            <div id="devices-list">
+                <div class="devices-empty">⏳ Yuklanmoqda...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<header>
+    <div class="hd1">
+        <div class="brand">
+            <div class="brand-icon" id="brand-icon">—</div>
+            <div>
+                <div class="brand-name" id="brand-name">Ma'lumot yo'q</div>
+                <div class="brand-sub">Kassa</div>
+            </div>
+        </div>
+        <div class="hd1-right">
+            <div class="ws-pill">
+                <div class="ws-dot"></div>
+                <span>Jonli</span>
+            </div>
+            <button class="icon-btn" aria-label="Bildirishnomalar" onclick="goPage('notif')">
+                <span>🔔</span>
+                <span class="notif-dot" id="notif-dot"></span>
+            </button>
+            <div class="prof-wrap">
+                <button class="prof-btn" id="prof-btn" onclick="toggleDD()">
+                    <div class="avatar" id="avatar-el">—</div>
+                    <span class="prof-name" id="prof-name-el">—</span>
+                    <span class="prof-chevron">▾</span>
+                </button>
+                <div class="dd" id="dd">
+                    <div class="dd-hd">
+                        <div class="dd-name" id="dd-name">—</div>
+                        <div class="dd-role" id="dd-role">Kassir</div>
+                    </div>
+                    <button class="dd-item" onclick="openSettings('profile')">👤 Profil</button>
+                    <button class="dd-item" onclick="openSettings('devices')">⚙️ Sozlamalar</button>
+                    <div class="dd-sep"></div>
+                    <button class="dd-item dd-danger" onclick="logout()">🚪 Chiqish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hd2">
+        <div class="nav">
+            <button class="nav-item active" data-page="kassa" onclick="goPage('kassa',this)">
+                💵 Kassa <span class="nav-badge" id="badge-kassa" style="display:none">0</span>
+            </button>
+            <button class="nav-item" data-page="stollar" onclick="goPage('stollar',this)">
+                🪑 Stollar xaritasi
+            </button>
+            <button class="nav-item" data-page="hisobot" onclick="goPage('hisobot',this)">
+                📊 Kunlik hisobot
+            </button>
+            <button class="nav-item" data-page="chek" onclick="goPage('chek',this)">
+                🧾 Chek &amp; Sozlamalar
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- ══ PAGES ══ -->
+<div class="content">
+
+    <!-- KASSA -->
+    <div id="p-kassa">
+        <div class="kassa-layout">
+            <div>
+                <div class="filter-row">
+                    <button class="ftag active" data-filter="all" onclick="filterOrders('all',this)">
+                        <span class="ftag-dot" style="background:var(--muted)"></span>Hammasi
+                    </button>
+                    <button class="ftag" data-filter="ready" onclick="filterOrders('ready',this)">
+                        <span class="ftag-dot" style="background:var(--success)"></span>Ready
+                    </button>
+                    <button class="ftag" data-filter="cooking" onclick="filterOrders('cooking',this)">
+                        <span class="ftag-dot" style="background:var(--blue)"></span>Cooking
+                    </button>
+                    <button class="ftag" data-filter="confirmed" onclick="filterOrders('confirmed',this)">
+                        <span class="ftag-dot" style="background:#b0a0e0"></span>Confirmed
+                    </button>
+                    <button class="ftag" data-filter="paid" onclick="filterOrders('paid',this)">
+                        <span class="ftag-dot" style="background:var(--muted2)"></span>To'langan
+                    </button>
+                </div>
+                <div class="orders-list" id="orders-list"></div>
+            </div>
+
+            <div class="detail-panel" id="detail-panel">
+                <div class="dp-head">
+                    <span style="font-size:.9rem">🧾</span>
+                    <span class="dp-title" id="dp-title">Order tanlang</span>
+                    <span id="dp-status-tag"></span>
+                </div>
+                <div class="dp-body" id="dp-body">
+                    <div class="dp-empty">
+                        <div class="dp-empty-ico">←</div>
+                        <div class="dp-empty-txt">Chap tomondagi<br>orderni bosing</div>
+                    </div>
+                </div>
+                <div id="dp-totals" style="display:none">
+                    <div class="total-block">
+                        <div class="total-row"><span>Taomlar narxi</span><span id="dp-sub">—</span></div>
+                        <div class="total-row"><span>Xizmat haqi (<span id="dp-svc-pct">10</span>%)</span><span
+                                id="dp-svc">—</span></div>
+                        <div class="total-row"><span>Chegirma</span><span>— 0</span></div>
+                        <div class="total-main"><span>JAMI TO'LOV</span><span id="dp-total">—</span></div>
+                    </div>
+                    <div class="pay-block">
+                        <div class="pay-label">To'lov usuli</div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
+        <span style="font-size:.76rem;color:var(--muted)">
+            Mijoz tanlagan: <b id="pay-customer-choice" style="color:var(--txt)">—</b>
+        </span>
+                            <label style="display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);font-weight:600">
+                                O'zgartirish
+                                <label class="toggle">
+                                    <input type="checkbox" id="tog-pay-edit" onchange="togglePayEdit()">
+                                    <div class="toggle-track"></div>
+                                </label>
+                            </label>
+                        </div>
+                        <div class="pay-methods" id="pay-methods">
+                            <button class="pay-btn active" data-method="cash" onclick="selectMethod(this)" disabled>💵
+                                Naqd
+                            </button>
+                            <button class="pay-btn" data-method="card" onclick="selectMethod(this)" disabled>💳 Karta
+                            </button>
+                        </div>
+                        <button class="confirm-btn" id="confirm-btn" onclick="confirmPayment()">
+                            ✓ To'lovni tasdiqlash · <span id="confirm-amount">—</span>
+                        </button>
+                    </div>
+                    <div class="tg-section">
+                        <div class="tg-label">Telegram chek yuborish</div>
+                        <div class="tg-tabs">
+                            <button class="tg-tab active" data-ttype="phone" onclick="selectTgType(this)">📞 Telefon
+                            </button>
+                            <button class="tg-tab" data-ttype="username" onclick="selectTgType(this)">✈️ Username
+                            </button>
+                        </div>
+                        <div class="tg-input-row">
+                            <input class="tg-input" id="tg-input" placeholder="+998 90 123 45 67" type="tel">
+                            <button class="tg-send-btn" onclick="sendTgReceipt()">Yuborish ↗</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STOLLAR -->
+    <div id="p-stollar" style="display:none">
+        <div class="sec-title">Stollar xaritasi <small id="table-counts"></small></div>
+        <div class="map-legend">
+            <div class="leg">
+                <div class="leg-dot"
+                     style="background:var(--success-dim);border:1.5px solid rgba(110,231,160,.3)"></div>
+                To'lashga tayyor
+            </div>
+            <div class="leg">
+                <div class="leg-dot" style="background:var(--amber-dim);border:1.5px solid rgba(212,168,83,.25)"></div>
+                Band (cooking)
+            </div>
+            <div class="leg">
+                <div class="leg-dot" style="background:var(--sur);border:1.5px solid var(--brd);opacity:.5"></div>
+                Bo'sh
+            </div>
+        </div>
+        <div class="table-grid" id="table-grid"></div>
+    </div>
+
+    <!-- HISOBOT -->
+    <div id="p-hisobot" style="display:none">
+        <div class="sec-title">Kunlik hisobot</div>
+        <div class="report-stats" style="grid-template-columns:repeat(5,1fr)">
+    <div class="rstat g">
+        <div class="rstat-val" id="r-cash">—</div>
+        <div class="rstat-label">💵 Naqd to'lovlar</div>
+    </div>
+    <div class="rstat b">
+        <div class="rstat-val" id="r-card">—</div>
+        <div class="rstat-label">💳 Karta to'lovlar</div>
+    </div>
+    <div class="rstat" style="background:var(--sur)">
+        <div class="rstat-val" id="r-online">—</div>
+        <div class="rstat-label">✈️ Telegram to'lovlar</div>
+    </div>
+    <div class="rstat a">
+        <div class="rstat-val" id="r-total">—</div>
+        <div class="rstat-label">📊 Jami daromad</div>
+    </div>
+    <div class="rstat r">
+        <div class="rstat-val" id="r-count">—</div>
+        <div class="rstat-label">🧾 To'langan orderlar</div>
+    </div>
+</div>
+        <div class="card">
+            <div class="card-head"><span>📋</span><span class="card-head-title">Bugungi to'lovlar tarixi</span></div>
+            <table class="hist-table">
+                <thead>
+                <tr>
+                    <th>Order</th>
+                    <th>Stol</th>
+                    <th>Ofitsiant</th>
+                    <th>Usul</th>
+                    <th>Vaqt</th>
+                    <th>Summa</th>
+                </tr>
+                </thead>
+                <tbody id="hist-body">
+                <tr>
+                    <td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">Bugun to'lovlar yo'q</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- CHEK -->
+    <div id="p-chek" style="display:none">
+        <div class="sec-title">Chek &amp; Sozlamalar</div>
+        <div class="chek-layout">
+            <div>
+                <div style="font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px">
+                    Ko'rinish (namuna)
+                </div>
+                <div class="receipt-wrap" id="receipt-preview">
+                    <div class="receipt-head">
+                        <img class="receipt-logo-img" id="rp-logo-img" style="display:none" src="" alt="">
+                        <div class="receipt-logo" id="rp-name">Ma'lumot yo'q</div>
+                        <div class="receipt-sub" id="rp-addr">Ma'lumot yo'q</div>
+                    </div>
+                    <div class="receipt-meta" id="rp-meta">
+                        Stol: #<span id="rp-table">—</span> &nbsp;|&nbsp; Order: #<span id="rp-order">—</span><br>
+                        Sana: <span id="rp-date">—</span> &nbsp; Vaqt: <span id="rp-time">—</span><br>
+                        Kassir: <span id="rp-cashier">—</span>
+                    </div>
+                    <div class="receipt-body">
+                        <table class="receipt-items" id="rp-items">
+                            <tr>
+                                <td colspan="3" style="text-align:center;color:var(--muted2);padding:8px 0">Order
+                                    tanlanmagan
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="receipt-div"></div>
+                        <div class="receipt-sum-row"><span>Taomlar narxi</span><span id="rp-sub-amount">— so'm</span>
+                        </div>
+                        <div class="receipt-sum-row" id="rp-svc-row"><span>Xizmat haqi <span
+                                id="rp-svc-pct-label">10</span>%</span><span id="rp-svc-amount">— so'm</span></div>
+                        <div class="receipt-div"></div>
+                        <div class="receipt-total-row"><span>JAMI TO'LOV</span><span id="rp-total-amount">— so'm</span>
+                        </div>
+                        <div class="receipt-paymethod">To'lov: <span id="rp-paymethod">—</span></div>
+                        <div class="receipt-staff" id="rp-waiter">Ofitsiant: —</div>
+                        <div class="receipt-staff" id="rp-chef">Oshpaz: —</div>
+                    </div>
+                    <div class="receipt-foot" id="rp-foot">
+                        Tashrif buyurganingiz uchun rahmat! 🙏<br>
+                        <span style="font-size:.62rem" id="rp-site">—</span>
+                    </div>
+                </div>
+                <button class="print-btn" style="margin-top:10px" onclick="printReceipt()">🖨️ Chek chiqarish (Print)
+                </button>
+            </div>
+
+            <div class="chek-settings">
+                <div class="card">
+                    <div class="card-head"><span>⚙️</span><span class="card-head-title">Chek sozlamalari</span></div>
+                    <div class="card-body">
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Xizmat haqi ko'rsatish</div>
+                                <div class="setting-sub">Chek summasiga qo'shiladi</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="tog-svc" checked
+                                                         onchange="updateReceipt()">
+                                <div class="toggle-track"></div>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Xizmat haqi foizi</div>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:5px">
+                                <input class="pct-input" type="number" id="svc-pct" value="10" min="0" max="30"
+                                       onchange="updateReceipt()">
+                                <span style="font-size:.8rem;font-weight:600;color:var(--muted)">%</span>
+                            </div>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Ofitsiant ismi</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="tog-waiter" checked
+                                                         onchange="updateReceipt()">
+                                <div class="toggle-track"></div>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Oshpaz ismi</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="tog-chef" checked
+                                                         onchange="updateReceipt()">
+                                <div class="toggle-track"></div>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">QR kod (feedback)</div>
+                                <div class="setting-sub">Mijoz fikr qoldirsin</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="tog-qr" onchange="updateReceipt()">
+                                <div class="toggle-track"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-head"><span>✈️</span><span
+                            class="card-head-title">Telegram orqali chek yuborish</span></div>
+                    <div class="tg-card-row">
+                        <div style="font-size:.74rem;font-weight:500;color:var(--muted);line-height:1.7">
+                            Mijozning telefon raqami yoki Telegram username ini kiriting.
+                        </div>
+                        <div class="tg-tabs2">
+                            <button class="tg-tab2 active" data-t2="phone" onclick="selectTg2(this)">📞 Telefon raqam
+                            </button>
+                            <button class="tg-tab2" data-t2="username" onclick="selectTg2(this)">✈️ Username</button>
+                        </div>
+                        <input class="tg-inp" id="tg-inp2" placeholder="+998 90 123 45 67" type="tel">
+                        <div class="tg-info" id="tg-info2">Telefon raqam database dagi foydalanuvchi bilan
+                            solishtiriladi.
+                        </div>
+                        <button class="tg-send" id="tg-send2" onclick="sendTg2()">✈️ Chek yuborish</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div id="p-notif" style="display:none">
+        <div class="sec-title">Bildirishnomalar</div>
+        <div class="card">
+            <div id="notif-list">
+                <div class="notif-item">
+                    <div class="ni-dot read"></div>
+                    <div>
+                        <div class="ni-text" style="color:var(--muted)">Hozircha bildirishnoma yo'q</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const API = '/api/v1';
+    const TOKEN_KEY = 'cashier_access_token';
+    const USER_KEY = 'cashier_user';
+
+    const fmt = n => Number(n || 0).toLocaleString('uz-UZ') + " so'm";
+    const NO_DATA = "Ma'lumot yo'q";
+
+    let state = {
+        orders: [],
+        tables: [],
+        restaurant: null,
+        selectedOrderId: null,
+        filterStatus: 'all',
+        payMethod: 'cash',
+        tgType: 'phone',
+        tg2Type: 'phone',
+        settings: {svcEnabled: true, svcPct: 10, showWaiter: true, showChef: true, showQr: false},
+        todayPayments: [],
+        notifications: [],
+    };
+
+    /* ── AUTH ── */
+    function initAuth() {
+        const token = localStorage.getItem(TOKEN_KEY)
+            || localStorage.getItem('access_token');
+        if (!token) {
+            window.location.href = '/login/';
+            return;
+        }
+
+        try {
+            const user = JSON.parse(
+                localStorage.getItem(USER_KEY)
+                || localStorage.getItem('user')
+                || '{}'
+            );
+            const name = ((user.first_name || '') + ' ' + (user.last_name || '')).trim() || 'Kassir';
+            const init = name.charAt(0).toUpperCase();
+            document.getElementById('dd-name').textContent = name;
+            document.getElementById('prof-name-el').textContent = name.split(' ')[0];
+            document.getElementById('avatar-el').textContent = init;
+            document.getElementById('rp-cashier').textContent = name;
+            state.cashierName = name;
+            state.cashierInitial = init;
+            applyBrandFallback();
+        } catch (e) {
+        }
+    }
+
+    function logout() {
+        ['cashier_access_token', 'cashier_refresh_token', 'cashier_user',
+            'access_token', 'refresh_token', 'user'].forEach(k => localStorage.removeItem(k));
+        window.location.href = '/login/';
+    }
+
+    function authHeaders() {
+        const token = localStorage.getItem(TOKEN_KEY) || localStorage.getItem('access_token');
+        return {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token};
+    }
+
+    /* ── RESTAURANT INFO ── */
+    async function loadRestaurantInfo() {
+        try {
+            const res = await fetch(`${API}/restaurant/info/`, {headers: authHeaders()});
+            if (!res.ok) throw new Error();
+            state.restaurant = await res.json();
+        } catch (e) {
+            state.restaurant = null;
+        }
+        applyRestaurantInfo();
+    }
+
+    function applyRestaurantInfo() {
+        const r = state.restaurant;
+        const name = r?.name?.trim() || null;
+        const address = r?.address?.trim() || null;
+        const phone = r?.phone?.trim() || null;
+        const logo = r?.logo || null;
+        const telegram = r?.telegram?.trim() || null;
+
+        document.getElementById('brand-name').textContent = name || NO_DATA;
+        document.getElementById('rp-name').textContent = name || NO_DATA;
+
+        let addrLines = [];
+        if (address) addrLines.push(address);
+        if (phone) addrLines.push('Tel: ' + phone);
+        document.getElementById('rp-addr').innerHTML = addrLines.length ? addrLines.join('<br>') : NO_DATA;
+        document.getElementById('rp-site').textContent = telegram || NO_DATA;
+        applyBrandFallback();
+    }
+
+    function applyBrandFallback() {
+        const logo = state.restaurant?.logo || null;
+        const brandIcon = document.getElementById('brand-icon');
+        const logoImgEl = document.getElementById('rp-logo-img');
+        if (logo) {
+            brandIcon.innerHTML = `<img src="${logo}" alt="logo">`;
+            logoImgEl.src = logo;
+            logoImgEl.style.display = '';
+        } else {
+            brandIcon.textContent = state.cashierInitial || 'S';
+            logoImgEl.style.display = 'none';
+        }
+    }
+
+    /* ── NAVIGATION ── */
+    function goPage(id, btn) {
+        document.querySelectorAll('[id^="p-"]').forEach(p => p.style.display = 'none');
+        const t = document.getElementById('p-' + id);
+        if (t) t.style.display = '';
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        if (btn && btn.classList.contains('nav-item')) btn.classList.add('active');
+        else document.querySelectorAll('.nav-item').forEach(b => {
+            if (b.dataset.page === id) b.classList.add('active');
+        });
+        closeDD();
+        if (id === 'stollar') renderTableGrid();
+        if (id === 'hisobot') renderReport();
+    }
+
+    function toggleDD() {
+        document.getElementById('dd').classList.toggle('open');
+    }
+
+    function closeDD() {
+        document.getElementById('dd').classList.remove('open');
+    }
+
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.prof-wrap')) closeDD();
+    });
+
+    /* ── TOAST ── */
+    function toast(msg, type = '', dur = 3000) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = 'toast ' + type + ' show';
+        setTimeout(() => t.classList.remove('show'), dur);
+    }
+
+    /* ── LOAD DATA ── */
+    async function loadOrders() {
+        try {
+            const res = await fetch(`${API}/manager/orders/`, {headers: authHeaders()});
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            state.orders = Array.isArray(data) ? data : (data.results || []);
+        } catch (e) {
+            state.orders = [];
+        }
+        renderOrdersList();
+        updateBadge();
+    }
+
+    async function loadTables() {
+        try {
+            const res = await fetch(`${API}/tables/`, {headers: authHeaders()});
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            state.tables = Array.isArray(data) ? data : (data.results || []);
+        } catch (e) {
+            state.tables = [];
+        }
+    }
+
+    async function loadNotifications() {
+        try {
+            const res = await fetch(`${API}/notifications/`, {headers: authHeaders()});
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            state.notifications = Array.isArray(data) ? data : (data.results || []);
+        } catch (e) {
+            state.notifications = [];
+        }
+        renderNotifications();
+    }
+
+    async function loadPaymentHistory() {
+        try {
+            const res = await fetch(`${API}/payments/history/`, {headers: authHeaders()});
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            const payments = Array.isArray(data) ? data : (data.results || []);
+            state.todayPayments = payments.map(p => ({
+                id: p.order?.id,
+                table: p.order?.table_number,
+                waiter: p.order?.waiter_name,
+                method: p.method,
+                amount: parseFloat(p.amount),
+                time: p.paid_at ? new Date(p.paid_at).toLocaleTimeString('uz-UZ', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }) : '—'
+            }));
+        } catch (e) {
+            state.todayPayments = [];
+        }
+    }
+
+    function renderNotifications() {
+        const list = document.getElementById('notif-list');
+        if (!state.notifications.length) {
+            list.innerHTML = `<div class="notif-item"><div class="ni-dot read"></div><div><div class="ni-text" style="color:var(--muted)">Hozircha bildirishnoma yo'q</div></div></div>`;
+            return;
+        }
+        list.innerHTML = state.notifications.map(n => `
+    <div class="notif-item ${n.is_read ? '' : 'unread'}">
+      <div class="ni-dot ${n.is_read ? 'read' : ''}"></div>
+      <div>
+        <div class="ni-text">${n.message || NO_DATA}</div>
+        <div class="ni-time">${relTime(n.created_at)}</div>
+      </div>
+    </div>`).join('');
+    }
+
+    /* ── RENDER ORDERS ── */
+    function renderOrdersList() {
+        const list = document.getElementById('orders-list');
+        // Faqat oshpaz qabul qilgan (confirmed) va paid bo'lmagan orderlar
+        let orders = state.orders.filter(o => o.status !== 'pending' && o.status !== 'paid');
+        if (state.filterStatus !== 'all') orders = orders.filter(o => o.status === state.filterStatus);
+        if (!orders.length) {
+            list.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--muted);font-size:.84rem;grid-column:1/-1">Orderlar topilmadi</div>`;
+            return;
+        }
+        list.innerHTML = orders.map(o => {
+            const isSelected = o.id === state.selectedOrderId;
+            const isReady = o.status === 'ready';
+            const items = o.order_items || [];
+            const itemNames = items.slice(0, 2).map(i => {
+                const name = i.product?.name || i.product_name || '';
+                return `${name.split(' ')[0]} x${i.quantity}`;
+            }).join(' · ');
+            const extra = items.length > 2 ? ` +${items.length - 2}` : '';
+            const tableNum = o.table?.number ?? '—';
+            const waiterName = o.waiter?.first_name || '—';
+            return `<div class="order-card${isSelected ? ' selected' : ''}${isReady ? ' is-ready' : ''}" onclick="selectOrder(${o.id})">
+      <div class="oc-top">
+        <span class="oc-num">#${o.id}</span>
+        <span class="oc-table">Stol #${tableNum} · ${waiterName}</span>
+      </div>
+      <div class="oc-top" style="margin-top:-4px">
+        <span class="status-tag ${statusClass(o.status)}">${statusLabel(o.status)}</span>
+      </div>
+      <div class="oc-items">${itemNames || NO_DATA}${extra}</div>
+      <div class="oc-bottom">
+        <span class="oc-price">${fmt(o.total_price)}</span>
+        <span class="oc-time">${relTime(o.created_at)}</span>
+      </div>
+    </div>`;
+        }).join('');
+    }
+
+    // statusClass funksiyasiga qo'shing
+    function statusClass(s) {
+        return {
+            ready: 'tag-ready',
+            served: 'tag-ready',      // YANGI — yashil
+            cooking: 'tag-cooking',
+            pending: 'tag-pending',
+            confirmed: 'tag-confirmed',
+            paid: 'tag-paid'
+        }[s] || 'tag-pending';
+    }
+
+    // statusLabel funksiyasiga qo'shing
+    function statusLabel(s) {
+        return {
+            ready: '✓ Ready',
+            served: '🍽️ Berildi',    // YANGI
+            cooking: 'Cooking',
+            pending: 'Pending',
+            confirmed: 'Confirmed',
+            paid: 'To\'langan'
+        }[s] || s;
+    }
+
+
+    function relTime(iso) {
+        if (!iso) return '—';
+        const diff = (Date.now() - new Date(iso).getTime()) / 60000;
+        if (diff < 1) return 'Hozir';
+        if (diff < 60) return Math.floor(diff) + ' daq. oldin';
+        return Math.floor(diff / 60) + ' soat oldin';
+    }
+
+    function updateBadge() {
+        const ready = state.orders.filter(o => o.status === 'ready').length;
+        const badge = document.getElementById('badge-kassa');
+        if (ready > 0) {
+            badge.style.display = 'flex';
+            badge.textContent = ready;
+        } else badge.style.display = 'none';
+        document.getElementById('notif-dot').style.display = ready > 0 ? 'block' : 'none';
+    }
+
+    /* ── SELECT ORDER ── */
+    function selectOrder(id) {
+        state.selectedOrderId = id;
+        renderOrdersList();
+        const order = state.orders.find(o => o.id === id);
+        if (!order) return;
+
+        document.getElementById('dp-title').textContent = `Order #${order.id} — Stol #${order.table?.number ?? '—'}`;
+        const stag = document.getElementById('dp-status-tag');
+        stag.className = 'status-tag ' + statusClass(order.status);
+        stag.textContent = statusLabel(order.status);
+
+        const customerMethod = order.payment_type || 'cash';
+    state.payMethod = customerMethod;
+    document.getElementById('pay-customer-choice').textContent =
+        customerMethod === 'cash' ? '💵 Naqd' : customerMethod === 'card' ? '💳 Karta' : '✈️ Online';
+    document.getElementById('tog-pay-edit').checked = false;
+    document.querySelectorAll('#pay-methods .pay-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.method === customerMethod);
+        b.disabled = true; // boshida qulflangan, faqat "O'zgartirish" tugmasi orqali ochiladi
+    });
+
+        const items = order.order_items || [];
+        const itemsHtml = items.length ? items.map(item => {
+            const name = item.product?.name || item.product_name || NO_DATA;
+            const price = item.product?.price || 0;
+            const chefName = item.chef?.first_name || null;
+            return `<tr class="oi-row">
+      <td><div class="oi-name-cell">
+        <span class="oi-name">${name}</span>
+        <span class="oi-chef">Oshpaz: ${chefName || NO_DATA}</span>
+      </div></td>
+      <td class="oi-qty">x${item.quantity}</td>
+      <td class="oi-price">${fmt(price * item.quantity)}</td>
+    </tr>`;
+        }).join('') : `<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:1rem">${NO_DATA}</td></tr>`;
+
+        const waiter = order.waiter?.first_name || NO_DATA;
+        const chefs = [...new Set(items.filter(i => i.chef).map(i => i.chef.first_name))].join(', ') || NO_DATA;
+
+        document.getElementById('dp-body').innerHTML = `
+    <table class="oi-table">
+      <thead class="oi-head"><tr><th>Taom</th><th style="text-align:center">Dona</th><th style="text-align:right">Narx</th></tr></thead>
+      <tbody>${itemsHtml}</tbody>
+    </table>
+    <div class="staff-row">
+      <div class="si"><span class="si-ico">👤</span>Ofitsiant: ${waiter}</div>
+      <div class="si"><span class="si-ico">👨‍🍳</span>Oshpaz: ${chefs}</div>
+    </div>`;
+
+        const sub = parseFloat(order.total_price) || 0;
+        const svcPct = state.settings.svcPct;
+        const svcEnabled = state.settings.svcEnabled;
+        const svc = svcEnabled ? Math.round(sub * svcPct / 100) : 0;
+        const total = sub + svc;
+
+        document.getElementById('dp-sub').textContent = fmt(sub);
+        document.getElementById('dp-svc-pct').textContent = svcPct;
+        document.getElementById('dp-svc').textContent = svcEnabled ? fmt(svc) : '—';
+        document.getElementById('dp-total').textContent = fmt(total);
+        document.getElementById('confirm-amount').textContent = fmt(total);
+
+        const confirmBtn = document.getElementById('confirm-btn');
+        if (order.status === 'paid') {
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = '✓ To\'langan';
+        } else if (order.status !== 'ready' && order.status !== 'served') {
+            confirmBtn.disabled = true;
+            confirmBtn.style.opacity = '0.5';
+            confirmBtn.textContent = '⏳ Hali tayyor emas (' + statusLabel(order.status) + ')';
+        } else {
+            confirmBtn.disabled = false;
+            confirmBtn.style.opacity = '1';
+            confirmBtn.innerHTML = `✓ To'lovni tasdiqlash · <span id="confirm-amount">${fmt(total)}</span>`;
+        }
+
+        document.getElementById('dp-totals').style.display = '';
+        updateReceiptFromOrder(order);
+    }
+
+    /* ── FILTER ── */
+    function filterOrders(status, btn) {
+        state.filterStatus = status;
+        document.querySelectorAll('.ftag').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderOrdersList();
+    }
+
+    function togglePayEdit() {
+        const editing = document.getElementById('tog-pay-edit').checked;
+        document.querySelectorAll('#pay-methods .pay-btn').forEach(b => b.disabled = !editing);
+    }
+
+    /* ── PAY METHOD ── */
+    function selectMethod(btn) {
+        state.payMethod = btn.dataset.method;
+        document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    /* ── CONFIRM PAYMENT ── */
+    async function confirmPayment() {
+    if (!state.selectedOrderId) return;
+    const order = state.orders.find(o => o.id === state.selectedOrderId);
+    if (!order || order.status === 'paid') return;
+
+    const btn = document.getElementById('confirm-btn');
+    btn.disabled = true;
+    btn.textContent = 'Saqlanmoqda...';
+
+    // ❌ Bu yerdagi customerMethod, pay-customer-choice, pay-btn,
+    // tog-pay-edit bilan bog'liq qismlar OLIB TASHLANDI —
+    // chunki bular endi selectOrder() da bajariladi.
+
+    const sub = parseFloat(order.total_price) || 0;
+    const svc = state.settings.svcEnabled ? Math.round(sub * state.settings.svcPct / 100) : 0;
+    const total = sub + svc;
+
+    let res;
+    try {
+        res = await fetch(`${API}/payments/`, {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({order: order.id, method: state.payMethod, amount: total}),
+        });
+    } catch (networkErr) {
+        console.error('Fetch network/CORS xatosi:', networkErr);
+        toast('Tarmoq yoki CORS xatosi — konsolni tekshiring', 'err');
+        btn.disabled = false;
+        btn.innerHTML = `✓ To'lovni tasdiqlash · <span id="confirm-amount">${fmt(total)}</span>`;
+        return;
+    }
+
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast(Object.values(err).flat().join(', ') || `Xatolik: ${res.status}`, 'err');
+        btn.disabled = false;
+        btn.innerHTML = `✓ To'lovni tasdiqlash · <span id="confirm-amount">${fmt(total)}</span>`;
+        return;
+    }
+
+    order.status = 'paid';
+    renderOrdersList();
+    selectOrder(order.id);
+    updateBadge();
+    toast("✓ To'lov qabul qilindi!", 'success');
+
+    loadPaymentHistory().catch(err => console.warn('Tarix yangilanmadi:', err));
+}
+
+    /* ── TELEGRAM ── */
+    function selectTgType(btn) {
+        state.tgType = btn.dataset.ttype;
+        document.querySelectorAll('.tg-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const inp = document.getElementById('tg-input');
+        if (state.tgType === 'phone') {
+            inp.type = 'tel';
+            inp.placeholder = '+998 90 123 45 67';
+        } else {
+            inp.type = 'text';
+            inp.placeholder = '@username';
+        }
+    }
+
+    async function sendTgReceipt() {
+        const val = document.getElementById('tg-input').value.trim();
+        if (!val) {
+            toast('Telefon yoki username kiriting', 'err');
+            return;
+        }
+        if (!state.selectedOrderId) {
+            toast('Avval order tanlang', 'err');
+            return;
+        }
+        await doSendTg(val, state.tgType, state.selectedOrderId);
+    }
+
+    function selectTg2(btn) {
+        state.tg2Type = btn.dataset.t2;
+        document.querySelectorAll('.tg-tab2').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const inp = document.getElementById('tg-inp2');
+        const info = document.getElementById('tg-info2');
+        if (state.tg2Type === 'phone') {
+            inp.type = 'tel';
+            inp.placeholder = '+998 90 123 45 67';
+            info.textContent = 'Telefon raqam database dagi foydalanuvchi bilan solishtiriladi.';
+        } else {
+            inp.type = 'text';
+            inp.placeholder = '@username';
+            info.textContent = 'Telegram username (@username) kiritilganda bot to\'g\'ridan-to\'g\'ri yuboradi.';
+        }
+    }
+
+    async function sendTg2() {
+        const val = document.getElementById('tg-inp2').value.trim();
+        if (!val) {
+            toast('Ma\'lumot kiriting', 'err');
+            return;
+        }
+        if (!state.selectedOrderId) {
+            toast('Avval kassa sahifasida order tanlang', 'err');
+            return;
+        }
+        await doSendTg(val, state.tg2Type, state.selectedOrderId);
+    }
+
+    async function doSendTg(value, type, orderId) {
+        try {
+            const body = {order_id: orderId};
+            if (type === 'phone') body.phone_number = value;
+            else body.username = value.replace('@', '');
+            const res = await fetch(`${API}/telegram/send-receipt/`, {
+                method: 'POST',
+                headers: authHeaders(),
+                body: JSON.stringify(body)
+            });
+            if (!res.ok) {
+                const d = await res.json();
+                toast(d.detail || 'Xatolik', 'err');
+                return;
+            }
+            toast('✈️ Chek Telegram orqali yuborildi!', 'success');
+        } catch (e) {
+            toast('Server bilan bog\'lanib bo\'lmadi', 'err');
+        }
+    }
+
+    /* ── TABLES GRID ── */
+    function renderTableGrid() {
+        const grid = document.getElementById('table-grid');
+        if (!state.tables.length) {
+            grid.innerHTML = `<p style="color:var(--muted)">${NO_DATA}</p>`;
+            return;
+        }
+
+        const readyTableIds = new Set(state.orders.filter(o => o.status === 'ready').map(o => o.table?.id));
+        const occupiedTableIds = new Set(state.orders.filter(o => ['cooking', 'confirmed', 'pending'].includes(o.status)).map(o => o.table?.id));
+
+        const occupied = state.tables.filter(t => occupiedTableIds.has(t.id) || t.is_occupied).length;
+        const readyCount = readyTableIds.size;
+        document.getElementById('table-counts').textContent = `${state.tables.length} ta stol · ${occupied} band · ${readyCount} to'lashga tayyor`;
+
+        grid.innerHTML = state.tables.map(t => {
+            const isReady = readyTableIds.has(t.id);
+            const isOccupied = occupiedTableIds.has(t.id) || t.is_occupied;
+            const orderForTable = state.orders.find(o => o.table?.id === t.id && o.status !== 'paid');
+            const cls = isReady ? 'ready' : isOccupied ? 'occupied' : 'free';
+            const statusTxt = isReady ? '✓ Ready' : isOccupied ? 'Band' : 'Bo\'sh';
+            const statusColor = isReady ? 'var(--success)' : isOccupied ? 'var(--amber)' : 'var(--muted2)';
+            return `<div class="tbl-card ${cls}" onclick="${isReady || isOccupied ? `goToOrder(${t.id})` : ''}">
+      <div class="tbl-num">#${t.number}</div>
+      <div class="tbl-cap">${t.capacity} kishilik</div>
+      <div class="tbl-status" style="color:${statusColor}">${statusTxt}</div>
+      ${orderForTable ? `<div class="tbl-price">${fmt(orderForTable.total_price)}</div>` : ''}
+    </div>`;
+        }).join('');
+    }
+
+    function goToOrder(tableId) {
+        const order = state.orders.find(o => o.table?.id === tableId && o.status !== 'paid');
+        if (!order) return;
+        goPage('kassa');
+        setTimeout(() => selectOrder(order.id), 50);
+    }
+
+    /* ── REPORT ── */
+    function renderReport() {
+    const cashTotal   = state.todayPayments.filter(p => p.method === 'cash').reduce((s, p) => s + p.amount, 0);
+    const cardTotal   = state.todayPayments.filter(p => p.method === 'card').reduce((s, p) => s + p.amount, 0);
+    const onlineTotal = state.todayPayments.filter(p => p.method === 'online').reduce((s, p) => s + p.amount, 0);
+    const total = cashTotal + cardTotal + onlineTotal;
+
+    document.getElementById('r-cash').textContent = fmt(cashTotal);
+    document.getElementById('r-card').textContent = fmt(cardTotal);
+    document.getElementById('r-online').textContent = fmt(onlineTotal);
+    document.getElementById('r-total').textContent = fmt(total);
+    document.getElementById('r-count').textContent = state.todayPayments.length + ' ta';
+
+    const tbody = document.getElementById('hist-body');
+    if (!state.todayPayments.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">Bugun to'lovlar yo'q</td></tr>`;
+        return;
+    }
+
+    const methodMeta = {
+        cash:   { cls: 'tag-ready',     label: '💵 Naqd' },
+        card:   { cls: 'tag-cooking',   label: '💳 Karta' },
+        online: { cls: 'tag-confirmed', label: '✈️ Telegram' },
+    };
+
+    tbody.innerHTML = [...state.todayPayments].reverse().map(p => {
+        const m = methodMeta[p.method] || { cls: 'tag-pending', label: p.method };
+        return `
+    <tr>
+      <td style="font-weight:600;color:var(--txt)">#${p.id}</td>
+      <td>Stol #${p.table ?? '—'}</td>
+      <td>${p.waiter || NO_DATA}</td>
+      <td><span class="status-tag ${m.cls}">${m.label}</span></td>
+      <td style="color:var(--muted)">${p.time}</td>
+      <td style="font-weight:600">${fmt(p.amount)}</td>
+    </tr>`;
+    }).join('');
+}
+
+    /* ── RECEIPT ── */
+    function updateReceiptFromOrder(order) {
+        if (!order) return;
+        document.getElementById('rp-table').textContent = order.table?.number ?? '—';
+        document.getElementById('rp-order').textContent = order.id ?? '—';
+        const created = order.created_at ? new Date(order.created_at) : new Date();
+        document.getElementById('rp-date').textContent =
+            String(created.getDate()).padStart(2, '0') + '.' + String(created.getMonth() + 1).padStart(2, '0') + '.' + created.getFullYear();
+        document.getElementById('rp-time').textContent = created.toLocaleTimeString('uz-UZ', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        document.getElementById('rp-cashier').textContent = state.cashierName || NO_DATA;
+
+        const items = order.order_items || [];
+        document.getElementById('rp-items').innerHTML = items.length ? items.map(item => `
+    <tr>
+      <td class="ri-name">${item.product?.name || item.product_name || NO_DATA}</td>
+      <td class="ri-qty">x${item.quantity}</td>
+      <td class="ri-price">${fmt((item.product?.price || 0) * item.quantity)}</td>
+    </tr>`).join('') : `<tr><td colspan="3" style="text-align:center;color:var(--muted2);padding:8px 0">${NO_DATA}</td></tr>`;
+
+        const sub = parseFloat(order.total_price) || 0;
+        const svc = state.settings.svcEnabled ? Math.round(sub * state.settings.svcPct / 100) : 0;
+        document.getElementById('rp-sub-amount').textContent = fmt(sub);
+        document.getElementById('rp-svc-pct-label').textContent = state.settings.svcPct;
+        document.getElementById('rp-svc-amount').textContent = fmt(svc);
+        document.getElementById('rp-total-amount').textContent = fmt(sub + svc);
+        document.getElementById('rp-paymethod').textContent = {
+            cash: 'Naqd pul',
+            card: 'Bank kartasi'
+        }[state.payMethod] || NO_DATA;
+
+        const waiterName = order.waiter?.first_name || null;
+        document.getElementById('rp-waiter').textContent = 'Ofitsiant: ' + (waiterName || NO_DATA);
+        const chefNames = [...new Set(items.filter(i => i.chef).map(i => i.chef.first_name))].join(', ') || null;
+        document.getElementById('rp-chef').textContent = 'Oshpaz: ' + (chefNames || NO_DATA);
+        updateReceipt();
+    }
+
+    function updateReceipt() {
+        state.settings.svcEnabled = document.getElementById('tog-svc').checked;
+        state.settings.svcPct = parseInt(document.getElementById('svc-pct').value) || 10;
+        state.settings.showWaiter = document.getElementById('tog-waiter').checked;
+        state.settings.showChef = document.getElementById('tog-chef').checked;
+        state.settings.showQr = document.getElementById('tog-qr').checked;
+        document.getElementById('rp-svc-row').style.display = state.settings.svcEnabled ? '' : 'none';
+        document.getElementById('rp-waiter').style.display = state.settings.showWaiter ? '' : 'none';
+        document.getElementById('rp-chef').style.display = state.settings.showChef ? '' : 'none';
+
+        const order = state.orders.find(o => o.id === state.selectedOrderId);
+        if (order) {
+            const sub = parseFloat(order.total_price) || 0;
+            const svc = state.settings.svcEnabled ? Math.round(sub * state.settings.svcPct / 100) : 0;
+            const total = sub + svc;
+            document.getElementById('rp-svc-pct-label').textContent = state.settings.svcPct;
+            document.getElementById('rp-svc-amount').textContent = fmt(svc);
+            document.getElementById('rp-total-amount').textContent = fmt(total);
+            document.getElementById('dp-svc-pct').textContent = state.settings.svcPct;
+            document.getElementById('dp-svc').textContent = state.settings.svcEnabled ? fmt(svc) : '—';
+            document.getElementById('dp-total').textContent = fmt(total);
+            const ca = document.getElementById('confirm-amount');
+            if (ca) ca.textContent = fmt(total);
+        }
+    }
+
+    /* ── PRINT ── */
+    function printReceipt() {
+        const content = document.getElementById('receipt-preview').innerHTML;
+        const win = window.open('', '_blank', 'width=380,height=600');
+        win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <style>*{box-sizing:border-box;margin:0;padding:0}body{background:#fff;color:#000;font-family:'Courier New',Courier,monospace;padding:16px;max-width:320px}.receipt-logo-img{width:36px;height:36px;border-radius:6px;object-fit:cover;display:block;margin:0 auto 6px}.receipt-logo{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:4px}.receipt-sub,.receipt-meta{font-size:.68rem;color:#555;text-align:center;line-height:1.7;margin-bottom:6px}.receipt-items{width:100%;border-collapse:collapse}.receipt-items td{padding:3px 0;font-size:.72rem;vertical-align:top}.ri-name{word-break:break-word;padding-right:6px}.ri-qty{text-align:center;min-width:24px;white-space:nowrap;padding:0 4px}.ri-price{text-align:right;white-space:nowrap;min-width:72px}.receipt-div{border-top:1px dashed #ccc;margin:6px 0}.receipt-sum-row{display:flex;justify-content:space-between;font-size:.68rem;color:#555;padding:2px 0}.receipt-total-row{display:flex;justify-content:space-between;font-size:.9rem;font-weight:700;padding-top:4px;margin-top:4px;border-top:2px solid #000}.receipt-paymethod,.receipt-staff{font-size:.66rem;color:#555;margin-top:3px}.receipt-foot{text-align:center;font-size:.62rem;color:#777;margin-top:10px;border-top:1px dashed #ccc;padding-top:8px;line-height:1.8}</style>
+    </head><body>${content}</body></html>`);
+        win.document.close();
+        win.focus();
+        setTimeout(() => win.print(), 300);
+    }
+
+    /* ── WEBSOCKET ── */
+    function initWebSocket() {
+        const token = localStorage.getItem(TOKEN_KEY) || localStorage.getItem('access_token');
+        if (!token) return;
+        const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+        const ws = new WebSocket(`${proto}://${location.host}/ws/cashier/?token=${token}`);
+        ws.onmessage = e => {
+            try {
+                const msg = JSON.parse(e.data);
+                if (msg.type === 'initial_ready_orders' && msg.orders?.length) {
+                    msg.orders.forEach(o => {
+                        if (!state.orders.find(x => x.id === o.order_id)) loadOrders();
+                    });
+                }
+                if (msg.type === 'order_ready' || msg.type === 'new_order') {
+                    loadOrders();
+                    toast(`🔔 Stol #${msg.table_number} — order to'lashga tayyor`, 'success', 4000);
+                }
+                if (msg.type === 'order_paid') {
+                    loadOrders();
+                    toast(`✅ Stol #${msg.table_number} — to'lov tasdiqlandi`, 'success');
+                }
+            } catch (err) {
+            }
+        };
+        ws.onclose = () => setTimeout(initWebSocket, 5000);
+    }
+
+    /* ═══════════════════════════════════════
+   SETTINGS MODAL
+═══════════════════════════════════════ */
+    function openSettings(tab) {
+        closeDD();
+        document.getElementById('settings-modal').classList.add('open');
+        const targetTab = tab || 'profile';
+        const tabBtn = document.querySelector(`[data-stab="${targetTab}"]`);
+        if (tabBtn) switchSettingsTab(targetTab, tabBtn);
+        loadProfileIntoForm();
+        if (targetTab === 'devices') loadDevices();
+    }
+
+    function closeSettings() {
+        document.getElementById('settings-modal').classList.remove('open');
+    }
+
+    function closeSettingsOutside(e) {
+        if (e.target.id === 'settings-modal') closeSettings();
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeSettings();
+    });
+
+    function switchSettingsTab(tab, btn) {
+        document.querySelectorAll('.modal-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('stab-profile').style.display = tab === 'profile' ? '' : 'none';
+        document.getElementById('stab-devices').style.display = tab === 'devices' ? '' : 'none';
+        if (tab === 'devices') loadDevices();
+    }
+
+    /* ── PROFILE ── */
+    function loadProfileIntoForm() {
+        const user = JSON.parse(
+            localStorage.getItem(USER_KEY) || localStorage.getItem('user') || '{}'
+        );
+        fillProfileForm(user);
+        fetch(`${API}/employees/me/`, {headers: authHeaders()})
+            .then(r => r.ok ? r.json() : null)
+            .then(data => {
+                if (data) fillProfileForm(data);
+            })
+            .catch(() => {
+            });
+    }
+
+    function fillProfileForm(user) {
+        if (!user) return;
+        const name = ((user.first_name || '') + ' ' + (user.last_name || '')).trim();
+        document.getElementById('s-avatar').textContent = (name.charAt(0) || 'K').toUpperCase();
+        document.getElementById('s-fullname').textContent = name || '—';
+        document.getElementById('s-role-tag').textContent =
+            {cashier: 'Kassir', manager: 'Menejer', owner: 'Egasi'}[user.role] || user.role || 'Kassir';
+        document.getElementById('s-firstname').value = user.first_name || '';
+        document.getElementById('s-lastname').value = user.last_name || '';
+        document.getElementById('s-phone').value = user.phone_number || '';
+        document.getElementById('s-email').value = user.email || '';
+        document.getElementById('s-bank').value = user.bank_card || '';
+    }
+
+    async function saveProfile() {
+        const btn = document.getElementById('s-save-btn');
+        btn.disabled = true;
+        btn.textContent = 'Saqlanmoqda...';
+
+        const body = {};
+        const firstname = document.getElementById('s-firstname').value.trim();
+        const lastname = document.getElementById('s-lastname').value.trim();
+        const phone = document.getElementById('s-phone').value.trim();
+        const email = document.getElementById('s-email').value.trim();
+        const bank = document.getElementById('s-bank').value.trim();
+        const pwd = document.getElementById('s-pwd').value;
+
+        if (firstname) body.first_name = firstname;
+        if (lastname) body.last_name = lastname;
+        if (phone) body.phone_number = phone;
+        if (email) body.email = email;
+        if (bank) body.bank_card = bank;
+        if (pwd) body.password = pwd;
+
+        try {
+            const res = await fetch(`${API}/employees/me/update/`, {
+                method: 'PATCH',
+                headers: authHeaders(),
+                body: JSON.stringify(body),
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                toast(Object.values(err).flat().join(', ') || 'Xatolik yuz berdi', 'err');
+            } else {
+                const data = await res.json();
+                const stored = JSON.parse(localStorage.getItem(USER_KEY) || localStorage.getItem('user') || '{}');
+                const updated = {...stored, ...data};
+                localStorage.setItem(USER_KEY, JSON.stringify(updated));
+                localStorage.setItem('user', JSON.stringify(updated));
+                const newName = ((data.first_name || '') + ' ' + (data.last_name || '')).trim();
+                if (newName) {
+                    document.getElementById('prof-name-el').textContent = newName.split(' ')[0];
+                    document.getElementById('dd-name').textContent = newName;
+                    document.getElementById('avatar-el').textContent = newName.charAt(0).toUpperCase();
+                    state.cashierName = newName;
+                    state.cashierInitial = newName.charAt(0).toUpperCase();
+                }
+                fillProfileForm(data);
+                document.getElementById('s-pwd').value = '';
+                toast('✓ Profil saqlandi', 'success');
+            }
+        } catch (e) {
+            toast('Server bilan bog\'lanib bo\'lmadi', 'err');
+        }
+
+        btn.disabled = false;
+        btn.textContent = '✓ Saqlash';
+    }
+
+    /* ── DEVICES ── */
+    const deviceState = {};
+
+    async function loadDevices() {
+        const list = document.getElementById('devices-list');
+        list.innerHTML = '<div class="devices-empty">⏳ Yuklanmoqda...</div>';
+        try {
+            const res = await fetch(`${API}/employees/devices/`, {headers: authHeaders()});
+            if (!res.ok) throw new Error();
+            const devices = await res.json();
+            if (!devices.length) {
+                list.innerHTML = '<div class="devices-empty">Hozircha qurilmalar yo\'q</div>';
+                return;
+            }
+            list.innerHTML = devices.map(d => renderDeviceCard(d)).join('');
+        } catch (e) {
+            list.innerHTML = '<div class="devices-empty" style="color:var(--danger)">Yuklab bo\'lmadi</div>';
+        }
+    }
+
+    function renderDeviceCard(d) {
+        const isCurrent = d.is_current;
+        const icon = getDeviceIcon(d.os, d.browser);
+        const dState = deviceState[d.id] || null;
+        const lastActive = d.last_active
+            ? new Date(d.last_active).toLocaleString('uz-UZ', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+            : '—';
+        const loggedIn = d.logged_in_at
+            ? new Date(d.logged_in_at).toLocaleString('uz-UZ', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+            : '—';
+
+        let codeBox = '';
+        if (dState === 'waiting_code') {
+            codeBox = `<div class="code-confirm-box">
+      <div class="code-confirm-label">📧 Email ga 6 raqamli kod yuborildi. Kodni kiriting va tasdiqlang:</div>
+      <div class="code-input-row">
+        <input class="code-input" id="code-input-${d.id}" placeholder="••••••" maxlength="6" type="text"
+          oninput="this.value=this.value.replace(/\\D/g,'')"
+          onkeydown="if(event.key==='Enter')confirmDevice(${d.id})">
+        <button class="code-confirm-btn" onclick="confirmDevice(${d.id})" id="code-confirm-btn-${d.id}">O'chirish</button>
+      </div>
+    </div>`;
+        }
+
+        return `<div class="device-card${isCurrent ? ' current' : ''}" id="device-card-${d.id}">
+    <div class="device-icon">${icon}</div>
+    <div class="device-info">
+      <div class="device-name">
+        ${d.device_name || d.browser || 'Noma\'lum qurilma'}
+        ${isCurrent ? '<span class="device-current-tag">Joriy</span>' : ''}
+      </div>
+      <div class="device-meta">
+        ${d.os ? d.os + ' · ' : ''}${d.browser || ''}${d.ip_address ? ' · ' + d.ip_address : ''}<br>
+        Kirgan: ${loggedIn}<br>
+        Oxirgi faollik: ${lastActive}
+      </div>
+      ${codeBox}
+    </div>
+    ${!isCurrent ? `<button class="device-remove-btn" id="remove-btn-${d.id}"
+      onclick="requestDeviceRemove(${d.id})"
+      ${dState === 'sending' || dState === 'confirming' ? 'disabled' : ''}>
+      ${dState === 'sending' ? '...' : dState === 'waiting_code' ? 'Qayta yuborish' : 'O\'chirish'}
+    </button>` : ''}
+  </div>`;
+    }
+
+    function getDeviceIcon(os, browser) {
+        const o = (os || '').toLowerCase();
+        const b = (browser || '').toLowerCase();
+        if (o.includes('android')) return '📱';
+        if (o.includes('ios') || o.includes('iphone') || o.includes('ipad')) return '📱';
+        if (o.includes('windows')) return '🖥️';
+        if (o.includes('mac')) return '💻';
+        if (o.includes('linux')) return '🐧';
+        if (b.includes('mobile')) return '📱';
+        return '💻';
+    }
+
+    async function requestDeviceRemove(sessionId) {
+        const btn = document.getElementById(`remove-btn-${sessionId}`);
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = '...';
+        }
+        deviceState[sessionId] = 'sending';
+        try {
+            const res = await fetch(`${API}/employees/devices/${sessionId}/remove/`, {
+                method: 'POST', headers: authHeaders(),
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                toast(err.error || 'Xatolik yuz berdi', 'err');
+                deviceState[sessionId] = null;
+                loadDevices();
+                return;
+            }
+            deviceState[sessionId] = 'waiting_code';
+            toast('📧 Email ga kod yuborildi!', 'success', 4000);
+            loadDevices();
+            setTimeout(() => {
+                const inp = document.getElementById(`code-input-${sessionId}`);
+                if (inp) inp.focus();
+            }, 150);
+        } catch (e) {
+            toast('Server bilan bog\'lanib bo\'lmadi', 'err');
+            deviceState[sessionId] = null;
+            loadDevices();
+        }
+    }
+
+    async function confirmDevice(sessionId) {
+        const codeEl = document.getElementById(`code-input-${sessionId}`);
+        const confirmBtn = document.getElementById(`code-confirm-btn-${sessionId}`);
+        const code = codeEl ? codeEl.value.trim() : '';
+        if (!code || code.length !== 6) {
+            toast('6 raqamli kodni kiriting', 'err');
+            return;
+        }
+        if (confirmBtn) {
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = '...';
+        }
+        deviceState[sessionId] = 'confirming';
+        try {
+            const res = await fetch(`${API}/employees/devices/${sessionId}/confirm/`, {
+                method: 'POST', headers: authHeaders(), body: JSON.stringify({code}),
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                toast(err.error || 'Kod xato yoki muddati tugagan', 'err');
+                deviceState[sessionId] = 'waiting_code';
+                if (confirmBtn) {
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = 'O\'chirish';
+                }
+                return;
+            }
+            delete deviceState[sessionId];
+            toast('✓ Qurilma muvaffaqiyatli o\'chirildi', 'success');
+            loadDevices();
+        } catch (e) {
+            toast('Server bilan bog\'lanib bo\'lmadi', 'err');
+            deviceState[sessionId] = 'waiting_code';
+            if (confirmBtn) {
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = 'O\'chirish';
+            }
+        }
+    }
+
+    /* ── INIT ── */
+    async function init() {
+        initAuth();
+        await Promise.all([loadRestaurantInfo(), loadOrders(), loadTables(), loadNotifications(), loadPaymentHistory()]);
+        initWebSocket();
+    }
+
+    init();
+</script>
+</body>
+</html>

@@ -1,0 +1,3670 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ofitsiant Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        :root {
+            --bg: #0d1117;
+            --sidebar: #0a0f1a;
+            --surface: #111827;
+            --surface2: #161d2e;
+            --surface3: #1a2438;
+            --border: rgba(255, 255, 255, .07);
+            --border2: rgba(255, 255, 255, .12);
+            --text: #e2e8f0;
+            --text2: #94a3b8;
+            --text3: #64748b;
+            --accent: #3b82f6;
+            --accent2: #8b5cf6;
+            --accent-fg: #ffffff;
+            --tint: rgba(255, 255, 255, .04);
+            --tint2: rgba(255, 255, 255, .08);
+            --green: #4ade80;
+            --green-bg: #0a2d13;
+            --green-border: #14532d;
+            --paid: #22c55e;
+            --paid-bg: #052314;
+            --paid-border: #166534;
+            --orange: #fb923c;
+            --orange-bg: #3c1a00;
+            --orange-border: #7c2d12;
+            --red: #f87171;
+            --red-bg: #3b0a0a;
+            --red-border: #7f1d1d;
+            --blue: #93c5fd;
+            --blue-bg: #0c1a4d;
+            --blue-border: #1e3a8a;
+            --yellow: #fbbf24;
+            --yellow-bg: #422006;
+            --yellow-border: #78350f;
+            --input-bg: #0d1117;
+            --mono: 'JetBrains Mono', monospace;
+            --sans: 'Inter', sans-serif;
+            --r: 9px;
+            --r2: 10px;
+            --r3: 14px;
+            --nav-h: 54px;
+            --bot-h: 62px;
+        }
+
+        body.light-mode {
+            --bg: #f1f5f9;
+            --sidebar: #ffffff;
+            --surface: #ffffff;
+            --surface2: #f8fafc;
+            --surface3: #eff6ff;
+            --border: rgba(0, 0, 0, .08);
+            --border2: rgba(0, 0, 0, .14);
+            --text: #0f172a;
+            --text2: #475569;
+            --text3: #64748b;
+            --tint: rgba(0, 0, 0, .04);
+            --tint2: rgba(0, 0, 0, .06);
+            --input-bg: #f8fafc;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--text)
+        }
+
+        body {
+            font-family: var(--sans);
+            font-size: 14px
+        }
+
+        .mono {
+            font-family: var(--mono)
+        }
+
+        /* ── TOP NAV ── */
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-h);
+            z-index: 100;
+            background: var(--sidebar);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            gap: 10px;
+        }
+
+        .tn-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0
+        }
+
+        .restaurant-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--r2);
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            overflow: hidden;
+            flex-shrink: 0;
+            color: #fff
+        }
+
+        .restaurant-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .restaurant-name {
+            font-family: var(--sans);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: .2px;
+            color: var(--text);
+            max-width: 130px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .tn-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0
+        }
+
+        .ws-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            font-family: var(--mono);
+            border: 1px solid transparent;
+            flex-shrink: 0;
+            transition: all .2s
+        }
+
+        .ws-on {
+            color: var(--green);
+            border-color: var(--green-border);
+            background: var(--green-bg)
+        }
+
+        .ws-off {
+            color: var(--red);
+            border-color: var(--red-border);
+            background: var(--red-bg)
+        }
+
+        .ws-connecting {
+            color: var(--orange);
+            border-color: var(--orange-border);
+            background: var(--orange-bg)
+        }
+
+        .ws-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            flex-shrink: 0
+        }
+
+        .ws-on .ws-dot {
+            animation: pulse-dot 2s infinite
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% {
+                opacity: 1
+            }
+            50% {
+                opacity: .3
+            }
+        }
+
+        .tn-bell {
+            position: relative;
+            width: 34px;
+            height: 34px;
+            border-radius: var(--r2);
+            background: var(--tint);
+            border: 1px solid var(--border);
+            color: var(--text3);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: .15s
+        }
+
+        .tn-bell:hover {
+            background: var(--tint2);
+            border-color: var(--border2);
+            color: var(--text)
+        }
+
+        .tn-bell svg {
+            width: 15px;
+            height: 15px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round
+        }
+
+        .tn-bell-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #ef4444;
+            border: 2px solid var(--sidebar);
+            display: none
+        }
+
+        .tn-bell-dot.show {
+            display: block
+        }
+
+        .av-wrap {
+            position: relative
+        }
+
+        .av-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--r2);
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: var(--accent-fg);
+            border: none;
+            display: grid;
+            place-items: center;
+            font-family: var(--sans);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            transition: opacity .15s
+        }
+
+        .av-btn:hover {
+            opacity: .85
+        }
+
+        .av-btn img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--r2);
+            display: none
+        }
+
+        .av-dd {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 210px;
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-5px);
+            transition: .17s;
+            z-index: 300
+        }
+
+        .av-dd.open {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0)
+        }
+
+        .av-dd-user {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .av-dd-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text)
+        }
+
+        .av-dd-role {
+            font-size: 10px;
+            color: var(--text3);
+            font-family: var(--mono);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-top: 2px
+        }
+
+        .av-dd-theme {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .av-dd-theme-lbl {
+            font-size: 12px;
+            color: var(--text2);
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .av-dd-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 10px 14px;
+            font-size: 13px;
+            color: var(--text3);
+            cursor: pointer;
+            text-align: left;
+            transition: .13s;
+            font-family: var(--sans)
+        }
+
+        .av-dd-item:hover {
+            background: var(--tint);
+            color: var(--text)
+        }
+
+        .av-dd-item.danger {
+            color: var(--red)
+        }
+
+        .av-dd-item.danger:hover {
+            background: var(--red-bg)
+        }
+
+        .av-dd-item svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0
+        }
+
+        /* ── THEME TOGGLE (matches owner panel) ── */
+        .toggle-switch {
+            position: relative;
+            width: 42px;
+            height: 22px;
+            cursor: pointer;
+            flex-shrink: 0
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute
+        }
+
+        .toggle-track {
+            position: absolute;
+            inset: 0;
+            border-radius: 34px;
+            background: #1e2a3a;
+            border: 1px solid var(--border2);
+            transition: all .35s
+        }
+
+        body.light-mode .toggle-track {
+            background: #e2e8f0
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #64748b, #475569);
+            transition: all .35s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .4)
+        }
+
+        .toggle-switch input:checked ~ .toggle-track {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-color: rgba(251, 191, 36, .3)
+        }
+
+        .toggle-switch input:checked ~ .toggle-thumb {
+            left: 23px;
+            background: linear-gradient(135deg, #fff, #fef3c7);
+            box-shadow: 0 2px 8px rgba(251, 191, 36, .5)
+        }
+
+        .toggle-thumb .moon-icon {
+            display: block;
+            color: #94a3b8
+        }
+
+        .toggle-thumb .sun-icon {
+            display: none;
+            color: #f59e0b
+        }
+
+        .toggle-switch input:checked ~ .toggle-thumb .moon-icon {
+            display: none
+        }
+
+        .toggle-switch input:checked ~ .toggle-thumb .sun-icon {
+            display: block
+        }
+
+        /* ── PAGES ── */
+        .page {
+            display: none;
+            position: fixed;
+            top: var(--nav-h);
+            left: 0;
+            right: 0;
+            bottom: var(--bot-h);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background: var(--bg)
+        }
+
+        .page.active {
+            display: block
+        }
+
+        .page::-webkit-scrollbar {
+            width: 3px
+        }
+
+        .page::-webkit-scrollbar-thumb {
+            background: var(--border2);
+            border-radius: 2px
+        }
+
+        .page-inner {
+            padding: 16px 14px
+        }
+
+        /* ── BOTTOM NAV ── */
+        .botnav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--bot-h);
+            z-index: 100;
+            background: var(--sidebar);
+            border-top: 1px solid var(--border);
+            display: flex
+        }
+
+        .bn-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            background: none;
+            border: none;
+            color: var(--text3);
+            cursor: pointer;
+            font-size: 9px;
+            font-weight: 600;
+            font-family: var(--sans);
+            letter-spacing: .03em;
+            position: relative;
+            transition: color .15s;
+            padding-bottom: env(safe-area-inset-bottom, 0)
+        }
+
+        .bn-btn svg {
+            width: 21px;
+            height: 21px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform .15s
+        }
+
+        .bn-btn.active {
+            color: #60a5fa
+        }
+
+        .bn-btn.active svg {
+            transform: scale(1.08)
+        }
+
+        .bn-badge {
+            position: absolute;
+            top: 5px;
+            right: calc(50% - 20px);
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            background: #ef4444;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            font-family: var(--mono);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            border: 2px solid var(--sidebar)
+        }
+
+        .bn-badge.show {
+            display: flex
+        }
+
+        /* ── SHEET MODAL ── */
+        .sheet-ov {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .6);
+            z-index: 500;
+            display: none;
+            align-items: flex-end;
+            justify-content: center
+        }
+
+        .sheet-ov.open {
+            display: flex
+        }
+
+        .sheet {
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-top: 1px solid var(--border2);
+            border-radius: 18px 18px 0 0;
+            width: 100%;
+            max-width: 520px;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, .4);
+            animation: sheetUp .22s cubic-bezier(.34, 1.2, .64, 1)
+        }
+
+        @keyframes sheetUp {
+            from {
+                transform: translateY(28px);
+                opacity: .6
+            }
+            to {
+                transform: none;
+                opacity: 1
+            }
+        }
+
+        .sheet-handle {
+            width: 36px;
+            height: 3px;
+            background: var(--border2);
+            border-radius: 2px;
+            margin: 0 auto 18px
+        }
+
+        .sheet-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+            font-family: var(--sans)
+        }
+
+        .sheet-sub {
+            font-size: 12px;
+            color: var(--text2);
+            margin-bottom: 18px
+        }
+
+        /* ── FLOAT NOTIF ── */
+        .fnotif {
+            position: fixed;
+            top: calc(var(--nav-h) + 10px);
+            left: 12px;
+            right: 12px;
+            max-width: 460px;
+            margin: 0 auto;
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: var(--r2);
+            padding: 13px 15px;
+            z-index: 400;
+            cursor: pointer;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, .3);
+            animation: floatIn .3s cubic-bezier(.34, 1.3, .64, 1)
+        }
+
+        .fnotif.fo {
+            border-left: 3px solid var(--orange)
+        }
+
+        .fnotif.fg {
+            border-left: 3px solid var(--green)
+        }
+
+        .fnotif.fb {
+            border-left: 3px solid #3b82f6
+        }
+
+        @keyframes floatIn {
+            from {
+                transform: translateY(-14px);
+                opacity: 0
+            }
+            to {
+                transform: none;
+                opacity: 1
+            }
+        }
+
+        /* ── TOAST ── */
+        .toast-el {
+            position: fixed;
+            bottom: calc(var(--bot-h) + 14px);
+            left: 14px;
+            right: 14px;
+            max-width: 420px;
+            margin: 0 auto;
+            border-radius: var(--r2);
+            padding: 11px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 600;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+            animation: floatIn .25s ease;
+            border: 1px solid transparent
+        }
+
+        .toast-el.success {
+            background: var(--paid-bg);
+            border-color: var(--paid-border);
+            color: var(--paid)
+        }
+
+        .toast-el.error {
+            background: var(--red-bg);
+            border-color: var(--red-border);
+            color: var(--red)
+        }
+
+        .toast-el.warn {
+            background: var(--orange-bg);
+            border-color: var(--orange-border);
+            color: var(--orange)
+        }
+
+        .toast-el.info {
+            background: var(--blue-bg);
+            border-color: var(--blue-border);
+            color: var(--blue)
+        }
+
+        .toast-el svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0
+        }
+
+        /* ── COMMON COMPONENTS ── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r3);
+            padding: 14px
+        }
+
+        .card.orange {
+            border-color: rgba(251, 146, 60, .3);
+            background: rgba(251, 146, 60, .06)
+        }
+
+        .card.green {
+            border-color: rgba(74, 222, 128, .3);
+            background: rgba(74, 222, 128, .06)
+        }
+
+        .card.blue {
+            border-color: rgba(59, 130, 246, .3);
+            background: rgba(59, 130, 246, .06)
+        }
+
+        .card-sm {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--r2);
+            padding: 12px
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            font-family: var(--mono);
+            white-space: nowrap;
+            border: 1px solid transparent
+        }
+
+        .b-pending {
+            background: var(--yellow-bg);
+            color: var(--yellow);
+            border-color: var(--yellow-border)
+        }
+
+        .b-confirmed {
+            background: var(--blue-bg);
+            color: var(--blue);
+            border-color: var(--blue-border)
+        }
+
+        .b-cooking {
+            background: var(--orange-bg);
+            color: var(--orange);
+            border-color: var(--orange-border)
+        }
+
+        .b-ready {
+            background: var(--green-bg);
+            color: var(--green);
+            border-color: var(--green-border)
+        }
+
+        .b-paid {
+            background: var(--paid-bg);
+            color: var(--paid);
+            border-color: var(--paid-border)
+        }
+
+        .b-canceled {
+            background: var(--red-bg);
+            color: var(--red);
+            border-color: var(--red-border)
+        }
+
+        .b-active {
+            background: var(--blue-bg);
+            color: var(--blue);
+            border-color: var(--blue-border)
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: inline-block
+        }
+
+        .dot-green {
+            background: var(--green);
+            animation: pulseDot 2s infinite
+        }
+
+        .dot-orange {
+            background: var(--orange);
+            animation: pulseDot 2s infinite
+        }
+
+        .dot-gray {
+            background: var(--text3)
+        }
+
+        @keyframes pulseDot {
+            0%, 100% {
+                opacity: 1
+            }
+            50% {
+                opacity: .5
+            }
+        }
+
+        .sec-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--text3);
+            margin-bottom: 10px;
+            font-family: var(--sans)
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+            font-family: var(--sans)
+        }
+
+        .page-sub {
+            font-size: 12px;
+            color: var(--text3);
+            margin-bottom: 16px
+        }
+
+        .btn {
+            border: 1px solid transparent;
+            border-radius: 9px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: all .15s;
+            font-family: var(--sans)
+        }
+
+        .btn:active {
+            transform: scale(.97)
+        }
+
+        .btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            flex-shrink: 0
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #fff;
+            border-color: transparent
+        }
+
+        .btn-primary:hover {
+            opacity: .85
+        }
+
+        .btn-success {
+            background: rgba(22, 101, 52, .25);
+            color: var(--green);
+            border-color: var(--paid-border)
+        }
+
+        .btn-success:hover {
+            background: rgba(22, 101, 52, .55)
+        }
+
+        .btn-danger {
+            background: rgba(127, 29, 29, .25);
+            color: var(--red);
+            border-color: var(--red-border)
+        }
+
+        .btn-danger:hover {
+            background: rgba(127, 29, 29, .55)
+        }
+
+        .btn-ghost {
+            background: var(--tint);
+            border-color: var(--border);
+            color: var(--text2)
+        }
+
+        .btn-ghost:hover {
+            background: var(--tint2);
+            border-color: var(--border2);
+            color: var(--text)
+        }
+
+        .btn-full {
+            width: 100%
+        }
+
+        .btn-sm {
+            padding: 8px 13px;
+            font-size: 12px
+        }
+
+        .btn-xs {
+            padding: 6px 10px;
+            font-size: 11px;
+            border-radius: 8px
+        }
+
+        .fi {
+            width: 100%;
+            padding: 9px 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+            font-family: var(--sans);
+            outline: none;
+            transition: .15s;
+            -webkit-appearance: none
+        }
+
+        .fi:focus {
+            border-color: var(--accent)
+        }
+
+        .fi::placeholder {
+            color: var(--text3)
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 14px 0
+        }
+
+        .flex-sb {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px
+        }
+
+        .flex-c {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns:1fr 1fr;
+            gap: 10px
+        }
+
+        .grid3 {
+            display: grid;
+            grid-template-columns:repeat(3, 1fr);
+            gap: 10px
+        }
+
+        .kpi {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center
+        }
+
+        .kpi-val {
+            font-family: var(--mono);
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 3px;
+            color: var(--text)
+        }
+
+        .kpi-lbl {
+            font-size: 10px;
+            color: var(--text3);
+            font-weight: 600;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            font-family: var(--sans)
+        }
+
+        .empty {
+            text-align: center;
+            padding: 44px 20px;
+            color: var(--text3);
+            font-size: 13px;
+            font-family: var(--sans)
+        }
+
+        .empty-ico {
+            font-size: 30px;
+            margin-bottom: 10px;
+            opacity: .3
+        }
+
+        .empty-txt {
+            font-size: 13px
+        }
+
+        .timer {
+            font-family: var(--mono);
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--green)
+        }
+
+        .timer.urgent {
+            color: var(--red);
+            animation: blink 1s infinite
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1
+            }
+            50% {
+                opacity: .3
+            }
+        }
+
+        /* ── CHIP FILTER (matches owner filter-btn) ── */
+        .chips {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px
+        }
+
+        .chips::-webkit-scrollbar {
+            display: none
+        }
+
+        .chip {
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text3);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: .15s;
+            font-family: var(--sans)
+        }
+
+        .chip:hover, .chip.active {
+            border-color: #3b82f6;
+            color: #60a5fa;
+            background: rgba(59, 130, 246, .1)
+        }
+
+        /* ── TABLE GRID ── */
+        .table-grid {
+            display: grid;
+            grid-template-columns:repeat(3, 1fr);
+            gap: 10px
+        }
+
+        .table-cell {
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: .15s;
+            position: relative
+        }
+
+        .table-cell:hover {
+            border-color: var(--border2);
+            transform: translateY(-1px)
+        }
+
+        .table-cell.mine {
+            border-color: rgba(251, 146, 60, .35);
+            background: rgba(251, 146, 60, .07)
+        }
+
+        .table-cell.busy {
+            border-color: var(--border);
+            background: var(--surface2);
+            cursor: default
+        }
+
+        .table-cell.busy:hover {
+            transform: none;
+            border-color: var(--border)
+        }
+
+        .table-cell.free {
+            border-color: rgba(74, 222, 128, .3)
+        }
+
+        .table-cell:active {
+            transform: scale(.97)
+        }
+
+        .tc-num {
+            font-family: var(--mono);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 3px
+        }
+
+        .tc-cap {
+            font-size: 10px;
+            color: var(--text3);
+            margin-bottom: 4px;
+            font-family: var(--mono)
+        }
+
+        .tc-status {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: .04em;
+            font-family: var(--mono)
+        }
+
+        .tc-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px
+        }
+
+        .tc-other {
+            font-size: 9px;
+            color: var(--text3);
+            margin-top: 2px;
+            font-family: var(--mono);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        /* ── NOTIFICATION ITEM ── */
+        .notif-item {
+            border-radius: var(--r2);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            transition: .15s
+        }
+
+        .notif-item.unread {
+            border-left: 3px solid var(--orange)
+        }
+
+        .notif-meta {
+            font-size: 10px;
+            color: var(--text3);
+            font-family: var(--mono);
+            margin-top: 4px;
+            display: flex;
+            justify-content: space-between
+        }
+
+        /* ── SALARY TABLE ── */
+        .sal-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px
+        }
+
+        .sal-table th {
+            padding: 9px 12px;
+            background: var(--surface2);
+            color: var(--text3);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            font-weight: 600;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--sans)
+        }
+
+        .sal-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            font-family: var(--mono);
+            color: var(--text)
+        }
+
+        .sal-table tr:last-child td {
+            border-bottom: none
+        }
+
+        /* ── PROFILE ── */
+        .prof-hero {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r3);
+            padding: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px
+        }
+
+        .prof-ava {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: grid;
+            place-items: center;
+            font-family: var(--sans);
+            font-size: 19px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative
+        }
+
+        .prof-ava img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 14px;
+            display: none
+        }
+
+        .prof-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 2px
+        }
+
+        .prof-role {
+            font-size: 11px;
+            color: var(--orange);
+            font-weight: 600;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            font-family: var(--mono)
+        }
+
+        .prof-phone {
+            font-size: 11px;
+            color: var(--text3);
+            font-family: var(--mono);
+            margin-top: 2px
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 14px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r2);
+            cursor: pointer;
+            transition: .15s;
+            margin-bottom: 8px
+        }
+
+        .settings-item:hover {
+            border-color: var(--border2);
+            background: var(--tint)
+        }
+
+        .settings-item-ico {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: var(--surface2);
+            display: grid;
+            place-items: center;
+            flex-shrink: 0
+        }
+
+        .settings-item-ico svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text2);
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round
+        }
+
+        .settings-item-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text)
+        }
+
+        .settings-item-sub {
+            font-size: 11px;
+            color: var(--text3)
+        }
+
+        .chev {
+            margin-left: auto;
+            color: var(--text3);
+            font-size: 13px
+        }
+
+        @keyframes inPulse {
+            0%, 100% {
+                transform: scale(1)
+            }
+            50% {
+                transform: scale(1.008)
+            }
+        }
+
+        .in-pulse {
+            animation: inPulse 1.8s ease infinite
+        }
+
+        /* ── SETTINGS MODAL ── */
+        .sm-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--text3);
+            margin-bottom: 6px;
+            display: block;
+            font-family: var(--sans)
+        }
+
+        .sm-group {
+            margin-bottom: 14px
+        }
+
+        .pic-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px
+        }
+
+        .pic-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: var(--surface2);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--sans);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            overflow: hidden;
+            flex-shrink: 0
+        }
+
+        .pic-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .upload-lbl {
+            display: inline-block;
+            padding: 8px 13px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--tint);
+            color: var(--text2);
+            font-size: 12px;
+            cursor: pointer;
+            transition: .15s;
+            font-family: var(--sans)
+        }
+
+        .upload-lbl:hover {
+            border-color: var(--border2);
+            color: var(--text)
+        }
+
+        #pic-input {
+            display: none
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border2);
+            border-radius: 2px
+        }
+
+        /* ── SESSIONS GRID ── */
+        .sessions-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 1024px) {
+            .sessions-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sessions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .sess-card {
+            background: rgba(251, 146, 60, .07);
+            border: 1px solid rgba(251, 146, 60, .35);
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: .15s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .sess-card:hover {
+            border-color: rgba(251, 146, 60, .6);
+            transform: translateY(-1px);
+        }
+
+        .sess-card:active {
+            transform: scale(.97);
+        }
+
+        .sess-card.has-ready {
+            border-color: rgba(74, 222, 128, .35);
+            background: rgba(74, 222, 128, .07);
+        }
+
+        .sess-tnum {
+            font-family: var(--mono);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .sess-orders-mini {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 2px;
+        }
+
+        .sess-order-chip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 4px 7px;
+            font-size: 10px;
+            gap: 4px;
+        }
+
+        .sess-close-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: rgba(127, 29, 29, .35);
+            border: 1px solid var(--red-border);
+            color: var(--red);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            font-size: 9px;
+        }
+
+        /* ── ORDERS GRID ── */
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 1024px) {
+            .orders-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .orders-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .order-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r3);
+            padding: 12px;
+            cursor: pointer;
+            transition: .15s;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .order-card:hover {
+            border-color: var(--border2);
+            transform: translateY(-1px);
+        }
+
+        .order-card:active {
+            transform: scale(.97);
+        }
+
+        .order-card.ready {
+            border-color: rgba(74, 222, 128, .35);
+            background: rgba(74, 222, 128, .06);
+            animation: inPulse 1.8s ease infinite;
+        }
+
+        .order-card.paid {
+            border-color: var(--border);
+            background: var(--surface2);
+            opacity: .7;
+        }
+
+        .oc-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .oc-table {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .oc-id {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--text3);
+        }
+
+        .oc-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+
+        .oc-time {
+            font-size: 10px;
+            color: var(--text3);
+        }
+
+        .oc-price {
+            font-family: var(--mono);
+            font-weight: 700;
+            font-size: 12px;
+            color: var(--text);
+        }
+
+        .oc-ready-bar {
+            background: var(--green-bg);
+            border: 1px solid var(--green-border);
+            border-radius: 6px;
+            padding: 5px 8px;
+            font-size: 10px;
+            color: var(--green);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* ── PAGINATION ── */
+        .pagination {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 8px 0;
+        }
+
+        .pg-btn {
+            min-width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text2);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .15s;
+            font-family: var(--mono);
+        }
+
+        .pg-btn:hover {
+            border-color: var(--border2);
+            color: var(--text);
+        }
+
+        .pg-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topnav">
+    <div class="tn-left">
+        <div class="restaurant-logo" id="restaurantLogo">🍽️</div>
+        <div class="restaurant-name" id="restaurantName">Yuklanmoqda...</div>
+    </div>
+    <div class="tn-right">
+        <div class="ws-pill ws-off" id="ws-pill">
+            <span class="ws-dot"></span>
+            <span id="ws-txt">Ulanmoqda</span>
+        </div>
+        <button class="tn-bell" onclick="goPage('notifications')" id="bell-btn" aria-label="Bildirishnomalar">
+            <svg viewBox="0 0 24 24">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="tn-bell-dot" id="bell-dot"></span>
+        </button>
+        <div class="av-wrap">
+            <button class="av-btn" id="av-btn" onclick="toggleAvDd()" aria-label="Profil">
+                <span id="av-init">W</span>
+                <img id="av-img" src="" alt="">
+            </button>
+            <div class="av-dd" id="av-dd">
+                <div class="av-dd-user">
+                    <div class="av-dd-name" id="av-name">Ofitsiant</div>
+                    <div class="av-dd-role">WAITER</div>
+                </div>
+                <div class="av-dd-theme">
+                    <span class="av-dd-theme-lbl">🎨 Mavzu</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="theme-toggle" onchange="toggleTheme(this)">
+                        <div class="toggle-track"></div>
+                        <div class="toggle-thumb">
+                            <span class="moon-icon">🌙</span>
+                            <span class="sun-icon">☀️</span>
+                        </div>
+                    </label>
+                </div>
+                <button class="av-dd-item" onclick="goPage('profile');closeAvDd()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Profilim
+                </button>
+
+                <button class="av-dd-item danger" onclick="doLogout()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Chiqish
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ══════ PAGE: SESSIONS ══════ -->
+<div class="page active" id="page-sessions">
+    <div class="page-inner">
+        <div class="page-title">Mening Sessiyalarim</div>
+        <div class="page-sub">Hozir siz xizmat ko'rsatayotgan stollar</div>
+        <div id="my-sessions">
+            <div class="empty">
+                <div class="empty-ico">🪑</div>
+                <div class="empty-txt">Faol sessiya yo'q</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ PAGE: INCOMING ══════ -->
+<div class="page" id="page-incoming">
+    <div class="page-inner">
+        <div class="page-title">Kelgan Buyurtmalar</div>
+        <div class="page-sub">QR orqali mijozlardan kelgan yangi buyurtmalar</div>
+        <div id="incoming-list">
+            <div class="empty">
+                <div class="empty-ico">📥</div>
+                <div class="empty-txt">Yangi buyurtma yo'q</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ PAGE: ORDERS ══════ -->
+<div class="page" id="page-orders">
+    <div class="page-inner">
+        <div class="page-title">Buyurtmalarim</div>
+        <div class="grid3" style="margin-bottom:14px">
+            <div class="kpi">
+                <div class="kpi-val" style="color:var(--orange)" id="o-active">0</div>
+                <div class="kpi-lbl">Faol</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-val" style="color:var(--green)" id="o-ready">0</div>
+                <div class="kpi-lbl">Tayyor</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-val" style="color:var(--text2)" id="o-total">0</div>
+                <div class="kpi-lbl">Jami</div>
+            </div>
+        </div>
+        <div class="chips" style="margin-bottom:14px">
+            <button class="chip active" onclick="filterOrders('active',this)">Faol</button>
+            <button class="chip" onclick="filterOrders('pending',this)">Kutmoqda</button>
+            <button class="chip" onclick="filterOrders('cooking',this)">Pishirilmoqda</button>
+            <button class="chip" onclick="filterOrders('ready',this)">Tayyor</button>
+            <button class="chip" onclick="filterOrders('paid',this)">To'landi</button>
+            <button class="chip" onclick="filterOrders('all',this)">Barchasi</button>
+        </div>
+        <div id="orders-list"></div>
+        <div id="paid-section" style="display:none;margin-top:20px">
+            <div class="sec-label" style="margin-bottom:10px">💳 To'langan buyurtmalar</div>
+            <div id="orders-paid-list"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ PAGE: TABLES ══════ -->
+<div class="page" id="page-tables">
+    <div class="page-inner">
+        <div class="page-title">Zal Xaritasi</div>
+        <div class="page-sub" id="tables-summary">Yuklanmoqda...</div>
+        <div class="flex-c" style="gap:14px;margin-bottom:14px;flex-wrap:wrap">
+      <span class="flex-c" style="gap:6px;font-size:11px;color:var(--text2)">
+        <span style="width:10px;height:10px;border-radius:3px;border:1px solid rgba(251,146,60,.35);background:rgba(251,146,60,.07);display:inline-block"></span>Mening stolim
+      </span>
+            <span class="flex-c" style="gap:6px;font-size:11px;color:var(--text2)">
+        <span style="width:10px;height:10px;border-radius:3px;border:1px solid var(--border);background:var(--surface2);display:inline-block"></span>Band (boshqa)
+      </span>
+            <span class="flex-c" style="gap:6px;font-size:11px;color:var(--text2)">
+        <span style="width:10px;height:10px;border-radius:3px;border:1px solid rgba(74,222,128,.3);background:var(--surface);display:inline-block"></span>Bo'sh
+      </span>
+        </div>
+        <div class="table-grid" id="tables-grid">
+            <div style="grid-column:1/-1" class="empty">
+                <div class="empty-ico">⏳</div>
+                <div class="empty-txt">Yuklanmoqda...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ PAGE: SALARY ══════ -->
+<div class="page" id="page-salary">
+    <div class="page-inner">
+        <div class="page-title">Maoshim</div>
+        <div class="page-sub">Joriy oy hisob-kitobi</div>
+        <div class="card green" style="margin-bottom:16px">
+            <div class="flex-c" style="margin-bottom:14px">
+                <div style="width:44px;height:44px;border-radius:12px;background:var(--surface);border:1px solid var(--paid-border);display:grid;place-items:center;flex-shrink:0">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--green)" fill="none" stroke-width="1.8"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="5" width="20" height="14" rx="2"/>
+                        <line x1="2" y1="10" x2="22" y2="10"/>
+                    </svg>
+                </div>
+                <div>
+                    <div style="font-size:11px;color:var(--text2);margin-bottom:2px">Sof to'lanishi kerak</div>
+                    <div style="font-family:var(--mono);font-size:21px;font-weight:700;color:var(--green)" id="sal-net">
+                        — UZS
+                    </div>
+                </div>
+            </div>
+            <div class="divider" style="margin:0 0 12px"></div>
+            <div class="grid2">
+                <div class="card-sm">
+                    <div style="font-size:10px;color:var(--text3);margin-bottom:4px;font-family:var(--sans)">Asosiy
+                        oylik
+                    </div>
+                    <div style="font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text)" id="sal-base">
+                        — UZS
+                    </div>
+                </div>
+                <div class="card-sm">
+                    <div style="font-size:10px;color:var(--text3);margin-bottom:4px;font-family:var(--sans)">Jarimalar
+                    </div>
+                    <div style="font-family:var(--mono);font-size:13px;font-weight:600;color:var(--red)" id="sal-fine">—
+                        UZS
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sec-label">To'lov tarixi</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;overflow-x:auto">
+            <table class="sal-table" id="sal-table">
+                <thead>
+                <tr>
+                    <th>Sana</th>
+                    <th>Summa</th>
+                    <th>Kim to'ladi</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="3" class="empty" style="padding:32px">Yuklanmoqda...</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ PAGE: NOTIFICATIONS ══════ -->
+<div class="page" id="page-notifications">
+    <div class="page-inner">
+        <div class="flex-sb" style="margin-bottom:18px">
+            <div class="page-title" style="margin:0">Bildirishnomalar</div>
+            <button class="btn btn-ghost btn-sm" onclick="markAllRead()">Hammasini o'qi</button>
+        </div>
+        <div id="notif-list">
+            <div class="empty">
+                <div class="empty-ico">🔕</div>
+                <div class="empty-txt">Bildirishnomalar yo'q</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ PAGE: PROFILE ══════ -->
+<div class="page" id="page-profile">
+    <div class="page-inner" style="max-width:560px;margin:0 auto">
+        <div class="prof-hero">
+            <div class="prof-ava" id="prof-ava">
+                <span id="prof-init-big">W</span>
+                <img id="prof-img" src="" alt="">
+            </div>
+            <div>
+                <div class="prof-name" id="prof-name">Ofitsiant</div>
+                <div class="prof-role">Ofitsiant</div>
+                <div class="prof-phone" id="prof-phone">—</div>
+            </div>
+        </div>
+
+        <div class="settings-item" onclick="openDevicesSheet()" style="margin-bottom:8px">
+            <div class="settings-item-ico">
+                <svg viewBox="0 0 24 24">
+                    <rect x="5" y="2" width="14" height="20" rx="2"/>
+                    <line x1="12" y1="18" x2="12.01" y2="18"/>
+                </svg>
+            </div>
+            <div>
+                <div class="settings-item-title">Faol qurilmalar</div>
+                <div class="settings-item-sub" id="devices-count-txt">Tizimga kirgan barcha qurilmalar</div>
+            </div>
+            <span class="chev">›</span>
+        </div>
+
+        <div class="settings-item" onclick="goPage('proofs')" style="margin-bottom:8px">
+            <div class="settings-item-ico">
+                <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+            </div>
+            <div>
+                <div class="settings-item-title">Chek tarixi</div>
+                <div class="settings-item-sub" id="proof-history-count">0 ta chek</div>
+            </div>
+            <span class="chev">›</span>
+        </div>
+
+        <div class="sec-label">Sozlamalar</div>
+        <div class="settings-item" onclick="openSettings()">
+            <div class="settings-item-ico">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+            </div>
+            <div>
+                <div class="settings-item-title">Ma'lumotlarni tahrirlash</div>
+                <div class="settings-item-sub">Ism, telefon, bank karta</div>
+            </div>
+            <span class="chev">›</span>
+        </div>
+
+        <div style="margin-top:8px">
+            <button class="btn btn-danger btn-full" onclick="doLogout()">
+                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                Tizimdan chiqish
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ PAGE: PROOFS ══════ -->
+<div class="page" id="page-proofs">
+    <div class="page-inner">
+        <div class="flex-sb" style="margin-bottom:16px">
+            <div>
+                <div class="page-title">Chek Tarixi</div>
+                <div class="page-sub">Mijozlardan kelgan to'lov cheklari</div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="goPage('profile')">← Orqaga</button>
+        </div>
+        <div id="proof-history-list">
+            <div class="empty">
+                <div class="empty-ico">🧾</div>
+                <div class="empty-txt">Cheklar yo'q</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ══════ BOTTOM NAV ══════ -->
+<nav class="botnav">
+    <button class="bn-btn active" id="bn-sessions" onclick="goPage('sessions')">
+        <svg viewBox="0 0 24 24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Sessiyalar
+    </button>
+    <button class="bn-btn" id="bn-incoming" onclick="goPage('incoming')">
+        <svg viewBox="0 0 24 24">
+            <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+            <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+        </svg>
+        Kelgan
+        <span class="bn-badge" id="bn-badge-inc">0</span>
+    </button>
+    <button class="bn-btn" id="bn-orders" onclick="goPage('orders')">
+        <svg viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        Buyurtmalar
+        <span class="bn-badge" id="bn-badge-ord">0</span>
+    </button>
+    <button class="bn-btn" id="bn-tables" onclick="goPage('tables')">
+        <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        Stollar
+    </button>
+    <button class="bn-btn" id="bn-salary" onclick="goPage('salary')">
+        <svg viewBox="0 0 24 24">
+            <rect x="2" y="5" width="20" height="14" rx="2"/>
+            <line x1="2" y1="10" x2="22" y2="10"/>
+        </svg>
+        Maosh
+    </button>
+</nav>
+
+<!-- ══════ SHEETS ══════ -->
+
+<!-- New Session Sheet (bo'sh stol bosilganda) -->
+<div class="sheet-ov" id="sh-new-session" onclick="if(event.target===this)closeSheet('sh-new-session')">
+    <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">Sessiya boshlash</div>
+        <div class="sheet-sub">Stol #<span id="new-sess-num">?</span> — <span id="new-sess-cap">?</span> kishilik ·
+            bo'sh
+        </div>
+        <div class="grid2">
+            <button class="btn btn-ghost btn-full" onclick="closeSheet('sh-new-session')">Bekor</button>
+            <button class="btn btn-primary btn-full" id="start-sess-btn" onclick="startSession()">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"
+                     stroke-linecap="round">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                Boshlash
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Close Session Sheet -->
+<div class="sheet-ov" id="sh-close-session" onclick="if(event.target===this)closeSheet('sh-close-session')">
+    <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">Sessiyani yopish</div>
+        <div class="sheet-sub">Stol #<span id="cls-num">?</span> sessiyasini yakunlaysizmi?</div>
+        <div class="grid2">
+            <button class="btn btn-ghost btn-full" onclick="closeSheet('sh-close-session')">Bekor</button>
+            <button class="btn btn-danger btn-full" onclick="doCloseSession()">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                </svg>
+                Yopish
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Other Waiter's Table Sheet (band, boshqa ofitsiantniki) -->
+<div class="sheet-ov" id="sh-busy-table" onclick="if(event.target===this)closeSheet('sh-busy-table')">
+    <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">Stol #<span id="busy-num">?</span></div>
+        <div class="sheet-sub">Bu stol band</div>
+        <div class="card-sm" style="margin-bottom:14px">
+            <div class="flex-sb">
+                <span style="font-size:12px;color:var(--text2)">Xizmat ko'rsatayotgan</span>
+                <span style="font-size:13px;font-weight:600;color:var(--text)" id="busy-waiter">—</span>
+            </div>
+            <div class="flex-sb" style="margin-top:8px">
+                <span style="font-size:12px;color:var(--text2)">Boshlangan vaqt</span>
+                <span style="font-family:var(--mono);font-size:12px;color:var(--text)" id="busy-time">—</span>
+            </div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);text-align:center;margin-bottom:8px">Bu sessiya boshqa ofitsiantga
+            tegishli — faqat ko'rish mumkin
+        </div>
+        <button class="btn btn-ghost btn-full" onclick="closeSheet('sh-busy-table')">Yopish</button>
+    </div>
+</div>
+
+<!-- Incoming Order Sheet -->
+<div class="sheet-ov" id="sh-incoming" onclick="if(event.target===this)closeSheet('sh-incoming')">
+    <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="flex-c" style="margin-bottom:18px;gap:12px">
+            <div style="width:44px;height:44px;border-radius:12px;background:var(--orange-bg);border:1px solid var(--orange-border);display:grid;place-items:center;flex-shrink:0">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--orange)" fill="none" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+            </div>
+            <div>
+                <div style="font-size:15px;font-weight:700;color:var(--text)">Yangi Buyurtma!</div>
+                <div style="font-size:11px;color:var(--orange);font-weight:600;font-family:var(--mono)"
+                     id="inc-table-lbl">Stol #—
+                </div>
+            </div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-left:auto" id="inc-order-id">
+                #—
+            </div>
+        </div>
+        <div id="inc-items" style="margin-bottom:12px;display:flex;flex-direction:column;gap:8px"></div>
+        <div id="inc-comment-wrap" style="display:none;margin-bottom:12px">
+            <div class="card-sm">
+                <div style="font-size:10px;color:var(--text3);margin-bottom:4px;font-family:var(--sans)">Mijoz izohi
+                </div>
+                <div style="font-size:13px;color:var(--text2)" id="inc-comment"></div>
+            </div>
+        </div>
+        <div class="card-sm" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <span style="font-size:13px;color:var(--text2)">Jami summa</span>
+            <span style="font-family:var(--mono);font-weight:700;font-size:15px;color:var(--text)"
+                  id="inc-total">—</span>
+        </div>
+        <div class="grid2">
+            <button class="btn btn-danger btn-full" onclick="rejectOrder()">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"
+                     stroke-linecap="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+                Rad etish
+            </button>
+            <button class="btn btn-success btn-full" onclick="confirmOrder()">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Tasdiqlash
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Order Detail Sheet -->
+<div class="sheet-ov" id="sh-order" onclick="if(event.target===this)closeSheet('sh-order')">
+    <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title" id="od-title">Buyurtma</div>
+        <div class="sheet-sub" id="od-sub">—</div>
+        <div id="od-body"></div>
+        <button class="btn btn-ghost btn-full" style="margin-top:14px" onclick="closeSheet('sh-order')">Yopish</button>
+    </div>
+</div>
+
+<!-- Ready Item Sheet -->
+
+<div class="sheet-ov" id="sh-ready">
+    <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="flex-c" style="margin-bottom:16px;gap:12px">
+            <div style="width:48px;height:48px;border-radius:14px;background:var(--green-bg);border:1px solid var(--green-border);display:grid;place-items:center;flex-shrink:0">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="var(--green)" fill="none" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            </div>
+            <div>
+                <div style="font-size:15px;font-weight:700;color:var(--text)">Taom Tayyor!</div>
+                <div style="font-size:11px;color:var(--green);font-weight:600;font-family:var(--mono)" id="ready-chef">
+                    Oshpaz: —
+                </div>
+            </div>
+        </div>
+
+        <div class="card orange" style="margin-bottom:14px">
+            <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px" id="ready-product">—</div>
+            <div style="font-size:12px;color:var(--text2)">Stol #<span id="ready-table">—</span></div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <span style="font-size:12px;color:var(--text2)">Olib ketish vaqti:</span>
+            <span class="timer" id="ready-timer">5:00</span>
+        </div>
+
+        <!-- Tasdiqlangan holat -->
+        <div id="ready-delivered-block" style="display:none;margin-bottom:14px">
+            <div class="card green">
+                <div style="text-align:center;font-size:13px;font-weight:600;color:var(--green)">
+                    ✓ Mijozga muvaffaqiyatli berildi
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttonlar -->
+        <div id="ready-btns">
+            <button class="btn btn-success btn-full" id="pickup-btn" onclick="pickUpItem()">
+                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                    <line x1="6" y1="1" x2="6" y2="4"/>
+                    <line x1="10" y1="1" x2="10" y2="4"/>
+                    <line x1="14" y1="1" x2="14" y2="4"/>
+                </svg>
+                Mijozga berdim ✓
+            </button>
+            <button class="btn btn-ghost btn-full" style="margin-top:8px" onclick="closeSheet('sh-ready')">
+                Keyinroq
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Settings Sheet -->
+<div class="sheet-ov" id="sh-settings" onclick="if(event.target===this)closeSheet('sh-settings')">
+    <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">Sozlamalar</div>
+        <div class="sheet-sub">Profil ma'lumotlaringizni yangilang</div>
+
+        <div style="margin-bottom:20px">
+            <div class="sm-label">Profil rasmi</div>
+            <div class="pic-area">
+                <div class="pic-circle" id="sm-pic">W</div>
+                <div>
+                    <label class="upload-lbl" for="pic-input">Rasm yuklash</label>
+                    <div style="font-size:10px;color:var(--text3);margin-top:5px">JPG, PNG · max 2MB</div>
+                </div>
+            </div>
+            <input type="file" id="pic-input" accept="image/*" onchange="handlePicChange(event)">
+        </div>
+
+        <div class="sm-group">
+            <label class="sm-label">Ism</label>
+            <input class="fi" id="sm-first" placeholder="Ism" style="margin-bottom:8px">
+            <label class="sm-label">Familiya</label>
+            <input class="fi" id="sm-last" placeholder="Familiya" style="margin-bottom:8px">
+            <label class="sm-label">Telefon</label>
+            <input class="fi" id="sm-phone" placeholder="+998901234567" type="tel" style="margin-bottom:8px">
+            <label class="sm-label">Bank karta</label>
+            <input class="fi" id="sm-card" placeholder="8600 0000 0000 0000">
+            <label class="sm-label">Favqulodda aloqa</label>
+            <input class="fi" id="sm-emergency" placeholder="+998901234567" type="tel">
+        </div>
+
+        <div style="margin-top:4px;margin-bottom:16px">
+            <label class="sm-label">Joriy parol</label>
+            <input class="fi" id="sm-oldpass" type="password" placeholder="Joriy parol" style="margin-bottom:8px">
+            <label class="sm-label">Yangi parol</label>
+            <input class="fi" id="sm-newpass" type="password" placeholder="Yangi parol">
+        </div>
+
+        <div class="grid2">
+            <button class="btn btn-ghost btn-full" onclick="closeSheet('sh-settings')">Bekor</button>
+            <button class="btn btn-primary btn-full" onclick="saveSettings()">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                Saqlash
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Devices Sheet -->
+<div class="sheet-ov" id="sh-devices" onclick="if(event.target===this)closeSheet('sh-devices')">
+    <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="flex-sb" style="margin-bottom:16px">
+            <div>
+                <div class="sheet-title">Faol qurilmalar</div>
+                <div class="sheet-sub" style="margin:0">Tizimga kirgan barcha qurilmalar</div>
+            </div>
+        </div>
+        <div id="sh-devices-list">
+            <div class="empty">
+                <div class="empty-ico">📱</div>
+                <div class="empty-txt">Yuklanmoqda...</div>
+            </div>
+        </div>
+        <button class="btn btn-ghost btn-full" style="margin-top:14px" onclick="closeSheet('sh-devices')">Yopish
+        </button>
+    </div>
+</div>
+
+<!-- Proof Sheet -->
+<div class="sheet-ov" id="sh-proof" onclick="if(event.target===this)closeSheet('sh-proof')">
+    <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="flex-c" style="margin-bottom:16px;gap:12px">
+            <div style="width:48px;height:48px;border-radius:14px;background:var(--blue-bg);border:1px solid var(--blue-border);display:grid;place-items:center;flex-shrink:0">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="var(--blue)" fill="none" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                    <line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
+            </div>
+            <div>
+                <div style="font-size:15px;font-weight:700;color:var(--text)">To'lov Cheki Keldi</div>
+                <div style="font-size:11px;color:var(--blue);font-weight:600;font-family:var(--mono)"
+                     id="proof-table-lbl">Stol #—
+                </div>
+            </div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-left:auto" id="proof-order-id">
+                #—
+            </div>
+        </div>
+
+        <!-- Chek rasmi -->
+        <div id="proof-img-wrap"
+             style="margin-bottom:14px;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--surface2);min-height:180px;display:flex;align-items:center;justify-content:center">
+            <img id="proof-img" src="" alt="Chek" style="width:100%;max-height:320px;object-fit:contain;display:none">
+            <div id="proof-img-placeholder" style="padding:20px;text-align:center;color:var(--text3)">
+                <div style="font-size:30px;margin-bottom:8px">🖼️</div>
+                <div style="font-size:12px">Rasm yuklanmoqda...</div>
+            </div>
+        </div>
+
+        <div style="font-size:11px;color:var(--text3);text-align:center;margin-bottom:16px">
+            Mijoz to'lov chekini yubordi. Tekshirib tasdiqlang.
+        </div>
+
+        <div class="grid2">
+            <button class="btn btn-ghost btn-full" onclick="closeSheet('sh-proof')">Keyinroq</button>
+            <button class="btn btn-success btn-full" id="proof-confirm-btn" onclick="confirmProof()">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Tasdiqlash
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API = '/api/v1';
+    const WS_BASE = (location.protocol === 'https:' ? 'wss' : 'ws') + '://' + location.host + '/ws/waiter/';
+    const HEARTBEAT_MS = 25000;
+    const HEARTBEAT_TIMEOUT_MS = 10000;
+    const ORDERS_PER_PAGE = 12;
+
+    const S = {
+        token: localStorage.getItem('waiter_access_token'),
+        refresh: localStorage.getItem('waiter_refresh_token'),
+        user: JSON.parse(localStorage.getItem('waiter_user') || 'null'),
+        ws: null, wsOk: false,
+        reconnectAttempt: 0,
+        heartbeatInterval: null, heartbeatTimeout: null,
+        sessions: [], mySessions: [], tables: [],
+        incoming: [], myOrders: [], notifications: [],
+        proofs: [],
+        ordersFilter: 'active',
+        ordersPage: 1,
+        ordersPaidPage: 1,
+        closeTarget: null, readyItem: null, readyTimer: null, currentIncoming: null,
+        pendingTableId: null,
+    };
+
+    let currentProofOrderId = null;
+
+    const ACTIVE_ST = ['pending', 'confirmed', 'cooking', 'ready', 'served'];
+    const fmt = v => parseInt(v || 0).toLocaleString();
+    const now = () => new Date().toLocaleTimeString('uz-UZ', {hour: '2-digit', minute: '2-digit'});
+
+    /* ── THEME ── */
+    function toggleTheme(cb) {
+        document.body.classList.toggle('light-mode', cb.checked);
+        localStorage.setItem('waiterTheme', cb.checked ? 'light' : 'dark');
+    }
+
+    function initTheme() {
+        const saved = localStorage.getItem('waiterTheme');
+        if (saved === 'light') {
+            document.body.classList.add('light-mode');
+            const t = document.getElementById('theme-toggle');
+            if (t) t.checked = true;
+        }
+    }
+
+    /* ── PAGE NAVIGATION ── */
+    function goPage(name) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.bn-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('page-' + name).classList.add('active');
+        const bn = document.getElementById('bn-' + name);
+        if (bn) bn.classList.add('active');
+        closeAvDd();
+        if (name === 'sessions') loadSessions();
+        if (name === 'orders') loadMyOrders();
+        if (name === 'tables') loadSessions();
+        if (name === 'salary') loadSalary();
+        if (name === 'proofs') renderProofHistory();
+        if (name === 'notifications') {
+            renderNotifs();
+            S.notifications.forEach(n => n.read = true);
+            updateBadges();
+        }
+        if (name === 'profile') renderProfile();
+    }
+
+    /* ── RESTAURANT INFO ── */
+    async function loadRestaurantInfo() {
+        try {
+            const res = await fetch(`${API}/restaurant/info/`);
+            if (!res.ok) return;
+            const data = await res.json();
+            const nameEl = document.getElementById('restaurantName');
+            const logoEl = document.getElementById('restaurantLogo');
+            if (data.name) {
+                nameEl.textContent = data.name;
+                document.title = `${data.name} — Ofitsiant`;
+            }
+            if (data.logo) {
+                logoEl.innerHTML = `<img src="${data.logo}" alt="logo" onerror="this.parentElement.textContent='🍽️'">`;
+            }
+        } catch (e) {
+        }
+    }
+
+    /* ── API ── */
+    async function api(path, method = 'GET', body = null) {
+        const h = {'Content-Type': 'application/json'};
+        if (S.token) h['Authorization'] = 'Bearer ' + S.token;
+        const opts = {method, headers: h};
+        if (body) opts.body = JSON.stringify(body);
+        try {
+            const r = await fetch(API + path, opts);
+            if (r.status === 401) {
+                await tryRefresh();
+                return null;
+            }
+            if (!r.ok) {
+                const e = await r.json().catch(() => ({}));
+                const errMsg = e.detail
+                    || Object.entries(e).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`).join(' | ')
+                    || 'Xato: ' + r.status;
+                showToast(errMsg, 'error');
+                return null;
+            }
+            if (r.status === 204) return {};
+            return r.json();
+        } catch (err) {
+            showToast("Server bilan aloqa yo'q", 'error');
+            return null;
+        }
+    }
+
+    async function tryRefresh() {
+        if (!S.refresh) {
+            doLogout();
+            return;
+        }
+        const res = await fetch(API + '/auth/token/refresh/', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({refresh: S.refresh})
+        });
+        if (res.ok) {
+            const d = await res.json();
+            S.token = d.access;
+            localStorage.setItem('waiter_access_token', d.access);
+        } else {
+            doLogout();
+        }
+    }
+
+    /* ── WEBSOCKET ── */
+    function setWS(state) {
+        const el = document.getElementById('ws-pill');
+        const txt = {on: 'Ulandi', off: 'Ulanmadi', connecting: 'Ulanmoqda'}[state];
+        el.className = 'ws-pill ws-' + state;
+        el.innerHTML = '<span class="ws-dot"></span><span id="ws-txt">' + txt + '</span>';
+    }
+
+    function connectWS() {
+        if (!S.token) return;
+        setWS('connecting');
+        try {
+            const ws = new WebSocket(WS_BASE + '?token=' + S.token);
+            S.ws = ws;
+            ws.onopen = () => {
+                S.wsOk = true;
+                S.reconnectAttempt = 0;
+                setWS('on');
+                startHeartbeat();
+            };
+            ws.onmessage = ({data}) => {
+                let msg;
+                try {
+                    msg = JSON.parse(data);
+                } catch {
+                    return;
+                }
+                if (msg.type === 'pong') {
+                    clearTimeout(S.heartbeatTimeout);
+                    return;
+                }
+                onWS(msg);
+            };
+            ws.onclose = () => {
+                S.wsOk = false;
+                setWS('off');
+                stopHeartbeat();
+                scheduleReconnect();
+            };
+            ws.onerror = () => ws.close();
+        } catch {
+            setWS('off');
+            scheduleReconnect();
+        }
+    }
+
+    function scheduleReconnect() {
+        S.reconnectAttempt = Math.min(S.reconnectAttempt + 1, 5);
+        const delay = Math.min(1000 * Math.pow(2, S.reconnectAttempt - 1), 16000);
+        setTimeout(async () => {
+            if (document.visibilityState === 'visible') {
+                await tryRefresh();
+                connectWS();
+            } else {
+                scheduleReconnect();
+            }
+        }, delay);
+    }
+
+    function startHeartbeat() {
+        stopHeartbeat();
+        S.heartbeatInterval = setInterval(() => {
+            if (S.ws && S.wsOk) {
+                try {
+                    S.ws.send(JSON.stringify({action: 'ping'}));
+                } catch {
+                }
+                S.heartbeatTimeout = setTimeout(() => {
+                    if (S.ws) S.ws.close();
+                }, HEARTBEAT_TIMEOUT_MS);
+            }
+        }, HEARTBEAT_MS);
+    }
+
+    function stopHeartbeat() {
+        clearInterval(S.heartbeatInterval);
+        clearTimeout(S.heartbeatTimeout);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            if (!S.ws || S.ws.readyState === WebSocket.CLOSED || S.ws.readyState === WebSocket.CLOSING) {
+                S.reconnectAttempt = 0;
+                connectWS();
+            }
+        }
+    });
+
+    function wsSend(data) {
+        if (S.ws && S.wsOk) S.ws.send(JSON.stringify(data));
+    }
+
+    /* ── WS HANDLER ── */
+    function onWS(msg) {
+        switch (msg.type) {
+            case 'new_order':
+                if (S.incoming.find(o => o.order_id == msg.order_id)) break;
+                S.incoming.push(msg);
+                renderIncoming();
+                updateBadges();
+                floatNotif('fo', 'Yangi buyurtma!',
+                    'Stol #' + msg.table_number + ' · ' + (msg.items?.length || 0) + ' taom',
+                    () => {
+                        goPage('incoming');
+                        showIncomingSheet(msg);
+                    }
+                );
+                addNotif({
+                    type: 'incoming',
+                    title: 'Yangi buyurtma — Stol #' + msg.table_number,
+                    body: (msg.items?.length || 0) + ' ta taom · ' + fmt(msg.total_price) + ' UZS',
+                    time: now()
+                });
+                break;
+
+            case 'order_confirmed':
+                S.incoming = S.incoming.filter(o => o.order_id != msg.order_id);
+                renderIncoming();
+                updateBadges();
+                loadMyOrders();
+                break;
+
+            case 'order_canceled':
+                S.incoming = S.incoming.filter(o => o.order_id != msg.order_id);
+                renderIncoming();
+                updateBadges();
+                break;
+
+            case 'item_status_changed':
+                loadMyOrders();
+                break;
+
+            case 'order_ready':
+                S.readyItem = msg;
+                showReadySheet(msg);
+                floatNotif('fg', msg.product_name + ' tayyor!',
+                    'Stol #' + msg.table_number + ' · ' + msg.chef_name,
+                    () => showReadySheet(msg)
+                );
+                addNotif({
+                    type: 'ready',
+                    title: 'Tayyor: ' + msg.product_name,
+                    body: 'Stol #' + msg.table_number + ' · Oshpaz: ' + msg.chef_name,
+                    time: now()
+                });
+                loadMyOrders();
+                break;
+
+            case 'picked_up_confirmed':
+                clearInterval(S.readyTimer);
+
+                // Sheet yopilmaydi — "berildi" ko'rsatiladi
+                const deliveredBlock = document.getElementById('ready-delivered-block');
+                const readyBtns = document.getElementById('ready-btns');
+
+                if (deliveredBlock) deliveredBlock.style.display = 'block';
+                if (readyBtns) {
+                    readyBtns.innerHTML = `
+            <button class="btn btn-ghost btn-full" onclick="closeSheet('sh-ready')">
+                Yopish
+            </button>`;
+                }
+
+                showToast('Taom mijozga topshirildi ✓', 'success');
+                loadMyOrders();
+                break;
+
+            case 'payment_received':
+                floatNotif('fb', 'To\'lov qabul qilindi!',
+                    'Buyurtma #' + msg.order_id + ' · Stol #' + msg.table_number + ' · ' + fmt(msg.amount) + ' UZS',
+                    () => goPage('orders')
+                );
+                addNotif({
+                    type: 'success',
+                    title: 'To\'lov: Buyurtma #' + msg.order_id,
+                    body: 'Stol #' + msg.table_number + ' · ' + fmt(msg.amount) + ' UZS',
+                    time: now()
+                });
+                loadMyOrders();
+                break;
+
+            case 'proof_submitted':
+                if (!S.proofs.find(p => p.proof_id === msg.proof_id)) {
+                    S.proofs.unshift({
+                        proof_id: msg.proof_id,
+                        order_id: msg.order_id,
+                        table_number: msg.table_number,
+                        image_url: msg.image_url,
+                        time: now(),
+                        confirmed: false,
+                    });
+                }
+                currentProofOrderId = msg.order_id;
+                showProofSheet(msg);
+                floatNotif('fb', 'To\'lov cheki keldi!',
+                    'Buyurtma #' + msg.order_id + ' · Stol #' + msg.table_number,
+                    () => {
+                        const p = S.proofs.find(x => x.order_id === msg.order_id);
+                        if (p) showProofSheet(p);
+                    }
+                );
+                addNotif({
+                    type: 'info',
+                    title: 'To\'lov cheki — Buyurtma #' + msg.order_id,
+                    body: 'Stol #' + msg.table_number,
+                    time: now(),
+                    proofRef: msg.order_id,
+                });
+                renderProofHistory();
+                break;
+
+            case 'urgent_message':
+                floatNotif('fo', '🚨 ' + (msg.from || 'Manager'), msg.message || '', null);
+                addNotif({
+                    type: 'urgent',
+                    title: '🚨 ' + (msg.from || 'Shoshilinch xabar'),
+                    body: msg.message || '',
+                    time: now()
+                });
+                showToast(msg.message || 'Shoshilinch xabar!', 'warn');
+                break;
+
+            case 'error':
+                showToast(msg.message || 'Xato', 'error');
+                break;
+        }
+    }
+
+    /* ── PROOF ── */
+    function showProofSheet(msg) {
+        currentProofOrderId = msg.order_id;
+        document.getElementById('proof-table-lbl').textContent = 'Stol #' + msg.table_number;
+        document.getElementById('proof-order-id').textContent = '#' + msg.order_id;
+
+        const img = document.getElementById('proof-img');
+        const placeholder = document.getElementById('proof-img-placeholder');
+
+        if (msg.image_url) {
+            img.src = msg.image_url;
+            img.style.display = 'block';
+            placeholder.style.display = 'none';
+        } else {
+            img.style.display = 'none';
+            placeholder.style.display = 'flex';
+        }
+        openSheet('sh-proof');
+    }
+
+    async function confirmProof() {
+        if (!currentProofOrderId) return;
+        const btn = document.getElementById('proof-confirm-btn');
+        btn.disabled = true;
+        btn.textContent = 'Yuborilmoqda...';
+
+        const r = await api('/orders/' + currentProofOrderId + '/proof/confirm/', 'POST');
+        btn.disabled = false;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Tasdiqlash';
+
+        if (r !== null) {
+            const p = S.proofs.find(x => x.order_id === currentProofOrderId);
+            if (p) p.confirmed = true;
+            closeSheet('sh-proof');
+            showToast('To\'lov tasdiqlandi ✓', 'success');
+            renderProofHistory();
+            loadMyOrders();
+            currentProofOrderId = null;
+        }
+    }
+
+    function renderProofHistory() {
+        const countEl = document.getElementById('proof-history-count');
+        if (countEl) countEl.textContent = S.proofs.length + ' ta chek';
+
+        const el = document.getElementById('proof-history-list');
+        if (!el) return;
+
+        if (!S.proofs.length) {
+            el.innerHTML = '<div class="empty"><div class="empty-ico">🧾</div><div class="empty-txt">Cheklar yo\'q</div></div>';
+            return;
+        }
+
+        el.innerHTML = S.proofs.map(p => {
+            const safeP = encodeURIComponent(JSON.stringify(p));
+            return '<div class="card" style="margin-bottom:10px;cursor:pointer" onclick="showProofSheet(JSON.parse(decodeURIComponent(\'' + safeP + '\')))">'
+                + '<div class="flex-sb" style="margin-bottom:8px">'
+                + '<div class="flex-c" style="gap:8px">'
+                + '<span style="font-size:13px;font-weight:700;color:var(--text)">Buyurtma #' + p.order_id + '</span>'
+                + '<span class="badge ' + (p.confirmed ? 'b-paid' : 'b-pending') + '">' + (p.confirmed ? 'Tasdiqlandi' : 'Kutmoqda') + '</span>'
+                + '</div>'
+                + '<span style="font-family:var(--mono);font-size:10px;color:var(--text3)">' + p.time + '</span>'
+                + '</div>'
+                + '<div class="flex-sb">'
+                + '<span style="font-size:12px;color:var(--text2)">Stol #' + p.table_number + '</span>'
+                + (!p.confirmed
+                    ? '<button class="btn btn-success btn-xs" onclick="event.stopPropagation();showProofSheet(JSON.parse(decodeURIComponent(\'' + safeP + '\')))">Tekshirish →</button>'
+                    : '<span style="font-size:11px;color:var(--green)">✓ To\'landi</span>')
+                + '</div>'
+                + '</div>';
+        }).join('');
+    }
+
+    /* ── SESSIONS / TABLES ── */
+    async function loadSessions() {
+        const tblData = await api('/tables/');
+        if (tblData) S.tables = Array.isArray(tblData) ? tblData : tblData.results || [];
+
+        const r = await fetch(API + '/sessions/', {
+            headers: S.token ? {'Authorization': 'Bearer ' + S.token} : {}
+        });
+        if (r.ok) {
+            const d = await r.json();
+            const list = Array.isArray(d) ? d : d.results || [];
+            S.sessions = list;
+            S.mySessions = list.filter(s => (s.waiter?.id ?? s.waiter) == S.user?.id);
+        }
+        renderSessions();
+        renderTables();
+    }
+
+    function renderSessions() {
+        const myEl = document.getElementById('my-sessions');
+        const active = S.mySessions.filter(s => s.is_active);
+        myEl.innerHTML = active.length
+            ? '<div class="sessions-grid">' + active.map(s => sessionCard(s)).join('') + '</div>'
+            : '<div class="empty"><div class="empty-ico">🪑</div><div class="empty-txt">Faol sessiya yo\'q — Stollar bo\'limidan boshlang</div></div>';
+    }
+
+    function sessionCard(s) {
+        const tNum = s.table?.number ?? s.table ?? '?';
+        const tId = s.table?.id ?? s.table;
+        const cap = s.table?.capacity ? s.table.capacity + ' kishi' : '';
+        const time = s.started_at
+            ? new Date(s.started_at).toLocaleTimeString('uz-UZ', {hour: '2-digit', minute: '2-digit'})
+            : '—';
+        const myOrdersHere = S.myOrders.filter(o => {
+            const oid = o.table?.id ?? o.table;
+            return oid == tId && ACTIVE_ST.includes(o.status);
+        });
+        const hasReady = myOrdersHere.some(o => o.status === 'ready');
+        const ordersHtml = myOrdersHere.length
+            ? '<div class="sess-orders-mini">'
+            + myOrdersHere.map(o =>
+                '<div class="sess-order-chip" onclick="event.stopPropagation();showOrderDetail(' + o.id + ')">'
+                + '<span style="font-family:var(--mono);color:var(--text3);font-size:9px">#' + o.id + '</span>'
+                + '<span class="badge ' + badgeClass(o.status) + '" style="font-size:8px;padding:1px 5px">' + sLabel(o.status) + '</span>'
+                + '<span style="font-family:var(--mono);font-weight:600;font-size:9px">' + fmt(o.total_price) + '</span>'
+                + '</div>'
+            ).join('') + '</div>'
+            : '';
+        return '<div class="sess-card' + (hasReady ? ' has-ready' : '') + '" onclick="openCloseSession(' + s.id + ',' + tNum + ')">'
+            + '<button class="sess-close-btn" onclick="event.stopPropagation();openCloseSession(' + s.id + ',' + tNum + ')" title="Yopish">■</button>'
+            + '<div>'
+            + '<div class="flex-c" style="gap:5px"><span class="dot dot-orange"></span><span class="sess-tnum">' + tNum + '</span></div>'
+            + '<div style="font-size:10px;color:var(--text3);font-family:var(--mono)">' + cap + '</div>'
+            + '<div style="font-size:10px;color:var(--text3);font-family:var(--mono)">' + time + '</div>'
+            + '</div>'
+            + ordersHtml
+            + '</div>';
+    }
+
+    function openCloseSession(id, tNum) {
+        S.closeTarget = id;
+        document.getElementById('cls-num').textContent = tNum;
+        openSheet('sh-close-session');
+    }
+
+    async function doCloseSession() {
+        if (!S.closeTarget) return;
+        const r = await api('/sessions/' + S.closeTarget + '/', 'PATCH', {is_active: false});
+        closeSheet('sh-close-session');
+        if (r !== null) {
+            showToast('Sessiya yopildi', 'success');
+            await loadSessions();
+        }
+    }
+
+    /* ── TABLES GRID ── */
+    function renderTables() {
+        const el = document.getElementById('tables-grid');
+        if (!S.tables.length) {
+            el.innerHTML = '<div style="grid-column:1/-1" class="empty"><div class="empty-ico">🪑</div><div class="empty-txt">Stollar yo\'q</div></div>';
+            document.getElementById('tables-summary').textContent = '';
+            return;
+        }
+        const occ = S.tables.filter(t => t.is_occupied).length;
+        document.getElementById('tables-summary').textContent = occ + ' ta band, ' + (S.tables.length - occ) + ' ta bo\'sh · Jami: ' + S.tables.length;
+
+        el.innerHTML = S.tables.map(t => {
+            const session = S.sessions.find(s => (s.table?.id ?? s.table) == t.id && s.is_active);
+            const waiterId = session?.waiter?.id ?? session?.waiter ?? null;
+            const isMine = session && waiterId == S.user?.id;
+            const isBusyOther = session && !isMine;
+            const isFree = !session;
+            let cls, sTxt, sCol, extra = '';
+            if (isMine) {
+                cls = 'mine';
+                sTxt = 'Mening stolim';
+                sCol = 'var(--orange)';
+            } else if (isBusyOther) {
+                cls = 'busy';
+                sTxt = 'Band';
+                sCol = 'var(--text3)';
+                const wName = session.waiter?.first_name ?? session.waiter_name ?? '—';
+                extra = '<div class="tc-other">' + wName + '</div>';
+            } else {
+                cls = 'free';
+                sTxt = "Bo'sh";
+                sCol = 'var(--green)';
+            }
+
+            return '<div class="table-cell ' + cls + '" onclick="onTableClick(' + t.id + ')">'
+                + (isMine ? '<span class="tc-dot"><span class="dot dot-orange"></span></span>' : '')
+                + (isFree ? '<span class="tc-dot"><span class="dot dot-green"></span></span>' : '')
+                + '<div class="tc-num">' + t.number + '</div>'
+                + '<div class="tc-cap">' + t.capacity + ' kishi</div>'
+                + '<div class="tc-status" style="color:' + sCol + '">' + sTxt + '</div>'
+                + extra + '</div>';
+        }).join('');
+    }
+
+    function onTableClick(tableId) {
+        const t = S.tables.find(x => x.id === tableId);
+        if (!t) return;
+        const session = S.sessions.find(s => (s.table?.id ?? s.table) == tableId && s.is_active);
+        if (!session) {
+            S.pendingTableId = tableId;
+            document.getElementById('new-sess-num').textContent = t.number;
+            document.getElementById('new-sess-cap').textContent = t.capacity;
+            openSheet('sh-new-session');
+            return;
+        }
+        const isMine = (session.waiter?.id ?? session.waiter) == S.user?.id;
+        if (isMine) {
+            S.closeTarget = session.id;
+            document.getElementById('cls-num').textContent = t.number;
+            openSheet('sh-close-session');
+            return;
+        }
+        document.getElementById('busy-num').textContent = t.number;
+        document.getElementById('busy-waiter').textContent = session.waiter?.first_name ?? session.waiter_name ?? '—';
+        document.getElementById('busy-time').textContent = session.started_at
+            ? new Date(session.started_at).toLocaleTimeString('uz-UZ', {hour: '2-digit', minute: '2-digit'})
+            : '—';
+        openSheet('sh-busy-table');
+    }
+
+    async function startSession() {
+        if (!S.pendingTableId) return;
+        const btn = document.getElementById('start-sess-btn');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Yuklanmoqda...';
+        }
+
+        const r = await api('/tables/' + S.pendingTableId + '/sessions/', 'POST', {
+            table: S.pendingTableId,
+            is_active: true
+        });
+
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Boshlash';
+        }
+        if (!r) return;
+        closeSheet('sh-new-session');
+        const tNum = S.tables.find(t => t.id === S.pendingTableId)?.number || '';
+        showToast('Sessiya boshlandi! Stol #' + tNum, 'success');
+        S.pendingTableId = null;
+        await loadSessions();
+    }
+
+    /* ── INCOMING ── */
+    function renderIncoming() {
+        const el = document.getElementById('incoming-list');
+        if (!S.incoming.length) {
+            el.innerHTML = '<div class="empty"><div class="empty-ico">📥</div><div class="empty-txt">Yangi buyurtma yo\'q</div></div>';
+            return;
+        }
+        el.innerHTML = S.incoming.map(o => {
+            const items = (o.items || []).slice(0, 3).map(i =>
+                '<div class="flex-sb" style="font-size:13px"><span style="color:var(--text2)">' + i.product_name + '</span>'
+                + '<span style="font-family:var(--mono);color:var(--orange);font-weight:600">×' + i.quantity + '</span></div>'
+            ).join('');
+            return '<div class="card orange in-pulse" style="margin-bottom:12px;cursor:pointer" onclick="showIncomingSheet(S.incoming.find(x=>x.order_id==' + o.order_id + '))">'
+                + '<div class="flex-sb" style="margin-bottom:10px">'
+                + '<div class="flex-c"><span class="dot dot-orange"></span><span style="font-weight:700;font-size:15px;color:var(--text)">Stol #' + o.table_number + '</span></div>'
+                + '<span style="font-family:var(--mono);font-size:11px;color:var(--orange)">#' + o.order_id + '</span>'
+                + '</div>'
+                + '<div style="margin-bottom:10px;display:flex;flex-direction:column;gap:6px">' + items + '</div>'
+                + (o.comment ? '<div style="font-size:11px;color:var(--text3);margin-bottom:10px">💬 ' + o.comment + '</div>' : '')
+                + '<div class="flex-sb" style="padding-top:10px;border-top:1px solid var(--orange-border)">'
+                + '<span style="font-family:var(--mono);font-weight:700;color:var(--text)">' + fmt(o.total_price) + ' UZS</span>'
+                + '<div style="display:flex;gap:8px">'
+                + '<button class="btn btn-danger btn-xs" onclick="event.stopPropagation();quickReject(' + o.order_id + ')">Rad</button>'
+                + '<button class="btn btn-success btn-xs" onclick="event.stopPropagation();quickConfirm(' + o.order_id + ')">✓ Tasdiqlash</button>'
+                + '</div></div></div>';
+        }).join('');
+    }
+
+    function showIncomingSheet(o) {
+        if (!o) return;
+        S.currentIncoming = o;
+        document.getElementById('inc-table-lbl').textContent = 'Stol #' + o.table_number;
+        document.getElementById('inc-order-id').textContent = '#' + o.order_id;
+        document.getElementById('inc-items').innerHTML = (o.items || []).map(i =>
+            '<div class="card-sm flex-sb"><span style="font-size:13px;font-weight:500">' + i.product_name + '</span>'
+            + '<span style="font-family:var(--mono);color:var(--orange);font-weight:600">×' + i.quantity + '</span></div>'
+        ).join('');
+        const cw = document.getElementById('inc-comment-wrap');
+        if (o.comment) {
+            cw.style.display = 'block';
+            document.getElementById('inc-comment').textContent = o.comment;
+        } else cw.style.display = 'none';
+        document.getElementById('inc-total').textContent = fmt(o.total_price) + ' UZS';
+        openSheet('sh-incoming');
+    }
+
+    function confirmOrder() {
+        if (!S.currentIncoming) return;
+        wsSend({action: 'confirm', order_id: S.currentIncoming.order_id});
+        S.incoming = S.incoming.filter(o => o.order_id != S.currentIncoming.order_id);
+        renderIncoming();
+        updateBadges();
+        closeSheet('sh-incoming');
+        showToast('Buyurtma tasdiqlandi — oshpazga yuborildi!', 'success');
+    }
+
+    function rejectOrder() {
+        if (!S.currentIncoming) return;
+        wsSend({action: 'cancel', order_id: S.currentIncoming.order_id});
+        S.incoming = S.incoming.filter(o => o.order_id != S.currentIncoming.order_id);
+        renderIncoming();
+        updateBadges();
+        closeSheet('sh-incoming');
+        showToast('Buyurtma rad etildi', 'warn');
+    }
+
+    function quickConfirm(id) {
+        wsSend({action: 'confirm', order_id: id});
+        S.incoming = S.incoming.filter(o => o.order_id != id);
+        renderIncoming();
+        updateBadges();
+        showToast('Tasdiqlandi!', 'success');
+    }
+
+    function quickReject(id) {
+        wsSend({action: 'cancel', order_id: id});
+        S.incoming = S.incoming.filter(o => o.order_id != id);
+        renderIncoming();
+        updateBadges();
+        showToast('Rad etildi', 'warn');
+    }
+
+    /* ── MY ORDERS ── */
+    async function loadMyOrders() {
+        const data = await api('/orders/statistics/');
+        if (!data) return;
+        const all = Array.isArray(data) ? data : data.results || [];
+        S.myOrders = all.filter(o => (o.waiter?.id ?? o.waiter) == S.user?.id);
+
+        // ── YANGI: to'lov cheklari yuklanishi ──
+        await loadProofs();
+        const pendingOrders = S.myOrders.filter(o => o.status === 'pending');
+        pendingOrders.forEach(o => {
+            if (!S.incoming.find(x => x.order_id == o.id)) {
+                S.incoming.push({
+                    order_id: o.id,
+                    table_number: o.table?.number ?? o.table ?? '?',
+                    total_price: o.total_price,
+                    comment: o.comment || '',
+                    items: (o.order_items || []).map(i => ({
+                        product_name: i.product?.name || i.product_name || 'Taom',
+                        quantity: i.quantity || 1,
+                    })),
+                });
+            }
+        });
+        renderIncoming();
+        renderOrders();
+        updateBadges();
+        renderProfile();
+        renderSessions();
+    }
+
+    function renderOrders() {
+        const activeEl = document.getElementById('orders-list');
+        const paidEl = document.getElementById('orders-paid-list');
+
+        let allActive = S.myOrders.filter(o => o.status !== 'paid' && o.status !== 'canceled');
+        let allPaid = S.myOrders.filter(o => o.status === 'paid' || o.status === 'canceled');
+
+        if (S.ordersFilter === 'pending') allActive = allActive.filter(o => o.status === 'pending');
+        else if (S.ordersFilter === 'cooking') allActive = allActive.filter(o => o.status === 'cooking');
+        else if (S.ordersFilter === 'ready') allActive = allActive.filter(o => o.status === 'ready');
+        else if (S.ordersFilter === 'confirmed') allActive = allActive.filter(o => o.status === 'confirmed');
+
+        allActive = allActive.sort((a, b) => {
+            if (a.status === 'ready' && b.status !== 'ready') return -1;
+            if (a.status !== 'ready' && b.status === 'ready') return 1;
+            return 0;
+        });
+
+        document.getElementById('o-active').textContent = S.myOrders.filter(o => ACTIVE_ST.includes(o.status)).length;
+        document.getElementById('o-ready').textContent = S.myOrders.filter(o => o.status === 'ready').length;
+        document.getElementById('o-total').textContent = S.myOrders.length;
+
+        const totalActivePages = Math.ceil(allActive.length / ORDERS_PER_PAGE) || 1;
+        S.ordersPage = Math.min(S.ordersPage, totalActivePages);
+        const activeSlice = allActive.slice((S.ordersPage - 1) * ORDERS_PER_PAGE, S.ordersPage * ORDERS_PER_PAGE);
+
+        if (!allActive.length) {
+            activeEl.innerHTML = '<div class="empty"><div class="empty-ico">🧾</div><div class="empty-txt">Buyurtmalar yo\'q</div></div>';
+        } else {
+            activeEl.innerHTML = '<div class="orders-grid">' + activeSlice.map(o => orderCard(o)).join('') + '</div>'
+                + renderPagination(S.ordersPage, totalActivePages, 'setOrdersPage');
+        }
+
+        if (S.ordersFilter === 'all' || S.ordersFilter === 'paid') {
+            document.getElementById('paid-section').style.display = 'block';
+            const totalPaidPages = Math.ceil(allPaid.length / ORDERS_PER_PAGE) || 1;
+            S.ordersPaidPage = Math.min(S.ordersPaidPage, totalPaidPages);
+            const paidSlice = allPaid.slice((S.ordersPaidPage - 1) * ORDERS_PER_PAGE, S.ordersPaidPage * ORDERS_PER_PAGE);
+            paidEl.innerHTML = !allPaid.length
+                ? '<div class="empty"><div class="empty-ico">💳</div><div class="empty-txt">To\'langan buyurtmalar yo\'q</div></div>'
+                : '<div class="orders-grid">' + paidSlice.map(o => orderCard(o)).join('') + '</div>'
+                + renderPagination(S.ordersPaidPage, totalPaidPages, 'setPaidOrdersPage');
+        } else {
+            document.getElementById('paid-section').style.display = 'none';
+        }
+    }
+
+    function orderCard(o) {
+        const tNum = o.table?.number ?? o.table ?? '?';
+        const t = new Date(o.created_at);
+        const ts = t.getHours().toString().padStart(2, '0') + ':' + t.getMinutes().toString().padStart(2, '0');
+        const isReady = o.status === 'ready';
+        const isPaid = o.status === 'paid';
+        return '<div class="order-card ' + (isReady ? 'ready' : isPaid ? 'paid' : '') + '" onclick="showOrderDetail(' + o.id + ')">'
+            + '<div class="oc-top">'
+            + '<div class="flex-c" style="gap:6px">'
+            + (isReady ? '<span class="dot dot-green"></span>' : '')
+            + '<span class="oc-table">Stol #' + tNum + '</span>'
+            + '</div>'
+            + '<span class="badge ' + badgeClass(o.status) + '">' + sLabel(o.status) + '</span>'
+            + '</div>'
+            + '<div class="oc-id">#' + o.id + '</div>'
+            + '<div class="oc-bottom">'
+            + '<span class="oc-time">' + ts + ' · ' + (o.order_items || []).length + ' taom</span>'
+            + '<span class="oc-price">' + fmt(o.total_price) + '</span>'
+            + '</div>'
+            + (isReady ? '<div class="oc-ready-bar">Tayyor — darhol olib keting!</div>' : '')
+            + '</div>';
+    }
+
+    function renderPagination(current, total, fn) {
+        if (total <= 1) return '';
+        let btns = '';
+        for (let i = 1; i <= total; i++) {
+            btns += '<button class="pg-btn ' + (i === current ? 'active' : '') + '" onclick="' + fn + '(' + i + ')">' + i + '</button>';
+        }
+        return '<div class="pagination">' + btns + '</div>';
+    }
+
+    function setOrdersPage(p) {
+        S.ordersPage = p;
+        renderOrders();
+    }
+
+    function setPaidOrdersPage(p) {
+        S.ordersPaidPage = p;
+        renderOrders();
+    }
+
+    function filterOrders(f, btn) {
+        S.ordersFilter = f;
+        S.ordersPage = 1;
+        S.ordersPaidPage = 1;
+        document.querySelectorAll('#page-orders .chip').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderOrders();
+    }
+
+    function deliverOrderFromDetail(orderId) {
+        const o = S.myOrders.find(x => x.id === orderId);
+        if (!o) return;
+        const readyItems = (o.order_items || []).filter(i => i.status === 'ready');
+        if (!readyItems.length) {
+            showToast('Tayyor taom topilmadi', 'warn');
+            return;
+        }
+        const btn = document.getElementById('od-deliver-btn');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Yuborilmoqda...';
+        }
+        readyItems.forEach(i => {
+            wsSend({action: 'picked_up', order_item_id: i.id});
+        });
+        showToast('Taomlar mijozga topshirilmoqda...', 'info');
+        closeSheet('sh-order');
+    }
+
+    function showOrderDetail(id) {
+        const o = S.myOrders.find(x => x.id === id);
+        if (!o) return;
+        const tNum = o.table?.number ?? o.table ?? '?';
+        document.getElementById('od-title').textContent = 'Buyurtma #' + o.id;
+        document.getElementById('od-sub').textContent = 'Stol #' + tNum + ' · ' + sLabel(o.status);
+        const items = o.order_items || [];
+        const hasReadyItems = items.some(i => i.status === 'ready');
+        document.getElementById('od-body').innerHTML =
+            '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">'
+            + (items.length ? items.map(i =>
+                '<div class="card-sm flex-sb">'
+                + '<div><div style="font-size:13px;font-weight:500;color:var(--text)">' + (i.product?.name || i.product_name || 'Taom') + '</div>'
+                + (i.chef?.first_name ? '<div style="font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono)">Oshpaz: ' + i.chef.first_name + '</div>' : '')
+                + '</div>'
+                + '<div class="flex-c"><span style="font-family:var(--mono);font-size:11px;color:var(--text3)">×' + (i.quantity || 1) + '</span>'
+                + '<span class="badge ' + badgeClass(i.status || 'pending') + '">' + sLabel(i.status || 'pending') + '</span></div>'
+                + '</div>'
+            ).join('') : '<div class="empty" style="padding:20px"><div class="empty-txt">Taomlar yo\'q</div></div>')
+            + '</div>'
+            + '<div class="card-sm" style="display:flex;justify-content:space-between;align-items:center">'
+            + '<span style="font-size:13px;color:var(--text2)">Jami summa</span>'
+            + '<span style="font-family:var(--mono);font-weight:700;font-size:16px">' + fmt(o.total_price) + ' UZS</span>'
+            + '</div>'
+            + (hasReadyItems
+                ? '<button class="btn btn-success btn-full" id="od-deliver-btn" style="margin-top:12px" onclick="deliverOrderFromDetail(' + o.id + ')">'
+                + '<svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+                + '<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>'
+                + '<line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>'
+                + '</svg> Mijozga berdim ✓'
+                + '</button>'
+                : '');
+        openSheet('sh-order');
+    }
+
+    /* ── SALARY ── */
+    async function loadSalary() {
+        if (!S.user) return;
+        const empData = await api('/employees/ru/' + S.user.id + '/');
+        if (empData) {
+            const base = parseInt(empData.base_salary || 0);
+            const fine = parseInt(empData.fine_balance || 0);
+            const net = base - fine;
+            document.getElementById('sal-base').textContent = base.toLocaleString() + ' UZS';
+            document.getElementById('sal-fine').textContent = fine.toLocaleString() + ' UZS';
+            document.getElementById('sal-net').textContent = net.toLocaleString() + ' UZS';
+        }
+        const payments = await api('/salary/payments/');
+        if (payments) {
+            const list = Array.isArray(payments) ? payments : payments.results || [];
+            const tbody = document.querySelector('#sal-table tbody');
+            if (!list.length) {
+                tbody.innerHTML = '<tr><td colspan="3" class="empty" style="padding:32px">To\'lovlar yo\'q</td></tr>';
+                return;
+            }
+            tbody.innerHTML = list.map(p => {
+                const dateStr = p.paid_at || p.created_at;
+                const dateFormatted = dateStr
+                    ? new Date(dateStr).toLocaleDateString('uz-UZ', {day: '2-digit', month: '2-digit', year: 'numeric'})
+                    : '—';
+                const paidBy = p.paid_by_name
+                    || (p.paid_by?.first_name ? p.paid_by.first_name + ' ' + (p.paid_by.last_name || '') : 'Menejer');
+                return '<tr><td>' + dateFormatted + '</td>'
+                    + '<td style="color:var(--green)">+' + fmt(p.amount) + ' UZS</td>'
+                    + '<td>' + paidBy.trim() + '</td></tr>';
+            }).join('');
+        }
+    }
+
+    /* ── READY SHEET ── */
+    function showReadySheet(msg) {
+        document.getElementById('ready-product').textContent = msg.product_name;
+        document.getElementById('ready-table').textContent = msg.table_number;
+        document.getElementById('ready-chef').textContent = 'Oshpaz: ' + msg.chef_name;
+        clearInterval(S.readyTimer);
+        const el = document.getElementById('ready-timer');
+        const end = new Date(msg.deadline).getTime();
+
+        function tick() {
+            const rem = Math.max(0, end - Date.now());
+            const m = Math.floor(rem / 60000);
+            const s = Math.floor((rem % 60000) / 1000);
+            el.textContent = m + ':' + (s + '').padStart(2, '0');
+            el.classList.toggle('urgent', rem < 60000);
+            if (!rem) clearInterval(S.readyTimer);
+        }
+
+        tick();
+        S.readyTimer = setInterval(tick, 1000);
+        openSheet('sh-ready');
+    }
+
+    function pickUpItem() {
+        if (!S.readyItem) return;
+        const btn = document.getElementById('pickup-btn');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Yuborilmoqda...';
+        }
+        wsSend({action: 'picked_up', order_item_id: S.readyItem.order_item_id});
+    }
+
+    /* ── NOTIFICATIONS ── */
+    function addNotif(n) {
+        n.id = Date.now();
+        n.read = false;
+        S.notifications.unshift(n);
+        renderNotifs();
+        updateBadges();
+    }
+
+    function renderNotifs() {
+        const el = document.getElementById('notif-list');
+        if (!S.notifications.length) {
+            el.innerHTML = '<div class="empty"><div class="empty-ico">🔕</div><div class="empty-txt">Bildirishnomalar yo\'q</div></div>';
+            return;
+        }
+        el.innerHTML = S.notifications.map(n =>
+            '<div class="notif-item ' + (n.read ? '' : 'unread') + '" onclick="onNotifClick(' + (n.proofRef || 0) + ')" style="cursor:pointer">'
+            + '<div class="flex-c"><div>'
+            + '<div style="font-size:13px;font-weight:600;color:var(--text)">' + (n.title || '') + '</div>'
+            + '<div style="font-size:11px;color:var(--text2)">' + (n.body || '') + '</div>'
+            + (n.proofRef ? '<span style="font-size:10px;color:var(--blue);margin-top:4px;display:block">👆 Chekni ko\'rish</span>' : '')
+            + '</div></div>'
+            + '<div class="notif-meta"><span>Tizim xabari</span><span>' + (n.time || '') + '</span></div>'
+            + '</div>'
+        ).join('');
+    }
+
+    function onNotifClick(proofOrderId) {
+        if (!proofOrderId) return;
+        const p = S.proofs.find(x => x.order_id === proofOrderId);
+        if (p) showProofSheet(p);
+    }
+
+    function markAllRead() {
+        S.notifications.forEach(n => n.read = true);
+        renderNotifs();
+        updateBadges();
+        showToast('Hammasi o\'qildi', 'success');
+    }
+
+    function updateBadges() {
+        const inc = S.incoming.length;
+        const incBadge = document.getElementById('bn-badge-inc');
+        incBadge.textContent = inc;
+        incBadge.classList.toggle('show', inc > 0);
+
+        const ready = S.myOrders.filter(o => o.status === 'ready').length;
+        const ordBadge = document.getElementById('bn-badge-ord');
+        ordBadge.textContent = ready;
+        ordBadge.classList.toggle('show', ready > 0);
+
+        const unread = S.notifications.filter(n => !n.read).length;
+        document.getElementById('bell-dot').classList.toggle('show', unread > 0);
+    }
+
+    /* ── PROFILE ── */
+    function renderProfile() {
+        if (!S.user) return;
+        const fn = S.user.first_name || '';
+        const ln = S.user.last_name || '';
+        const fullName = [fn, ln].filter(Boolean).join(' ') || 'Ofitsiant';
+        const init = (fn[0] || 'W').toUpperCase();
+        document.getElementById('av-init').textContent = init;
+        document.getElementById('av-name').textContent = fullName;
+        document.getElementById('prof-init-big').textContent = init;
+        document.getElementById('prof-name').textContent = fullName;
+        document.getElementById('prof-phone').textContent = S.user.phone_number || '—';
+
+        const savedPic = localStorage.getItem('waiter_profile_pic_' + S.user.id);
+        if (savedPic) applyPic(savedPic);
+
+        const emEl = document.getElementById('prof-emergency');
+        if (emEl) emEl.textContent = S.user.emergency_contact || 'Kiritilmagan';
+
+        renderProofHistory();
+    }
+
+    /* ── SETTINGS ── */
+    function openSettings() {
+        if (!S.user) return;
+        document.getElementById('sm-first').value = S.user.first_name || '';
+        document.getElementById('sm-last').value = S.user.last_name || '';
+        document.getElementById('sm-phone').value = S.user.phone_number || '';
+        document.getElementById('sm-card').value = S.user.bank_card || '';
+        document.getElementById('sm-emergency').value = S.user.emergency_contact || '';
+        const savedPic = localStorage.getItem('waiter_profile_pic_' + S.user.id);
+        if (savedPic) {
+            const sm = document.getElementById('sm-pic');
+            sm.innerHTML = '<img src="' + savedPic + '" style="width:100%;height:100%;object-fit:cover">';
+        }
+        openSheet('sh-settings');
+    }
+
+    async function saveSettings() {
+        const body = {
+            first_name: document.getElementById('sm-first').value.trim(),
+            last_name: document.getElementById('sm-last').value.trim(),
+            phone_number: document.getElementById('sm-phone').value.trim(),
+            bank_card: document.getElementById('sm-card').value.trim(),
+            emergency_contact: document.getElementById('sm-emergency').value.trim(),
+        };
+        if (!body.first_name) {
+            showToast('Ism majburiy', 'warn');
+            return;
+        }
+        if (S.user) {
+            const r = await api('/employees/ru/' + S.user.id + '/', 'PATCH', body);
+            if (r === null) return;
+            S.user = {...S.user, ...body};
+            localStorage.setItem('waiter_user', JSON.stringify(S.user));
+        }
+        renderProfile();
+        closeSheet('sh-settings');
+        showToast("Ma'lumotlar saqlandi ✓", 'success');
+
+        const oldp = document.getElementById('sm-oldpass').value;
+        const newp = document.getElementById('sm-newpass').value;
+        if (oldp && newp) {
+            if (newp.length < 8) {
+                showToast('Yangi parol kamida 8 belgi', 'warn');
+                return;
+            }
+            const pr = await api('/users/change-password/', 'POST', {old_password: oldp, new_password: newp});
+            if (pr !== null) {
+                document.getElementById('sm-oldpass').value = '';
+                document.getElementById('sm-newpass').value = '';
+                showToast('Parol o\'zgartirildi ✓', 'success');
+            }
+        }
+    }
+
+    function handlePicChange(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) {
+            showToast('Rasm 2MB dan oshmasin', 'warn');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = ev => {
+            const data = ev.target.result;
+            localStorage.setItem('waiter_profile_pic_' + S.user.id, data);
+            applyPic(data);
+            const sm = document.getElementById('sm-pic');
+            sm.innerHTML = '<img src="' + data + '" style="width:100%;height:100%;object-fit:cover">';
+            showToast('Rasm saqlandi', 'success');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function applyPic(src) {
+        [document.getElementById('av-img'), document.getElementById('prof-img')].forEach(img => {
+            if (img) {
+                img.src = src;
+                img.style.display = 'block';
+            }
+        });
+        [document.getElementById('av-init'), document.getElementById('prof-init-big')].forEach(el => {
+            if (el) el.style.display = 'none';
+        });
+    }
+
+    /* ── DEVICES ── */
+    async function openDevicesSheet() {
+        openSheet('sh-devices');
+        const el = document.getElementById('sh-devices-list');
+        el.innerHTML = '<div class="empty"><div class="empty-ico">⏳</div><div class="empty-txt">Yuklanmoqda...</div></div>';
+        const data = await api('/employees/devices/');
+        if (!data) return;
+        const list = Array.isArray(data) ? data : data.results || [];
+
+        const countEl = document.getElementById('devices-count-txt');
+        if (countEl) countEl.textContent = list.length + ' ta faol qurilma';
+
+        if (!list.length) {
+            el.innerHTML = '<div class="empty"><div class="empty-ico">📱</div><div class="empty-txt">Qurilmalar yo\'q</div></div>';
+            return;
+        }
+        el.innerHTML = list.map(d => {
+            const isCurrent = d.is_current;
+            const lastActive = d.last_active
+                ? new Date(d.last_active).toLocaleDateString('uz-UZ', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
+                : '—';
+            const osIcon = d.os?.toLowerCase().includes('android') ? '🤖'
+                : d.os?.toLowerCase().includes('ios') || d.os?.toLowerCase().includes('iphone') ? '🍎'
+                    : d.os?.toLowerCase().includes('windows') ? '🖥️'
+                        : d.os?.toLowerCase().includes('mac') ? '💻' : '📱';
+            return '<div class="card-sm" style="margin-bottom:8px">'
+                + '<div class="flex-c" style="gap:10px">'
+                + '<span style="font-size:22px">' + osIcon + '</span>'
+                + '<div style="flex:1;min-width:0">'
+                + '<div style="font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
+                + (d.device_name || d.browser || 'Noma\'lum qurilma')
+                + (isCurrent ? '<span class="badge b-active" style="font-size:9px">Joriy</span>' : '')
+                + '</div>'
+                + '<div style="font-size:11px;color:var(--text3);margin-top:2px">' + (d.os || '') + (d.browser ? ' · ' + d.browser : '') + '</div>'
+                + '<div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px">🕐 ' + lastActive + (d.ip_address ? ' · ' + d.ip_address : '') + '</div>'
+                + '</div>'
+                + (!isCurrent
+                    ? '<button class="btn btn-danger btn-xs" onclick="removeDevice(' + d.id + ')">O\'chirish</button>'
+                    : '<span style="font-size:10px;color:var(--green)">● Faol</span>')
+                + '</div></div>';
+        }).join('');
+    }
+
+    async function removeDevice(sessionId) {
+        const r = await api('/employees/devices/' + sessionId + '/remove/', 'POST');
+        if (!r) return;
+        const code = prompt('📧 Email ga yuborilgan 6 raqamli kodni kiriting:');
+        if (!code) return;
+        const res = await api('/employees/devices/' + sessionId + '/confirm/', 'POST', {code});
+        if (res !== null) {
+            showToast('Qurilma o\'chirildi ✓', 'success');
+            openDevicesSheet();
+        }
+    }
+
+    /* ── AVATAR DD ── */
+    function toggleAvDd() {
+        document.getElementById('av-dd').classList.toggle('open');
+        event.stopPropagation();
+    }
+
+    function closeAvDd() {
+        document.getElementById('av-dd').classList.remove('open');
+    }
+
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.av-wrap')) closeAvDd();
+    });
+
+    /* ── SHEETS ── */
+    function openSheet(id) {
+        document.getElementById(id).classList.add('open');
+    }
+
+    function closeSheet(id) {
+        document.getElementById(id).classList.remove('open');
+    }
+
+    /* ── FLOAT NOTIF ── */
+    function floatNotif(cls, title, body, onClick) {
+        document.querySelectorAll('.fnotif').forEach(e => e.remove());
+        const el = document.createElement('div');
+        el.className = 'fnotif ' + cls;
+        el.innerHTML =
+            '<div style="display:flex;align-items:flex-start;gap:12px">'
+            + '<div style="flex:1;min-width:0">'
+            + '<div style="font-weight:600;font-size:13px;color:var(--text);margin-bottom:2px">' + title + '</div>'
+            + '<div style="font-size:11px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + body + '</div>'
+            + '</div>'
+            + '<button onclick="event.stopPropagation();this.closest(\'.fnotif\').remove()" style="background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;flex-shrink:0;line-height:1">×</button>'
+            + '</div>';
+        el.addEventListener('click', e => {
+            if (e.target.tagName !== 'BUTTON') {
+                onClick && onClick();
+                el.remove();
+            }
+        });
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 8000);
+    }
+
+    /* ── TOAST ── */
+    const toastIcons = {
+        success: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>',
+        error: '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+        warn: '<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+        info: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    };
+
+    function showToast(msg, type = 'info') {
+        const el = document.createElement('div');
+        el.className = 'toast-el ' + type;
+        el.innerHTML = (toastIcons[type] || toastIcons.info) + ' <span>' + msg + '</span>';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3200);
+    }
+
+    /* ── HELPERS ── */
+    // sLabel funksiyasini toping va almashtiring
+    function sLabel(s) {
+        return ({
+            pending: 'Kutmoqda',
+            confirmed: 'Tasdiqlangan',
+            cooking: 'Pishirilmoqda',
+            ready: 'Tayyor',
+            served: 'Berildi',      // YANGI
+            delivered: 'Berildi',      // YANGI
+            paid: "To'landi",
+            canceled: 'Bekor',
+            waiting: 'Kutmoqda'
+        })[s] || s;
+    }
+
+    // badgeClass funksiyasini toping va almashtiring
+    function badgeClass(s) {
+        return ({
+            pending: 'b-pending',
+            confirmed: 'b-confirmed',
+            cooking: 'b-cooking',
+            ready: 'b-ready',
+            served: 'b-paid',       // YANGI — yashil rang
+            delivered: 'b-paid',       // YANGI
+            paid: 'b-paid',
+            canceled: 'b-canceled',
+            waiting: 'b-pending'
+        })[s] || 'b-pending';
+    }
+
+
+    /* ── LOGOUT ── */
+    function doLogout() {
+        ['waiter_access_token', 'waiter_refresh_token', 'waiter_user'].forEach(k => localStorage.removeItem(k));
+        window.location.href = '/login/';
+    }
+
+    async function loadProofs() {
+        const h = {'Content-Type': 'application/json'};
+        if (S.token) h['Authorization'] = 'Bearer ' + S.token;
+
+        try {
+            const r = await fetch(API + '/orders/my-proofs/', {headers: h});
+            if (!r.ok) return;
+            const list = await r.json();
+
+            // S.proofs ni yangilash
+            list.forEach(proof => {
+                const existing = S.proofs.find(p => p.proof_id === proof.id);
+                if (existing) {
+                    existing.confirmed = proof.is_confirmed;
+                    return;
+                }
+                S.proofs.push({
+                    proof_id: proof.id,
+                    order_id: proof.order_id,
+                    table_number: proof.table_number,
+                    image_url: proof.photo_url || null,
+                    time: proof.submitted_at
+                        ? new Date(proof.submitted_at).toLocaleTimeString('uz-UZ', {hour: '2-digit', minute: '2-digit'})
+                        : '—',
+                    confirmed: proof.is_confirmed,
+                });
+            });
+
+            S.proofs.sort((a, b) => b.order_id - a.order_id);
+            renderProofHistory();
+        } catch (e) {
+            console.error('loadProofs xato:', e);
+        }
+    }
+
+    /* ── INIT ── */
+    async function init() {
+        if (!S.token) {
+            doLogout();
+            return;
+        }
+        initTheme();
+        renderProfile();
+        loadRestaurantInfo();
+        connectWS();
+        await Promise.all([loadMyOrders(), loadSessions()]); // await qo'shing
+        setInterval(tryRefresh, 4 * 60 * 1000);
+        setInterval(loadMyOrders, 30 * 1000);
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linktree</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #e76f51, #f4a261, #e9c46a);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        @media (min-width: 600px) {
+            .wrapper { max-width: 640px; }
+        }
+
+        @media (min-width: 1024px) {
+            .wrapper { max-width: 900px; }
+        }
+
+        .profile {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .profile img {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.3);
+        }
+
+        .profile h1 {
+            color: #fff;
+            font-size: 20px;
+            margin-top: 14px;
+        }
+
+        .profile p {
+            color: rgba(255,255,255,0.85);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media (min-width: 600px) {
+            .links-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .links-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .link-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 18px 16px;
+            text-align: center;
+            text-decoration: none;
+            color: #222;
+            font-weight: 600;
+            font-size: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 64px;
+        }
+
+        .link-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        .link-card i { font-size: 16px; color: #e76f51; }
+
+        .socials {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .socials a {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255,255,255,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background 0.15s ease;
+        }
+
+        .socials a:hover { background: rgba(255,255,255,0.2); }
+
+        .status-text {
+            color: #fff;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .skeleton {
+            background: rgba(255,255,255,0.4);
+            border-radius: 14px;
+            min-height: 64px;
+            animation: pulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="profile" id="profile-section">
+            <p class="status-text">Yuklanmoqda...</p>
+        </div>
+
+        <div class="links-grid" id="links-grid">
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+        </div>
+
+        <div class="socials" id="socials-section"></div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/v1/linktree';
+
+        const PLATFORM_ICONS = {
+            twitter: 'fa-brands fa-x-twitter',
+            facebook: 'fa-brands fa-facebook-f',
+            instagram: 'fa-brands fa-instagram',
+            spotify: 'fa-brands fa-spotify',
+            telegram: 'fa-brands fa-telegram',
+            youtube: 'fa-brands fa-youtube',
+            tiktok: 'fa-brands fa-tiktok',
+            whatsapp: 'fa-brands fa-whatsapp',
+            other: 'fa-solid fa-link',
+        };
+
+        async function loadProfile() {
+            const profileSection = document.getElementById('profile-section');
+            const linksGrid = document.getElementById('links-grid');
+            const socialsSection = document.getElementById('socials-section');
+
+            try {
+                const res = await fetch(`${API_BASE}/profiles/`);
+                if (!res.ok) throw new Error('API xato qaytardi');
+
+                const data = await res.json();
+                const profile = Array.isArray(data) ? data[0] : (data.results ? data.results[0] : null);
+
+                if (!profile) {
+                    profileSection.innerHTML = '<p class="status-text">Profil topilmadi.</p>';
+                    linksGrid.innerHTML = '';
+                    return;
+                }
+
+                // Profil
+                profileSection.innerHTML = `
+                    <img src="${profile.photo}" alt="${profile.name}">
+                    <h1>${profile.name}</h1>
+                    <p>${profile.bio || ''}</p>
+                `;
+
+                // Linklar
+                const activeLinks = (profile.links || []).filter(l => l.is_active);
+                if (activeLinks.length) {
+                    linksGrid.innerHTML = activeLinks
+                        .sort((a, b) => a.order - b.order)
+                        .map(link => `
+                            <a href="${link.url}" target="_blank" rel="noopener" class="link-card">
+                                ${link.icon ? `<i class="${link.icon}"></i>` : ''}
+                                ${link.title}
+                            </a>
+                        `).join('');
+                } else {
+                    linksGrid.innerHTML = '';
+                }
+
+                // Ijtimoiy tarmoqlar
+                const socials = (profile.socials || []).sort((a, b) => a.order - b.order);
+                socialsSection.innerHTML = socials.map(social => `
+                    <a href="${social.url}" target="_blank" rel="noopener">
+                        <i class="${PLATFORM_ICONS[social.platform] || PLATFORM_ICONS.other}"></i>
+                    </a>
+                `).join('');
+
+            } catch (err) {
+                profileSection.innerHTML = '<p class="status-text">Maʼlumotlarni yuklab bo\'lmadi.</p>';
+                linksGrid.innerHTML = '';
+                console.error(err);
+            }
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>

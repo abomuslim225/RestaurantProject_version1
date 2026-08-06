@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tizimga Kirish</title>
+  <!-- Shriflar -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #faf7f2;
+      color: #1a1610;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+    .auth-container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 420px;
+      padding: 2.5rem;
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+    .auth-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      color: #2d2820;
+    }
+    .form-group {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #1a1610;
+    }
+    .form-group input {
+      padding: 0.85rem;
+      border: 1px solid #f0ebe0;
+      background: #faf7f2;
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      border-color: #c9a84c;
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 1rem;
+      background: #1a1610;
+      color: #faf7f2;
+      border: none;
+      text-transform: uppercase;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+    .auth-btn:hover {
+      background: #c9a84c;
+      color: #1a1610;
+    }
+    .auth-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .error-box {
+      color: #8b2e2e;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      display: none;
+      text-align: left;
+      background: rgba(139, 46, 46, 0.08);
+      padding: 0.75rem;
+      border-left: 3px solid #8b2e2e;
+    }
+    .switch-text {
+      font-size: 0.9rem;
+      margin-top: 2rem;
+      color: #2d2820;
+    }
+    .switch-text a {
+      color: #c9a84c;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .switch-text a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <h2 class="auth-title">Tizimga kirish</h2>
+
+    <!-- Xatoliklar shu yerda chiqadi -->
+    <div class="error-box" id="error-message"></div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email">Email Manzil *</label>
+        <input type="email" id="email" required placeholder="example@gmail.com">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Parol *</label>
+        <input type="password" id="password" required placeholder="••••••••">
+      </div>
+
+      <button type="submit" class="auth-btn" id="submit-btn">Kirish</button>
+    </form>
+
+    <p class="switch-text">
+      Akkountingiz yo'qmi? <a href="/register/">Ro'yxatdan o'tish</a>
+    </p>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submit-btn');
+      const errorBox = document.getElementById('error-message');
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Tozalash
+      errorBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Kirilmoqda...';
+
+      try {
+        const response = await fetch('/api/v1/auth/login/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Tokenlarni localStorage-ga saqlash
+          localStorage.setItem('access_token', data.access);
+          localStorage.setItem('refresh_token', data.refresh);
+
+          // Muvaffaqiyatli kirgach bosh sahifaga yo'naltirish
+          window.location.href = '/';
+        } else {
+          // Backend-dan kelgan xatolik matnini ko'rsatish
+          errorBox.textContent = data.non_field_errors || data.detail || "Email yoki parol noto'g'ri!";
+          errorBox.style.display = 'block';
+        }
+      } catch (err) {
+        errorBox.textContent = "Server bilan bog'lanishda xatolik yuz berdi.";
+        errorBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Kirish';
+      }
+    });
+  </script>
+</body>
+</html>

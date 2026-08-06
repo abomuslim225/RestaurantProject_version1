@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Signum | Kirish</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
+    * { font-family: 'Outfit', sans-serif; box-sizing: border-box; }
+    body { background: #030305; color: #f3f4f6; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    input { background: #111827; border: 1px solid #374151; border-radius: 12px; color: #f3f4f6; padding: 14px 16px; width: 100%; font-size: 15px; outline: none; transition: border-color .15s; -webkit-appearance: none; }
+    input:focus { border-color: #f97316; }
+    .btn { padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; border: none; width: 100%; transition: all .15s; }
+    label { font-size: 12px; color: #6b7280; font-weight: 600; display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .06em; }
+  </style>
+</head>
+<body>
+  <div style="width:100%;max-width:400px">
+    <!-- Logo -->
+    <div style="text-align:center;margin-bottom:40px">
+      <div style="width:64px;height:64px;background:#f97316;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;margin:0 auto 16px">SG</div>
+      <div style="font-size:24px;font-weight:700;color:#fff">Signum</div>
+      <div style="font-size:14px;color:#6b7280;margin-top:4px">Xodimlar tizimi</div>
+    </div>
+
+    <!-- Form -->
+    <div style="background:#0c0e15;border:1px solid #1f2937;border-radius:20px;padding:24px">
+      <div style="font-size:18px;font-weight:700;margin-bottom:20px">Tizimga kirish</div>
+
+      <div style="margin-bottom:16px">
+        <label>Telefon raqam</label>
+        <input type="tel" id="phone" placeholder="+998901234567">
+      </div>
+
+      <div style="margin-bottom:24px">
+        <label>Vaqtinchalik parol</label>
+        <input type="password" id="password" placeholder="••••••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+
+      <div id="err-msg" style="display:none;background:#1a0404;border:1px solid #7f1d1d;border-radius:10px;padding:12px;font-size:13px;color:#f87171;margin-bottom:16px"></div>
+
+      <button class="btn" id="login-btn" onclick="doLogin()" style="background:#f97316;color:#fff">
+        Kirish
+      </button>
+    </div>
+  </div>
+
+  <script>
+    async function doLogin() {
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errEl = document.getElementById('err-msg');
+      const btn = document.getElementById('login-btn');
+
+      if (!phone || !password) {
+        errEl.textContent = "Telefon va parolni kiriting";
+        errEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Kirilmoqda...';
+      errEl.style.display = 'none';
+
+      try {
+        const r = await fetch('/api/v1/employees/login/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone_number: phone, temporary_password: password })
+        });
+
+        if (!r.ok) {
+          const e = await r.json();
+          errEl.textContent = e.non_field_errors?.[0] || "Telefon yoki parol xato";
+          errEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Kirish';
+          return;
+        }
+
+        const user = await r.json();
+
+        // Faqat waiter kirishi mumkin
+        if (user.role !== 'waiter') {
+          errEl.textContent = "Bu panel faqat ofitsiantlar uchun";
+          errEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Kirish';
+          return;
+        }
+
+        // JWT token olish
+        const tokenRes = await fetch('/api/v1/auth/login/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          // employee login emailsiz ishlaydi, shuning uchun alohida token so'raymiz
+        });
+
+        // Employee login JWT bermaydi, shuning uchun user ma'lumotini saqlaymiz
+        // va token uchun alohida so'rov qilamiz
+        localStorage.setItem('waiter_user', JSON.stringify(user));
+
+        // Token olish uchun username/password bilan login
+        const jwtRes = await fetch('/api/v1/employees/token/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone_number: phone,
+            temporary_password: password
+          })
+        });
+
+        if (jwtRes.ok) {
+          const jwt = await jwtRes.json();
+          localStorage.setItem('waiter_access_token', jwt.access);
+          localStorage.setItem('waiter_refresh_token', jwt.refresh);
+        }
+
+        window.location.href = '/waiter/';
+
+      } catch {
+        errEl.textContent = "Server bilan aloqa yo'q";
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Kirish';
+      }
+    }
+  </script>
+</body>
+</html>

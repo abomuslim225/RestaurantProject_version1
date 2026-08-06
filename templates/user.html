@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Restaurant User Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --panel: rgba(17, 24, 39, 0.86);
+      --card: rgba(255, 255, 255, 0.06);
+      --card-strong: rgba(255, 255, 255, 0.1);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --line: rgba(255, 255, 255, 0.08);
+      --accent: #22c55e;
+      --accent-2: #f59e0b;
+      --danger: #ef4444;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+      --container: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(34, 197, 94, 0.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(245, 158, 11, 0.16), transparent 28%),
+        linear-gradient(180deg, #020617 0%, #0f172a 48%, #111827 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; width: 100%; }
+
+    .container {
+      width: min(var(--container), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      background: rgba(2, 6, 23, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), #16a34a);
+      color: #052e16;
+      box-shadow: 0 10px 24px rgba(34, 197, 94, 0.28);
+      font-weight: 900;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+    }
+
+    .brand-text small {
+      font-size: 11px;
+      color: #86efac;
+      letter-spacing: 0.18em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      padding: 12px 18px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-weight: 600;
+      transition: 0.22s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .nav-side {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.14);
+      border: 1px solid rgba(34, 197, 94, 0.24);
+      color: #bbf7d0;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 32px 0 24px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+    }
+
+    .hero-card,
+    .info-card,
+    .section-card,
+    .table-card,
+    .menu-card,
+    .footer-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      min-height: 380px;
+      border-radius: var(--radius-xl);
+      position: relative;
+      overflow: hidden;
+      padding: 34px;
+      display: flex;
+      align-items: flex-end;
+      background:
+        linear-gradient(180deg, rgba(15, 23, 42, 0.05), rgba(15, 23, 42, 0.92)),
+        url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1600&q=80') center/cover;
+    }
+
+    .hero-content {
+      max-width: 620px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.16);
+      border: 1px solid rgba(245, 158, 11, 0.22);
+      color: #fde68a;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .hero h1,
+    .section-title,
+    .menu-name,
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 0.98;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 560px;
+      color: #e2e8f0;
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    .hero-side {
+      display: grid;
+      grid-template-rows: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .info-card {
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 180px;
+    }
+
+    .info-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #94a3b8;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .info-card h3 {
+      margin: 0 0 10px;
+      font-size: 24px;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .status-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .status-chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .status-chip.green { background: rgba(34, 197, 94, 0.15); color: #bbf7d0; }
+    .status-chip.yellow { background: rgba(245, 158, 11, 0.16); color: #fde68a; }
+    .status-chip.red { background: rgba(239, 68, 68, 0.16); color: #fecaca; }
+
+    .section {
+      padding: 12px 0 0;
+    }
+
+    .section-card {
+      border-radius: var(--radius-xl);
+      padding: 26px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .section-kicker {
+      margin: 0 0 8px;
+      color: #86efac;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(28px, 3.5vw, 40px);
+      line-height: 1.05;
+    }
+
+    .section-desc {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 700px;
+      font-size: 15px;
+    }
+
+    .ghost-link {
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .carousel {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(300px, 1fr);
+      gap: 18px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 6px;
+    }
+
+    .carousel::-webkit-scrollbar { height: 8px; }
+    .carousel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.14); border-radius: 999px; }
+
+    .promo-card {
+      scroll-snap-align: start;
+      min-height: 300px;
+      border-radius: 26px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: end;
+      padding: 26px;
+      border: 1px solid var(--line);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .promo-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(15,23,42,0.06), rgba(15,23,42,0.88));
+    }
+
+    .promo-content { position: relative; z-index: 1; }
+
+    .promo-tag {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .promo-title {
+      margin: 0 0 10px;
+      font-size: 30px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .promo-text {
+      margin: 0;
+      color: #e2e8f0;
+      font-size: 14px;
+      line-height: 1.75;
+      max-width: 340px;
+    }
+
+    .categories-grid,
+    .menu-grid,
+    .tables-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .categories-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .category-tile {
+      min-height: 220px;
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--line);
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: end;
+      padding: 20px;
+    }
+
+    .category-tile::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(2,6,23,0.05), rgba(2,6,23,0.84));
+    }
+
+    .category-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .category-content h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .category-content p {
+      margin: 0;
+      color: #e2e8f0;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .menu-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .menu-card {
+      border-radius: 26px;
+      overflow: hidden;
+      transition: transform 0.22s ease, border-color 0.22s ease;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .menu-image {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+    }
+
+    .menu-image img {
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .menu-body {
+      padding: 18px;
+    }
+
+    .menu-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .menu-name {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.06;
+    }
+
+    .menu-price {
+      white-space: nowrap;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.14);
+      color: #bbf7d0;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .menu-text {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 14px;
+      min-height: 72px;
+    }
+
+    .menu-meta {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .meta-pill {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: #e2e8f0;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tables-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .table-card {
+      border-radius: 24px;
+      padding: 22px;
+      text-align: left;
+    }
+
+    .table-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .table-number {
+      margin: 0;
+      font-size: 34px;
+      font-family: 'Playfair Display', serif;
+      line-height: 1;
+    }
+
+    .table-sub {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .state {
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .state.empty { background: rgba(34, 197, 94, 0.16); color: #bbf7d0; }
+    .state.pending { background: rgba(245, 158, 11, 0.16); color: #fde68a; }
+    .state.occupied { background: rgba(239, 68, 68, 0.16); color: #fecaca; }
+
+    .table-line {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .table-line span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), #86efac);
+    }
+
+    .table-note {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 28px 0 36px;
+    }
+
+    .footer-card {
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr;
+      gap: 18px;
+    }
+
+    .footer-brand {
+      margin: 0 0 14px;
+      font-size: 32px;
+    }
+
+    .footer-text,
+    .footer-list a,
+    .footer-list p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .footer-title {
+      margin: 0 0 12px;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #86efac;
+    }
+
+    .footer-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .footer-card {
+        grid-template-columns: 1fr;
+      }
+
+      .categories-grid,
+      .menu-grid,
+      .tables-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        padding: 14px 0;
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .nav-links,
+      .nav-side {
+        width: 100%;
+      }
+
+      .nav-links {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+      }
+
+      .hero-card,
+      .info-card,
+      .section-card,
+      .footer-card {
+        padding: 20px;
+      }
+
+      .carousel {
+        grid-auto-columns: 88%;
+      }
+
+      .categories-grid,
+      .menu-grid,
+      .tables-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-top {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#home" class="brand">
+        <div class="brand-mark">R</div>
+        <div class="brand-text">
+          <span>Royal Taste</span>
+          <small>restaurant</small>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a class="nav-link active" href="#home">Home</a>
+        <a class="nav-link" href="#categories">Category</a>
+        <a class="nav-link" href="#tables">Tables</a>
+        <a class="nav-link" href="#menu-preview">Menu</a>
+      </nav>
+
+      <div class="nav-side">
+        <div class="badge">Bugun 09:00 — 23:00</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <article class="hero-card">
+          <div class="hero-content">
+            <div class="eyebrow">Best seller dishes</div>
+            <h1>Restoran taomlarini premium ko‘rinishda namoyish qiling</h1>
+            <p>
+              Bu user panel tanlash uchun emas, avval ko‘rish va qiziqtirish uchun ishlaydi.
+              Yuqori qismda aksiyalar, eng ko‘p sotilgan ovqatlar va tavsiya etilgan taomlar chiqadi.
+              Pastroqda esa kategoriyalar va kvadrat ko‘rinishdagi food cardlar joylashadi.
+            </p>
+          </div>
+        </article>
+
+        <div class="hero-side">
+          <article class="info-card">
+            <div>
+              <div class="info-label">Today highlights</div>
+              <h3>Chegirmali taomlar va mashhur menyular</h3>
+              <p>Carousel ichida haftaning eng kuchli takliflari, chef tavsiyalari va bestseller taomlar aylanib turadi.</p>
+            </div>
+            <div class="status-row">
+              <span class="status-chip green">Fresh menu</span>
+              <span class="status-chip yellow">Hot deals</span>
+            </div>
+          </article>
+
+          <article class="info-card">
+            <div>
+              <div class="info-label">Tables overview</div>
+              <h3>Stollar holati alohida ko‘rinadi</h3>
+              <p>Bo‘sh, kutayotgan va band stollar aniq rang bilan ko‘rsatiladi. Bu qism faqat ko‘rish uchun bo‘ladi.</p>
+            </div>
+            <div class="status-row">
+              <span class="status-chip green">Bo‘sh</span>
+              <span class="status-chip yellow">Kutyapti</span>
+              <span class="status-chip red">Band</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container section-card">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Showcase carousel</p>
+            <h2 class="section-title">Eng ko‘p sotiladigan va chegirmadagi taomlar</h2>
+            <p class="section-desc">Bu qism home sahifaning eng kuchli joyi bo‘ladi. Katta bannerlar restoran haqidagi birinchi taassurotni beradi.</p>
+          </div>
+          <a href="#menu-preview" class="ghost-link">Menu ko‘rish</a>
+        </div>
+
+        <div class="carousel">
+          <article class="promo-card" style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80')">
+            <div class="promo-content">
+              <span class="promo-tag">Best seller</span>
+              <h3 class="promo-title">Premium Steak Plate</h3>
+              <p class="promo-text">Eng ko‘p buyurtma qilinadigan asosiy taomlardan biri. Home sahifada katta ko‘rinishda chiqadi.</p>
+            </div>
+          </article>
+
+          <article class="promo-card" style="background-image:url('https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&w=1200&q=80')">
+            <div class="promo-content">
+              <span class="promo-tag">Discount</span>
+              <h3 class="promo-title">Family Pizza Deal</h3>
+              <p class="promo-text">Chegirmali mahsulotlar va kunlik aksiyalarni shu carousel orqali ko‘rsatish yaxshi ishlaydi.</p>
+            </div>
+          </article>
+
+          <article class="promo-card" style="background-image:url('https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=80')">
+            <div class="promo-content">
+              <span class="promo-tag">Chef choice</span>
+              <h3 class="promo-title">Signature Burger</h3>
+              <p class="promo-text">Taomni tez tanishtirish uchun katta promo kartalar juda mos keladi va saytni boy ko‘rsatadi.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="categories">
+      <div class="container section-card">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Browse by category</p>
+            <h2 class="section-title">Kategoriyalar bo‘yicha qulay ko‘rish</h2>
+            <p class="section-desc">Menu alohida template bo‘lsa ham, home sahifada category preview bo‘lishi chiroyli ko‘rinadi va userni tez yo‘naltiradi.</p>
+          </div>
+        </div>
+
+        <div class="categories-grid">
+          <article class="category-tile" style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80')">
+            <div class="category-content">
+              <h3>Pizza</h3>
+              <p>Qalin va yupqa asosli mashhur pizzalar.</p>
+            </div>
+          </article>
+
+          <article class="category-tile" style="background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80')">
+            <div class="category-content">
+              <h3>Burger</h3>
+              <p>Signature burgerlar va combo setlar.</p>
+            </div>
+          </article>
+
+          <article class="category-tile" style="background-image:url('https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80')">
+            <div class="category-content">
+              <h3>Soup</h3>
+              <p>Issiq va yengil sho‘rvalar kategoriyasi.</p>
+            </div>
+          </article>
+
+          <article class="category-tile" style="background-image:url('https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=80')">
+            <div class="category-content">
+              <h3>Drinks</h3>
+              <p>Sovuq ichimliklar va maxsus kokteyllar.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="menu-preview">
+      <div class="container section-card">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Square product cards</p>
+            <h2 class="section-title">Kvadrat ko‘rinishdagi taomlar joylashuvi</h2>
+            <p class="section-desc">Sen aytganidek bu yerda tanlash qismi yo‘q. Faqat ko‘rsatish uchun kvadrat cardlar ishlatildi. Bu usul vizual tomondan boyroq ko‘rinadi.</p>
+          </div>
+          <a href="#" class="ghost-link">To‘liq menu alohida</a>
+        </div>
+
+        <div class="menu-grid">
+          <article class="menu-card">
+            <div class="menu-image">
+              <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1000&q=80" alt="Caesar Salad">
+            </div>
+            <div class="menu-body">
+              <div class="menu-top">
+                <h3 class="menu-name">Caesar Salad</h3>
+                <span class="menu-price">38 000 so‘m</span>
+              </div>
+              <p class="menu-text">Yengil va chiroyli ko‘rinadigan starter turidagi taom. Home preview uchun juda mos.</p>
+              <div class="menu-meta">
+                <span class="meta-pill">Fresh</span>
+                <span class="meta-pill">Popular</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card">
+            <div class="menu-image">
+              <img src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=1000&q=80" alt="Pasta Alfredo">
+            </div>
+            <div class="menu-body">
+              <div class="menu-top">
+                <h3 class="menu-name">Pasta Alfredo</h3>
+                <span class="menu-price">52 000 so‘m</span>
+              </div>
+              <p class="menu-text">Qaymoqli sous bilan tayyorlangan klassik pasta. Premium ko‘rinishdagi card uchun yaxshi namuna.</p>
+              <div class="menu-meta">
+                <span class="meta-pill">Creamy</span>
+                <span class="meta-pill">Chef pick</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card">
+            <div class="menu-image">
+              <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1000&q=80" alt="Royal Burger">
+            </div>
+            <div class="menu-body">
+              <div class="menu-top">
+                <h3 class="menu-name">Royal Burger</h3>
+                <span class="menu-price">49 000 so‘m</span>
+              </div>
+              <p class="menu-text">Qalin burger bun, go‘sht va souslar bilan tayyorlangan bestseller taomlardan biri.</p>
+              <div class="menu-meta">
+                <span class="meta-pill">Best seller</span>
+                <span class="meta-pill">Hot</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card">
+            <div class="menu-image">
+              <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1000&q=80" alt="Pumpkin Soup">
+            </div>
+            <div class="menu-body">
+              <div class="menu-top">
+                <h3 class="menu-name">Pumpkin Soup</h3>
+                <span class="menu-price">31 000 so‘m</span>
+              </div>
+              <p class="menu-text">Yengil va iliq taomlar qatori uchun mos preview. Kartalar bir xil o‘lchamda ko‘rinadi.</p>
+              <div class="menu-meta">
+                <span class="meta-pill">Warm</span>
+                <span class="meta-pill">Seasonal</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tables">
+      <div class="container section-card">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Tables status</p>
+            <h2 class="section-title">Stollar holatini faqat ko‘rish uchun blok</h2>
+            <p class="section-desc">Bu bo‘limda tanlash yoki bron qilish yo‘q. Faqat qaysi stol bo‘sh yoki band ekanini ko‘rsatadi.</p>
+          </div>
+        </div>
+
+        <div class="tables-grid">
+          <article class="table-card">
+            <div class="table-top">
+              <div>
+                <h3 class="table-number">01</h3>
+                <div class="table-sub">4 kishilik stol</div>
+              </div>
+              <span class="state empty">Bo‘sh</span>
+            </div>
+            <div class="table-line"><span style="width: 25%"></span></div>
+            <p class="table-note">Hozir foydalanish mumkin bo‘lgan stol. Vizual ko‘rinishda yengil va tushunarli.</p>
+          </article>
+
+          <article class="table-card">
+            <div class="table-top">
+              <div>
+                <h3 class="table-number">02</h3>
+                <div class="table-sub">2 kishilik stol</div>
+              </div>
+              <span class="state pending">Kutyapti</span>
+            </div>
+            <div class="table-line"><span style="width: 60%; background: linear-gradient(90deg, #f59e0b, #fde68a)"></span></div>
+            <p class="table-note">Buyurtma yoki xizmat jarayoni davom etayotgan stollar uchun shu rang ishlatiladi.</p>
+          </article>
+
+          <article class="table-card">
+            <div class="table-top">
+              <div>
+                <h3 class="table-number">03</h3>
+                <div class="table-sub">6 kishilik stol</div>
+              </div>
+              <span class="state occupied">Band</span>
+            </div>
+            <div class="table-line"><span style="width: 100%; background: linear-gradient(90deg, #ef4444, #fca5a5)"></span></div>
+            <p class="table-note">Band stollar aniq va tez ko‘rinishi uchun qizil holatda turadi.</p>
+          </article>
+
+          <article class="table-card">
+            <div class="table-top">
+              <div>
+                <h3 class="table-number">04</h3>
+                <div class="table-sub">8 kishilik stol</div>
+              </div>
+              <span class="state empty">Bo‘sh</span>
+            </div>
+            <div class="table-line"><span style="width: 35%"></span></div>
+            <p class="table-note">Katta guruhlar uchun mo‘ljallangan stol. Shu usulda barcha stollar chiqadi.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-card">
+      <div>
+        <h3 class="footer-brand">Royal Taste</h3>
+        <p class="footer-text">Premium ko‘rinishdagi restoran user panel. Home, category, tables va menu preview qismlari bitta uslubda yig‘ilgan.</p>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Bog‘lanish</h4>
+        <div class="footer-list">
+          <p>+998 90 123 45 67</p>
+          <p>+998 90 765 43 21</p>
+          <a href="#">Telegram</a>
+          <a href="#">Instagram</a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Lokatsiya</h4>
+        <div class="footer-list">
+          <p>Toshkent shahri</p>
+          <p>Yunusobod tumani</p>
+          <p>Amir Temur ko‘chasi</p>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Ish vaqti</h4>
+        <div class="footer-list">
+          <p>Dushanba — Juma</p>
+          <p>09:00 — 23:00</p>
+          <p>Shanba — Yakshanba</p>
+          <p>10:00 — 00:00</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

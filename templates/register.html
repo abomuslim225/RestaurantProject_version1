@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ro'yxatdan O'tish</title>
+  <!-- Shriflar -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #faf7f2;
+      color: #1a1610;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+    .auth-container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 460px;
+      padding: 2.5rem;
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+    .auth-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      color: #2d2820;
+    }
+    .name-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.2rem;
+    }
+    .form-group label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #1a1610;
+    }
+    .form-group input {
+      padding: 0.85rem;
+      border: 1px solid #f0ebe0;
+      background: #faf7f2;
+      outline: none;
+      font-size: 1rem;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      border-color: #c9a84c;
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 1rem;
+      background: #1a1610;
+      color: #faf7f2;
+      border: none;
+      text-transform: uppercase;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+    .auth-btn:hover {
+      background: #c9a84c;
+      color: #1a1610;
+    }
+    .auth-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .error-box {
+      color: #8b2e2e;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      display: none;
+      text-align: left;
+      background: rgba(139, 46, 46, 0.08);
+      padding: 0.75rem;
+      border-left: 3px solid #8b2e2e;
+    }
+    .switch-text {
+      font-size: 0.9rem;
+      margin-top: 2rem;
+      color: #2d2820;
+    }
+    .switch-text a {
+      color: #c9a84c;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .switch-text a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <h2 class="auth-title">Ro'yxatdan o'tish</h2>
+
+    <!-- Xatoliklar shu yerda chiqadi -->
+    <div class="error-box" id="error-message"></div>
+
+    <form id="register-form">
+      <div class="name-row">
+        <div class="form-group">
+          <label for="firstname">Ism *</label>
+          <input type="text" id="firstname" required placeholder="Ali">
+        </div>
+        <div class="form-group">
+          <label for="lastname">Familiya *</label>
+          <input type="text" id="lastname" required placeholder="Valiyev">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Telefon Raqam *</label>
+        <input type="text" id="phone" required placeholder="+998901234567">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Manzil *</label>
+        <input type="email" id="email" required placeholder="example@gmail.com">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Parol *</label>
+        <input type="password" id="password" required placeholder="••••••••">
+      </div>
+
+      <button type="submit" class="auth-btn" id="submit-btn">Ro'yxatdan O'tish</button>
+    </form>
+
+    <p class="switch-text">
+      Sizda allaqachon akkount bormi? <a href="/login/">Kirish</a>
+    </p>
+  </div>
+
+  <script>
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submit-btn');
+      const errorBox = document.getElementById('error-message');
+
+      const first_name = document.getElementById('firstname').value;
+      const last_name = document.getElementById('lastname').value;
+      const phone_number = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Tozalash
+      errorBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Kutilmoqda...';
+
+      try {
+        const response = await fetch('/api/v1/auth/register/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            first_name,
+            last_name,
+            phone_number,
+            email,
+            password
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok || response.status === 201) {
+          alert("Ro'yxatdan muvaffaqiyatli o'tdingiz! Endi tizimga kiring.");
+          window.location.href = '/login/'; // Kirish sahifasiga otish
+        } else {
+          // Backend dan kelgan aniq xatoliklarni ajratib ko'rsatish
+          if (data.email) {
+            errorBox.textContent = "Ushbu email allaqachon ro'yxatdan o'tgan.";
+          } else if (data.phone_number) {
+            errorBox.textContent = "Ushbu telefon raqami allaqachon ro'yxatdan o'tgan.";
+          } else if (data.password) {
+            errorBox.textContent = "Parol talabga javob bermaydi (kamida 8 ta belgi bo'lishi kerak).";
+          } else {
+            errorBox.textContent = data.detail || "Ma'lumotlar noto'g'ri kiritildi.";
+          }
+          errorBox.style.display = 'block';
+        }
+      } catch (err) {
+        errorBox.textContent = "Server bilan bog'lanishda xatolik yuz berdi.";
+        errorBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Ro\'yxatdan O\'tish';
+      }
+    });
+  </script>
+</body>
+</html>

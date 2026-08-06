@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Royal Taste — Haqimizda</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080c0a;--surface:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);--text:#f0ede6;--muted:#8a9488;--accent:#b5d27a;--accent2:#d4a853}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+a{color:inherit;text-decoration:none}
+nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);background:rgba(8,12,10,0.85);border-bottom:1px solid var(--border);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:70px}
+.nav-brand{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:700}
+.nav-brand span{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--accent)}
+.nav-links{display:flex;gap:4px}
+.nav-links a{padding:8px 16px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted);transition:all 0.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--text);background:var(--surface)}
+.nav-badge{padding:8px 16px;border-radius:999px;background:rgba(181,210,122,0.12);border:1px solid rgba(181,210,122,0.2);color:var(--accent);font-size:13px;font-weight:500}
+
+/* HERO */
+.about-hero{position:relative;min-height:70vh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1800&q=80')center/cover;filter:brightness(0.25)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,12,10,0.3),rgba(8,12,10,1))}
+.hero-inner{position:relative;z-index:2;padding:80px 64px}
+.hero-tag{display:inline-block;padding:8px 16px;border-radius:999px;background:rgba(212,168,83,0.12);border:1px solid rgba(212,168,83,0.25);color:var(--accent2);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,7vw,96px);line-height:0.92;font-weight:600;letter-spacing:-0.02em;margin-bottom:24px;max-width:800px}
+.hero-title em{color:var(--accent);font-style:italic}
+.hero-desc{color:#b0b8aa;font-size:17px;line-height:1.8;max-width:560px;font-weight:300}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:24px;overflow:hidden}
+.stat-cell{background:var(--bg);padding:36px;text-align:center}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:600;line-height:1;color:var(--accent);margin-bottom:8px}
+.stat-label{font-size:13px;color:var(--muted);font-weight:500;letter-spacing:0.06em;text-transform:uppercase}
+
+/* STORY */
+.story{padding:80px 64px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.story-img{border-radius:28px;overflow:hidden;aspect-ratio:4/5}
+.story-img img{width:100%;height:100%;object-fit:cover}
+.story-kicker{font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.story-title{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,4vw,56px);font-weight:600;line-height:1;margin-bottom:24px}
+.story-text{color:var(--muted);font-size:16px;line-height:1.85;font-weight:300;margin-bottom:20px}
+
+/* VALUES */
+.values{padding:0 64px 80px}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.val-card{border-radius:20px;border:1px solid var(--border);background:var(--surface);padding:32px}
+.val-icon{font-size:36px;margin-bottom:16px}
+.val-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;margin-bottom:12px}
+.val-text{color:var(--muted);font-size:14px;line-height:1.8}
+
+/* TEAM */
+.team{padding:0 64px 80px}
+.team-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4vw,52px);font-weight:600;margin-bottom:8px}
+.team-desc{color:var(--muted);font-size:15px;margin-bottom:40px}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.team-card{border-radius:20px;border:1px solid var(--border);background:var(--surface);overflow:hidden;transition:all 0.2s}
+.team-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.14)}
+.team-img{aspect-ratio:3/4;overflow:hidden}
+.team-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.team-card:hover .team-img img{transform:scale(1.06)}
+.team-body{padding:18px}
+.team-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:4px}
+.team-role{font-size:13px;color:var(--accent);font-weight:500}
+.team-bio{font-size:13px;color:var(--muted);line-height:1.7;margin-top:8px}
+
+/* CONTACT */
+.contact{padding:0 64px 80px}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;background:var(--border);border-radius:28px;overflow:hidden}
+.contact-card{background:var(--surface);padding:40px}
+.contact-kicker{font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.contact-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;margin-bottom:20px}
+.contact-item{display:flex;gap:14px;margin-bottom:20px;align-items:flex-start}
+.contact-icon{width:44px;height:44px;border-radius:14px;background:rgba(181,210,122,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.contact-info h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.contact-info p{font-size:14px;color:var(--muted);line-height:1.7}
+.map-placeholder{background:rgba(255,255,255,0.03);border-radius:20px;height:280px;display:flex;align-items:center;justify-content:center;border:1px dashed var(--border);font-size:15px;color:var(--muted);margin-top:8px}
+
+@media(max-width:1000px){.story,.contact-grid{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}.values-grid,.team-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.hero-inner,.story,.values,.team,.contact{padding-left:24px;padding-right:24px}.stats-row,.values-grid,.team-grid{grid-template-columns:1fr}nav{padding:0 16px}.nav-links{display:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand"><span>R</span> Royal Taste</div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="menu.html">Menyu</a>
+    <a href="reservation.html">Rezervatsiya</a>
+    <a href="about.html" class="active">Haqimizda</a>
+    <a href="settings.html">Sozlamalar</a>
+  </div>
+  <div class="nav-badge">⏰ 09:00 — 23:00</div>
+</nav>
+
+<section class="about-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">Bizning hikoyamiz</div>
+    <h1 class="hero-title">Oziq-ovqat<br/><em>san'ati</em> bilan<br/>8 yil</h1>
+    <p class="hero-desc">Royal Taste 2017 yilda bitta orzu bilan boshlandi — har bir mehmon o'zini uyda his qilsin, har bir taom esda qolsin.</p>
+  </div>
+</section>
+
+<div style="padding:0 64px;margin-top:-1px">
+  <div class="stats-row">
+    <div class="stat-cell"><div class="stat-num">240+</div><div class="stat-label">Taomlar</div></div>
+    <div class="stat-cell"><div class="stat-num">8+</div><div class="stat-label">Yil tajriba</div></div>
+    <div class="stat-cell"><div class="stat-num">50k+</div><div class="stat-label">Mehmonlar</div></div>
+    <div class="stat-cell"><div class="stat-num">4.9</div><div class="stat-label">Reyting</div></div>
+  </div>
+</div>
+
+<section class="story">
+  <div class="story-img"><img src="https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?auto=format&fit=crop&w=900&q=80" alt="Story"/></div>
+  <div>
+    <p class="story-kicker">Bizning hikoya</p>
+    <h2 class="story-title">Bitta retseptdan butun bir olamga</h2>
+    <p class="story-text">2017 yilda kichik bir oilaviy restoran sifatida boshlangan Royal Taste bugun Toshkentning eng taniqli premium oshxonalaridan biriga aylandi. Bosh oshpazimiz Jamshid Karimov Italiya va Fransiyada tahsil olgan bo'lib, G'arb va Sharq taomlarini noyob tarzda birlashtiradi.</p>
+    <p class="story-text">Har kuni ertalab eng fresc ingredientlar tanlanadi. Har bir taom mehnat va sevgi bilan tayyorlanadi. Har bir mehmon — bu bizning oilamiz.</p>
+    <a href="reservation.html" style="display:inline-block;padding:16px 32px;border-radius:999px;background:var(--accent);color:#1a2410;font-weight:600;font-size:15px;transition:all 0.2s">Stol bron qilish →</a>
+  </div>
+</section>
+
+<section class="values">
+  <div class="values-grid">
+    <div class="val-card"><div class="val-icon">🌿</div><h3 class="val-title">Fresc ingredientlar</h3><p class="val-text">Har kuni yangi yetkazib beriladigan mahalliy sabzavotlar, go'sht va dengiz mahsulotlari. Kimyoviy qo'shimchalarsiz.</p></div>
+    <div class="val-card"><div class="val-icon">👨‍🍳</div><h3 class="val-title">Professional jamoa</h3><p class="val-text">Xalqaro tajribali oshpazlar va mehribon xizmat ko'rsatish mutaxassislari jamoasi.</p></div>
+    <div class="val-card"><div class="val-icon">✨</div><h3 class="val-title">Noyob atmosfera</h3><p class="val-text">Har bir tafsilot — niqob, musiqa, yoritish — maxsus tajriba yaratish uchun puxta o'ylangan.</p></div>
+  </div>
+</section>
+
+<section class="team">
+  <h2 class="team-title">Bizning jamoa</h2>
+  <p class="team-desc">Royal Taste'ni jonlantiruvchi insonlar.</p>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-img"><img src="https://images.unsplash.com/photo-1583394293214-5e9b0a0a0a1c?auto=format&fit=crop&w=600&q=80" alt="Chef"/></div>
+      <div class="team-body"><div class="team-name">Jamshid Karimov</div><div class="team-role">Bosh oshpaz</div><p class="team-bio">Milano va Parijda o'qigan, 15 yillik tajriba.</p></div>
+    </div>
+    <div class="team-card">
+      <div class="team-img"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80" alt="Manager"/></div>
+      <div class="team-body"><div class="team-name">Nilufar Rashidova</div><div class="team-role">Restoran menejeri</div><p class="team-bio">Mehmonlarga eng yaxshi tajribani ta'minlaydi.</p></div>
+    </div>
+    <div class="team-card">
+      <div class="team-img"><img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=600&q=80" alt="Pastry"/></div>
+      <div class="team-body"><div class="team-name">Alisher Toshmatov</div><div class="team-role">Pastry chef</div><p class="team-bio">Dessertlar va non mahsulotlari mutaxassisi.</p></div>
+    </div>
+    <div class="team-card">
+      <div class="team-img"><img src="https://images.unsplash.com/photo-1566554273541-37a9ca77b91f?auto=format&fit=crop&w=600&q=80" alt="Sommelier"/></div>
+      <div class="team-body"><div class="team-name">Dilorom Yusupova</div><div class="team-role">Sommelier</div><p class="team-bio">Ichimliklar va juftlashtirishlar bo'yicha ekspert.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact">
+  <div class="contact-grid">
+    <div class="contact-card">
+      <p class="contact-kicker">Bog'lanish</p>
+      <h2 class="contact-title">Biz bilan aloqa</h2>
+      <div class="contact-item"><div class="contact-icon">📍</div><div class="contact-info"><h4>Manzil</h4><p>Toshkent, Yunusobod tumani<br/>Amir Temur ko'chasi, 12</p></div></div>
+      <div class="contact-item"><div class="contact-icon">📞</div><div class="contact-info"><h4>Telefon</h4><p>+998 90 123 45 67<br/>+998 90 765 43 21</p></div></div>
+      <div class="contact-item"><div class="contact-icon">🕐</div><div class="contact-info"><h4>Ish vaqti</h4><p>Dushanba–Juma: 09:00–23:00<br/>Shanba–Yakshanba: 10:00–00:00</p></div></div>
+      <div class="contact-item"><div class="contact-icon">📧</div><div class="contact-info"><h4>Email</h4><p>info@royaltaste.uz</p></div></div>
+    </div>
+    <div class="contact-card">
+      <p class="contact-kicker">Lokatsiya</p>
+      <h2 class="contact-title">Bizni toping</h2>
+      <div class="map-placeholder">🗺️ Xarita shu yerda</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

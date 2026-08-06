@@ -1,0 +1,2331 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Menejer · Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+          rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #060810;
+            --bg2: #0b0d16;
+            --bg3: #10121e;
+            --sur: rgba(255, 255, 255, .04);
+            --sur2: rgba(255, 255, 255, .07);
+            --sur3: rgba(255, 255, 255, .11);
+            --brd: rgba(255, 255, 255, .07);
+            --brd2: rgba(255, 255, 255, .13);
+            --txt: #eef0f8;
+            --muted: #6b7280;
+            --muted2: #4b5563;
+            --cyan: #22d3ee;
+            --cyan-dim: rgba(34, 211, 238, .1);
+            --cyan-brd: rgba(34, 211, 238, .22);
+            --purple: #a78bfa;
+            --purple-dim: rgba(167, 139, 250, .1);
+            --purple-brd: rgba(167, 139, 250, .22);
+            --pink: #f472b6;
+            --pink-dim: rgba(244, 114, 182, .1);
+            --pink-brd: rgba(244, 114, 182, .22);
+            --amber: #fbbf24;
+            --amber-dim: rgba(251, 191, 36, .1);
+            --amber-brd: rgba(251, 191, 36, .22);
+            --danger: #f87171;
+            --danger-dim: rgba(248, 113, 113, .1);
+            --danger-brd: rgba(248, 113, 113, .22);
+            --success: #34d399;
+            --success-dim: rgba(52, 211, 153, .1);
+            --r: 8px;
+            --r2: 12px;
+            --r3: 16px;
+            --r4: 20px;
+        }
+
+        html { scroll-behavior: smooth }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--txt);
+            min-height: 100svh;
+            overflow-x: hidden;
+            font-size: 14px
+        }
+
+        button { font-family: 'Inter', sans-serif; cursor: pointer }
+        input, select, textarea { font-family: 'Inter', sans-serif }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px }
+        ::-webkit-scrollbar-track { background: transparent }
+        ::-webkit-scrollbar-thumb { background: var(--brd2); border-radius: 2px }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, .45) }
+            60% { box-shadow: 0 0 0 6px rgba(248, 113, 113, 0) }
+        }
+
+        .alert-badge {
+            position: absolute; top: -3px; right: -3px;
+            width: 15px; height: 15px; border-radius: 50%;
+            background: var(--danger); font-size: .5rem; font-weight: 700;
+            display: grid; place-items: center; color: #fff;
+            animation: pulse 1.8s infinite
+        }
+
+        .hd1 {
+            position: sticky; top: 0; z-index: 100;
+            height: 54px;
+            background: rgba(6, 8, 16, .95);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--brd);
+            display: flex; align-items: center;
+            padding: 0 20px; gap: 14px
+        }
+
+        .brand { display: flex; align-items: center; gap: 10px }
+
+        .brand-icon {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            display: grid; place-items: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem; font-weight: 700; color: #060810;
+            flex-shrink: 0; overflow: hidden
+        }
+
+        .brand-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px }
+        .brand-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: var(--txt); letter-spacing: .01em }
+        .brand-sub { font-size: .6rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 1px }
+
+        .hd1-right { display: flex; align-items: center; gap: 8px; margin-left: auto }
+
+        .ws-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--muted2); flex-shrink: 0; transition: .3s
+        }
+        .ws-dot.on { background: var(--success) !important; box-shadow: 0 0 8px rgba(52, 211, 153, .55) }
+        .ws-dot.off { background: var(--danger) !important }
+
+        .icon-btn {
+            width: 34px; height: 34px; border-radius: var(--r2);
+            border: 1px solid var(--brd); background: transparent;
+            display: grid; place-items: center; color: var(--muted);
+            transition: .15s; font-size: .95rem; position: relative
+        }
+        .icon-btn:hover { background: var(--sur2); border-color: var(--brd2); color: var(--txt) }
+        .icon-btn.danger-active { color: var(--danger); border-color: var(--danger-brd) }
+        .icon-btn.urgent-btn { border-color: var(--danger-brd); color: var(--danger) }
+        .icon-btn.urgent-btn:hover { background: var(--danger-dim) }
+        .icon-btn.amber-active { color: var(--amber); border-color: var(--amber-brd) }
+
+        .prof-wrap { position: relative }
+
+        .prof-btn {
+            display: flex; align-items: center; gap: 7px;
+            padding: 4px 10px 4px 5px; border-radius: var(--r2);
+            border: 1px solid var(--brd); background: transparent;
+            color: var(--txt); transition: .15s
+        }
+        .prof-btn:hover { background: var(--sur); border-color: var(--brd2) }
+
+        .avatar {
+            width: 26px; height: 26px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            display: grid; place-items: center;
+            font-size: .75rem; font-weight: 700; color: #060810;
+            flex-shrink: 0; overflow: hidden
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50% }
+
+        .prof-name {
+            font-size: .78rem; color: var(--muted);
+            max-width: 100px; overflow: hidden;
+            text-overflow: ellipsis; white-space: nowrap
+        }
+
+        .dd {
+            position: absolute; top: calc(100% + 8px); right: 0;
+            width: 220px; background: var(--bg3);
+            border: 1px solid var(--brd2); border-radius: var(--r3);
+            overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.7);
+            opacity: 0; pointer-events: none;
+            transform: translateY(-6px); transition: .18s; z-index: 200
+        }
+        .dd.open { opacity: 1; pointer-events: all; transform: translateY(0) }
+
+        .dd-hd {
+            padding: .8rem 1rem .6rem;
+            border-bottom: 1px solid var(--brd);
+            background: var(--sur)
+        }
+
+        .dd-profile-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px }
+
+        .dd-avatar-lg {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            display: grid; place-items: center;
+            font-size: 1rem; font-weight: 700; color: #060810;
+            flex-shrink: 0; overflow: hidden
+        }
+        .dd-avatar-lg img { width: 100%; height: 100%; object-fit: cover; border-radius: 50% }
+
+        .dd-name { font-size: .85rem; font-weight: 600; color: var(--txt) }
+        .dd-role { font-size: .66rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em }
+        .dd-phone { font-size: .68rem; color: var(--muted2); margin-top: 2px }
+
+        .dd-item {
+            display: flex; align-items: center; gap: .6rem;
+            padding: .58rem 1rem; font-size: .8rem; color: var(--muted);
+            border: none; background: none; width: 100%;
+            text-align: left; transition: .14s
+        }
+        .dd-item:hover { background: var(--sur2); color: var(--txt) }
+        .dd-sep { height: 1px; background: var(--brd) }
+        .dd-danger { color: var(--danger) }
+        .dd-danger:hover { background: var(--danger-dim) !important; color: var(--danger) !important }
+
+        /* Slide-out panels */
+        .side-panel {
+            position: fixed; top: 0; right: -400px;
+            width: 380px; height: 100vh;
+            background: var(--bg3); border-left: 1px solid var(--brd2);
+            box-shadow: -20px 0 60px rgba(0,0,0,.7);
+            transition: right .25s cubic-bezier(.4,0,.2,1);
+            z-index: 300; display: flex; flex-direction: column
+        }
+        .side-panel.open { right: 0 }
+
+        .side-panel-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.5); opacity: 0;
+            pointer-events: none; transition: opacity .25s;
+            z-index: 299; backdrop-filter: blur(2px)
+        }
+        .side-panel-overlay.open { opacity: 1; pointer-events: all }
+
+        .sp-head {
+            padding: 14px 16px; border-bottom: 1px solid var(--brd);
+            background: var(--sur); display: flex; align-items: center;
+            gap: 8px; flex-shrink: 0
+        }
+        .sp-title { font-size: .9rem; font-weight: 700; color: var(--txt); flex: 1 }
+        .sp-close {
+            width: 28px; height: 28px; border-radius: var(--r);
+            border: none; background: transparent; color: var(--muted);
+            font-size: 1rem; display: grid; place-items: center; transition: .14s
+        }
+        .sp-close:hover { background: var(--sur2); color: var(--txt) }
+        .sp-body { flex: 1; overflow-y: auto; padding: 12px }
+        .sp-footer {
+            padding: 12px 16px; border-top: 1px solid var(--brd);
+            background: var(--sur); flex-shrink: 0
+        }
+
+        .hd2 {
+            background: rgba(6, 8, 16, .9);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--brd);
+            overflow-x: auto; scrollbar-width: none;
+            position: sticky; top: 54px; z-index: 90
+        }
+        .hd2::-webkit-scrollbar { display: none }
+
+        .nav { display: flex; padding: 0 16px; min-width: max-content }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 6px;
+            padding: 0 14px; height: 42px; border: none;
+            background: transparent; font-size: .78rem; font-weight: 500;
+            color: var(--muted); border-bottom: 2px solid transparent;
+            margin-bottom: -1px; transition: .15s; white-space: nowrap;
+            position: relative; letter-spacing: .01em
+        }
+        .nav-item:hover { color: var(--txt) }
+        .nav-item.active { color: var(--cyan); border-bottom-color: var(--cyan) }
+
+        .content { padding: 18px; min-height: calc(100svh - 96px) }
+
+        .card {
+            background: var(--bg2); border: 1px solid var(--brd);
+            border-radius: var(--r3); overflow: hidden
+        }
+
+        .card-head {
+            padding: 11px 16px; border-bottom: 1px solid var(--brd);
+            background: var(--sur); display: flex; align-items: center; gap: 8px
+        }
+        .card-head-icon { font-size: .95rem; opacity: .7 }
+        .card-head-title { font-size: .85rem; font-weight: 600; color: var(--txt); flex: 1; letter-spacing: .01em }
+        .card-body { padding: 16px }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 12px; margin-bottom: 18px
+        }
+
+        .stat-card {
+            background: var(--bg2); border: 1px solid var(--brd);
+            border-radius: var(--r3); padding: 18px 16px;
+            position: relative; overflow: hidden; transition: .2s
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 2px; border-radius: var(--r3) var(--r3) 0 0
+        }
+        .stat-card.cyan::before { background: linear-gradient(90deg, var(--cyan), transparent) }
+        .stat-card.purple::before { background: linear-gradient(90deg, var(--purple), transparent) }
+        .stat-card.amber::before { background: linear-gradient(90deg, var(--amber), transparent) }
+        .stat-card.danger::before { background: linear-gradient(90deg, var(--danger), transparent) }
+
+        .stat-icon { font-size: 1.5rem; margin-bottom: 10px; opacity: .8 }
+        .stat-val { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; line-height: 1; color: var(--txt) }
+        .stat-label { font-size: .7rem; color: var(--muted); margin-top: 5px; font-weight: 500; letter-spacing: .03em }
+        .stat-sub { font-size: .68rem; color: var(--muted2); margin-top: 4px }
+
+        .two-col { display: grid; grid-template-columns: 1fr 360px; gap: 16px; align-items: start }
+
+        .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 13px }
+        .form-label { font-size: .66rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted) }
+
+        .form-input {
+            height: 38px; border-radius: var(--r);
+            border: 1px solid var(--brd); background: var(--sur);
+            color: var(--txt); font-size: .84rem; padding: 0 12px;
+            outline: none; transition: .15s; width: 100%
+        }
+        .form-input:focus { border-color: var(--cyan-brd); box-shadow: 0 0 0 3px rgba(34,211,238,.06) }
+        .form-input::placeholder { color: var(--muted2) }
+        .form-input:read-only { opacity: .55; cursor: not-allowed }
+
+        .form-textarea {
+            border-radius: var(--r); border: 1px solid var(--brd);
+            background: var(--sur); color: var(--txt); font-size: .84rem;
+            padding: 10px 12px; outline: none; transition: .15s;
+            width: 100%; resize: vertical; min-height: 80px
+        }
+        .form-textarea:focus { border-color: var(--cyan-brd); box-shadow: 0 0 0 3px rgba(34,211,238,.06) }
+
+        .form-select {
+            height: 38px; border-radius: var(--r);
+            border: 1px solid var(--brd); background: var(--sur);
+            color: var(--txt); font-size: .84rem; padding: 0 12px;
+            outline: none; transition: .15s; width: 100%;
+            -webkit-appearance: none; cursor: pointer
+        }
+        .form-select:focus { border-color: var(--cyan-brd) }
+        .form-select option { background: var(--bg2) }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
+        .form-divider { height: 1px; background: var(--brd); margin: 14px 0 }
+
+        .computed-field {
+            height: 38px; border-radius: var(--r);
+            border: 1px solid var(--cyan-brd); background: var(--cyan-dim);
+            color: var(--cyan); font-size: .9rem; font-weight: 600;
+            padding: 0 12px; display: flex; align-items: center
+        }
+        .computed-field.danger { border-color: var(--danger-brd); background: var(--danger-dim); color: var(--danger) }
+
+        .info-field {
+            height: 38px; border-radius: var(--r);
+            border: 1px solid var(--brd); background: var(--sur2);
+            color: var(--muted); font-size: .84rem;
+            padding: 0 12px; display: flex; align-items: center
+        }
+
+        .btn-submit {
+            width: 100%; height: 42px; border-radius: var(--r2);
+            border: none; background: linear-gradient(135deg, var(--cyan), #06b6d4);
+            color: #060810; font-size: .84rem; font-weight: 700;
+            transition: .2s; display: flex; align-items: center;
+            justify-content: center; gap: 6px; letter-spacing: .02em
+        }
+        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(34,211,238,.25) }
+        .btn-submit:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none }
+        .btn-submit.danger { background: linear-gradient(135deg, var(--danger), #ef4444); color: #fff }
+        .btn-submit.danger:hover { box-shadow: 0 6px 20px rgba(248,113,113,.25) }
+
+        .btn-sm {
+            padding: 5px 12px; border-radius: var(--r);
+            border: 1px solid var(--brd); background: transparent;
+            font-size: .7rem; font-weight: 500; color: var(--muted); transition: .15s
+        }
+        .btn-sm:hover { border-color: var(--brd2); color: var(--txt); background: var(--sur) }
+        .btn-sm.danger { border-color: var(--danger-brd); color: var(--danger) }
+        .btn-sm.danger:hover { background: var(--danger-dim) }
+        .btn-sm.cyan { border-color: var(--cyan-brd); color: var(--cyan) }
+        .btn-sm.cyan:hover { background: var(--cyan-dim) }
+        .btn-sm.amber { border-color: var(--amber-brd); color: var(--amber) }
+        .btn-sm.amber:hover { background: var(--amber-dim) }
+        .btn-sm.success { border-color: rgba(52,211,153,.3); color: var(--success) }
+        .btn-sm.success:hover { background: var(--success-dim) }
+        .btn-sm:disabled { opacity: .45; cursor: not-allowed }
+
+        .data-table { width: 100%; border-collapse: collapse }
+        .data-table th {
+            padding: 9px 13px; text-align: left;
+            font-size: .64rem; font-weight: 700; letter-spacing: .08em;
+            text-transform: uppercase; color: var(--muted2);
+            border-bottom: 1px solid var(--brd); background: var(--sur)
+        }
+        .data-table td {
+            padding: 11px 13px; border-bottom: 1px solid var(--brd);
+            font-size: .8rem; color: var(--txt); vertical-align: middle
+        }
+        .data-table tr:last-child td { border-bottom: none }
+        .data-table tr:hover td { background: var(--sur) }
+
+        .tag {
+            padding: 3px 9px; border-radius: 6px;
+            font-size: .62rem; font-weight: 700;
+            letter-spacing: .04em; text-transform: uppercase
+        }
+        .tag-cyan { background: var(--cyan-dim); color: var(--cyan); border: 1px solid var(--cyan-brd) }
+        .tag-purple { background: var(--purple-dim); color: var(--purple); border: 1px solid var(--purple-brd) }
+        .tag-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-brd) }
+        .tag-danger { background: var(--danger-dim); color: var(--danger); border: 1px solid var(--danger-brd) }
+        .tag-success { background: var(--success-dim); color: var(--success); border: 1px solid rgba(52,211,153,.25) }
+        .tag-muted { background: var(--sur2); color: var(--muted); border: 1px solid var(--brd) }
+
+        .sec-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem; font-weight: 700; color: var(--txt);
+            margin-bottom: 14px; display: flex; align-items: center;
+            gap: 10px; letter-spacing: .01em
+        }
+        .sec-title small { font-family: 'Inter', sans-serif; font-size: .7rem; color: var(--muted); font-weight: 400 }
+
+        .alert-item {
+            padding: 13px 15px; border-radius: var(--r2);
+            border: 1px solid var(--brd); background: var(--sur);
+            margin-bottom: 8px; transition: .15s
+        }
+        .alert-item.urgent { border-color: var(--danger-brd); background: var(--danger-dim) }
+        .alert-item.warning { border-color: var(--amber-brd); background: var(--amber-dim) }
+        .alert-item.info { border-color: var(--cyan-brd); background: var(--cyan-dim) }
+
+        .alert-item-top { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 5px }
+        .alert-item-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px }
+        .alert-item-title { font-size: .81rem; font-weight: 600; color: var(--txt); flex: 1; line-height: 1.4 }
+        .alert-item-time { font-size: .64rem; color: var(--muted2); white-space: nowrap }
+        .alert-item-msg { font-size: .73rem; color: var(--muted); line-height: 1.5; padding-left: 1.6rem }
+        .alert-item-actions { display: flex; gap: 6px; margin-top: 9px; padding-left: 1.6rem; flex-wrap: wrap }
+
+        .emp-avatar {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            display: grid; place-items: center;
+            font-size: .78rem; font-weight: 700; color: #fff; flex-shrink: 0
+        }
+
+        .table-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px }
+
+        .table-cell {
+            padding: 14px 12px; border-radius: var(--r3);
+            border: 1px solid var(--brd); background: var(--sur);
+            text-align: center; transition: .15s
+        }
+        .table-cell.occupied { border-color: var(--amber-brd); background: var(--amber-dim) }
+        .table-cell-num { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--txt); line-height: 1 }
+        .table-cell-cap { font-size: .64rem; color: var(--muted); margin-top: 3px; font-weight: 500 }
+        .table-cell-waiter { font-size: .62rem; color: var(--amber); margin-top: 5px; font-weight: 500 }
+        .table-cell-status { font-size: .58rem; margin-top: 4px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase }
+
+        .report-card {
+            padding: 14px 16px; border-radius: var(--r2);
+            border: 1px solid var(--brd); background: var(--sur); margin-bottom: 10px
+        }
+        .report-card.pending { border-color: var(--amber-brd) }
+        .report-card.confirmed { border-color: rgba(52,211,153,.2) }
+
+        .report-bar { height: 5px; border-radius: 3px; background: var(--sur2); overflow: hidden; margin: 7px 0 }
+        .report-bar-fill { height: 100%; border-radius: 3px; background: var(--danger); transition: width .4s }
+        .report-bar-fill.ok { background: var(--success) }
+
+        .period-btn {
+            padding: 5px 13px; border-radius: 999px;
+            border: 1px solid var(--brd); background: transparent;
+            font-size: .72rem; font-weight: 500; color: var(--muted); transition: .15s
+        }
+        .period-btn:hover { border-color: var(--brd2); color: var(--txt) }
+        .period-btn.active { background: var(--cyan-dim); border-color: var(--cyan-brd); color: var(--cyan) }
+
+        .work-toggle {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 10px; border-radius: 999px;
+            font-size: .68rem; font-weight: 700; border: none;
+            cursor: pointer; transition: .2s;
+            letter-spacing: .04em; text-transform: uppercase; white-space: nowrap
+        }
+        .work-toggle.at-work { background: var(--success-dim); color: var(--success); border: 1px solid rgba(52,211,153,.3) }
+        .work-toggle.at-work:hover { background: var(--danger-dim); color: var(--danger); border-color: var(--danger-brd) }
+        .work-toggle.not-work { background: var(--sur2); color: var(--muted); border: 1px solid var(--brd) }
+        .work-toggle.not-work:hover { background: var(--success-dim); color: var(--success); border-color: rgba(52,211,153,.3) }
+        .work-toggle:disabled { opacity: .5; cursor: not-allowed }
+
+        /* Settings — modal overlay */
+        .settings-modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,.8);
+            display: none; align-items: center; justify-content: center;
+            z-index: 600; padding: 20px;
+            backdrop-filter: blur(6px)
+        }
+        .settings-modal-overlay.open { display: flex }
+
+        .settings-modal {
+            background: var(--bg3); border: 1px solid var(--brd2);
+            border-radius: var(--r4); width: 100%; max-width: 860px;
+            max-height: 90vh; overflow: hidden;
+            box-shadow: 0 32px 100px rgba(0,0,0,.9);
+            display: flex; flex-direction: column
+        }
+
+        .settings-modal-head {
+            padding: 14px 18px; border-bottom: 1px solid var(--brd);
+            background: var(--sur); display: flex; align-items: center; gap: 10px;
+            flex-shrink: 0
+        }
+        .settings-modal-title { font-size: .95rem; font-weight: 700; color: var(--txt); flex: 1 }
+        .settings-modal-close {
+            width: 30px; height: 30px; border-radius: var(--r);
+            border: none; background: transparent; color: var(--muted);
+            font-size: 1.1rem; display: grid; place-items: center; transition: .14s
+        }
+        .settings-modal-close:hover { background: var(--sur2); color: var(--txt) }
+
+        .settings-modal-body {
+            display: flex; flex: 1; overflow: hidden
+        }
+
+        .settings-sidebar {
+            width: 200px; border-right: 1px solid var(--brd);
+            background: var(--sur); flex-shrink: 0; overflow-y: auto;
+            padding: 8px 0
+        }
+
+        .settings-nav-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 11px 16px; border: none; background: transparent;
+            font-size: .82rem; font-weight: 500; color: var(--muted);
+            width: 100%; text-align: left; transition: .15s;
+            border-left: 2px solid transparent
+        }
+        .settings-nav-item:hover { background: var(--sur2); color: var(--txt) }
+        .settings-nav-item.active { background: var(--cyan-dim); color: var(--cyan); border-left-color: var(--cyan) }
+        .settings-nav-item .sni-icon { font-size: .95rem; width: 18px; text-align: center }
+
+        .settings-content {
+            flex: 1; overflow-y: auto; padding: 20px
+        }
+
+        .settings-panel { display: none }
+        .settings-panel.active { display: block }
+
+        .settings-section-title {
+            font-size: .85rem; font-weight: 700; color: var(--txt);
+            margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 1px solid var(--brd); letter-spacing: .02em
+        }
+
+        .urgent-tpl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px }
+        .urgent-tpl {
+            padding: 8px 12px; border-radius: var(--r2);
+            border: 1px solid var(--brd); background: var(--sur);
+            font-size: .74rem; color: var(--muted); text-align: left; transition: .15s; cursor: pointer
+        }
+        .urgent-tpl:hover { border-color: var(--danger-brd); color: var(--danger); background: var(--danger-dim) }
+
+        .empty {
+            padding: 2.5rem; text-align: center;
+            color: var(--muted2); font-size: .8rem; line-height: 1.6
+        }
+        .empty-ico { font-size: 2rem; opacity: .3; margin-bottom: .5rem; display: block }
+
+        .toast {
+            position: fixed; bottom: 1.4rem; left: 50%;
+            transform: translateX(-50%) translateY(8px);
+            background: var(--bg3); border: 1px solid var(--brd2);
+            color: var(--txt); padding: .6rem 1.3rem; font-size: .78rem;
+            opacity: 0; transition: .25s; z-index: 9999;
+            pointer-events: none; border-radius: 999px; white-space: nowrap;
+            box-shadow: 0 8px 32px rgba(0,0,0,.6)
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0) }
+        .toast.success { border-color: var(--cyan-brd); color: var(--cyan) }
+        .toast.err { border-color: var(--danger-brd); color: var(--danger) }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,.75);
+            display: none; align-items: center; justify-content: center;
+            z-index: 500; padding: 20px; backdrop-filter: blur(4px)
+        }
+        .modal-overlay.open { display: flex }
+
+        .modal {
+            background: var(--bg3); border: 1px solid var(--brd2);
+            border-radius: var(--r4); width: 100%; max-width: 460px;
+            overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,.85)
+        }
+        .modal-head {
+            padding: 14px 18px; border-bottom: 1px solid var(--brd);
+            background: var(--sur); display: flex; align-items: center; gap: 9px
+        }
+        .modal-title { font-size: .9rem; font-weight: 700; color: var(--txt); flex: 1; letter-spacing: .01em }
+        .modal-close {
+            width: 28px; height: 28px; border-radius: var(--r);
+            border: none; background: transparent; color: var(--muted);
+            font-size: 1rem; display: grid; place-items: center; transition: .14s
+        }
+        .modal-close:hover { background: var(--sur2); color: var(--txt) }
+        .modal-body { padding: 18px; max-height: 80vh; overflow-y: auto }
+
+        .ref-box {
+            padding: 8px 12px; border-radius: var(--r);
+            background: var(--sur); border: 1px solid var(--brd);
+            font-size: .78rem; color: var(--muted); word-break: break-all
+        }
+
+        .fine-item { padding: 12px 14px; border-radius: var(--r2); border: 1px solid var(--brd); background: var(--sur); margin-bottom: 8px }
+        .fine-item-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px }
+        .fine-item-name { font-size: .82rem; font-weight: 600; color: var(--txt); flex: 1 }
+        .fine-item-amount { font-size: .82rem; font-weight: 700; color: var(--danger) }
+        .fine-item-desc { font-size: .72rem; color: var(--muted); line-height: 1.4 }
+        .fine-item-time { font-size: .62rem; color: var(--muted2); margin-top: 4px }
+
+        .notice-box {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 12px 14px; border-radius: var(--r2);
+            border: 1px solid var(--amber-brd); background: var(--amber-dim);
+            font-size: .76rem; color: var(--amber); line-height: 1.5; margin-bottom: 16px
+        }
+        .notice-box span.ni { font-size: 1rem; flex-shrink: 0; margin-top: 1px }
+
+        .device-item {
+            padding: 14px 16px; border-radius: var(--r3);
+            border: 1px solid var(--brd); background: var(--sur);
+            margin-bottom: 10px; transition: .15s
+        }
+        .device-item.current { border-color: var(--cyan-brd); background: var(--cyan-dim) }
+        .device-item-top { display: flex; align-items: flex-start; gap: 12px }
+        .device-icon {
+            width: 38px; height: 38px; border-radius: var(--r2);
+            background: var(--sur2); border: 1px solid var(--brd);
+            display: grid; place-items: center; font-size: 1.05rem; flex-shrink: 0
+        }
+        .device-info { flex: 1; min-width: 0 }
+        .device-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap }
+        .device-name { font-size: .86rem; font-weight: 600; color: var(--txt) }
+        .device-meta { font-size: .7rem; color: var(--muted); display: flex; flex-direction: column; gap: 2px }
+        .device-meta-row { display: flex; align-items: center; gap: 6px }
+        .device-meta-row span.mi { font-size: .68rem; opacity: .7; width: 13px; text-align: center }
+        .device-bottom {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--brd);
+            gap: 10px; flex-wrap: wrap
+        }
+        .device-status { font-size: .68rem; color: var(--muted2); display: flex; align-items: center; gap: 6px }
+        .device-status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); flex-shrink: 0 }
+        .otp-box { margin-top: 10px; padding: 12px 14px; border-radius: var(--r2); border: 1px solid var(--cyan-brd); background: var(--cyan-dim); display: none }
+        .otp-box.open { display: block }
+        .otp-row { display: flex; gap: 8px; margin-top: 8px }
+        .otp-row .form-input { letter-spacing: .15em; font-weight: 700; text-align: center }
+
+        /* Profile photo */
+        .profile-photo-wrap {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            display: grid; place-items: center;
+            font-size: 1.8rem; font-weight: 700; color: #060810;
+            overflow: hidden; flex-shrink: 0; position: relative;
+            border: 2px solid var(--brd2); cursor: pointer
+        }
+        .profile-photo-wrap img { width: 100%; height: 100%; object-fit: cover }
+        .profile-photo-overlay {
+            position: absolute; inset: 0;
+            background: rgba(0,0,0,.5);
+            display: grid; place-items: center;
+            font-size: .7rem; color: #fff; font-weight: 600;
+            opacity: 0; transition: .2s
+        }
+        .profile-photo-wrap:hover .profile-photo-overlay { opacity: 1 }
+
+        @media (max-width: 1100px) {
+            .stats-grid { grid-template-columns: repeat(2,1fr) }
+            .two-col { grid-template-columns: 1fr }
+            .settings-modal { max-width: 100%; max-height: 100%; border-radius: 0 }
+        }
+
+        @media (max-width: 640px) {
+            .content { padding: 10px }
+            .stats-grid { grid-template-columns: 1fr 1fr }
+            .form-row { grid-template-columns: 1fr }
+            .hd1 { padding: 0 12px }
+            .prof-name { display: none }
+            .side-panel { width: 100%; right: -100% }
+            .urgent-tpl-grid { grid-template-columns: 1fr }
+            .device-bottom { flex-direction: column; align-items: stretch }
+            .otp-row { flex-direction: column }
+            .settings-modal-body { flex-direction: column }
+            .settings-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--brd) }
+        }
+    </style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- SIDE PANEL OVERLAY -->
+<div class="side-panel-overlay" id="sp-overlay" onclick="closeAllPanels()"></div>
+
+<!-- ALERTS SIDE PANEL -->
+<div class="side-panel" id="alerts-panel">
+    <div class="sp-head">
+        <span>🔔</span>
+        <span class="sp-title">Ogohlantirishlar</span>
+        <span style="font-size:.72rem;color:var(--muted)" id="sp-alert-count"></span>
+        <button class="sp-close" onclick="closeAlertsPanel()">✕</button>
+    </div>
+    <div class="sp-body" id="sp-alerts-body">
+        <div class="empty"><span class="empty-ico">✓</span>Ogohlantirishlar yo'q</div>
+    </div>
+    <div class="sp-footer">
+        <button class="btn-sm danger" style="width:100%" onclick="clearAlerts()">Hammasini tozalash</button>
+    </div>
+</div>
+
+<!-- FINES SIDE PANEL -->
+<div class="side-panel" id="fines-panel">
+    <div class="sp-head">
+        <span>△</span>
+        <span class="sp-title">Jarimalar</span>
+        <button class="sp-close" onclick="closeFinesPanel()">✕</button>
+    </div>
+    <div class="sp-body">
+        <div style="margin-bottom:14px">
+            <div style="font-size:.8rem;font-weight:600;color:var(--txt);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--brd)">Yangi jarima</div>
+            <div class="form-group">
+                <div class="form-label">Xodim</div>
+                <select class="form-select" id="sp-fine-emp-select" onchange="onSpFineEmpChange()">
+                    <option value="">— Tanlang —</option>
+                </select>
+            </div>
+            <div class="form-group" id="sp-fine-balance-wrap" style="display:none">
+                <div class="form-label">Hozirgi jarima balansi</div>
+                <div class="computed-field danger" id="sp-fine-balance">0 so'm</div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Summa (so'm)</div>
+                <input class="form-input" type="number" id="sp-fine-amount" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <div class="form-label">Sabab</div>
+                <textarea class="form-textarea" id="sp-fine-desc" placeholder="Jarima sababi..." style="min-height:60px"></textarea>
+            </div>
+            <button class="btn-submit danger" onclick="submitSpFine()">⚠ Jarimani saqlash</button>
+        </div>
+        <div style="font-size:.8rem;font-weight:600;color:var(--txt);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--brd);margin-top:18px">
+            Jarima tarixi <span style="font-weight:400;color:var(--muted)" id="sp-fine-history-count"></span>
+        </div>
+        <div id="sp-fine-history-body">
+            <div class="empty"><span class="empty-ico">△</span>Jarimalar yo'q</div>
+        </div>
+    </div>
+</div>
+
+<!-- FINE MODAL -->
+<div class="modal-overlay" id="fine-modal">
+    <div class="modal">
+        <div class="modal-head">
+            <span>⚠</span>
+            <span class="modal-title">Jarima belgilash</span>
+            <button class="modal-close" onclick="closeFineModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="form-label">Xodim</div>
+                <select class="form-select" id="fine-emp-select" onchange="onFineModalEmpChange()">
+                    <option value="">— Tanlang —</option>
+                </select>
+            </div>
+            <div class="form-group" id="fine-modal-balance-wrap" style="display:none">
+                <div class="form-label">Hozirgi jarima balansi</div>
+                <div class="computed-field danger" id="fine-modal-balance">0 so'm</div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Summa (so'm)</div>
+                <input class="form-input" type="number" id="fine-amount" placeholder="0" min="0">
+            </div>
+            <div class="form-group">
+                <div class="form-label">Sabab</div>
+                <textarea class="form-textarea" id="fine-desc" placeholder="Jarima sababi..."></textarea>
+            </div>
+            <div class="form-group" id="fine-ref-wrap" style="display:none">
+                <div class="form-label">Bog'liq ogohlantirish</div>
+                <div class="ref-box" id="fine-ref-display"></div>
+                <input type="hidden" id="fine-ref-id">
+            </div>
+            <button class="btn-submit danger" onclick="submitFineFromModal()">⚠ Jarimani tasdiqlash</button>
+        </div>
+    </div>
+</div>
+
+<!-- URGENT MESSAGE MODAL -->
+<div class="modal-overlay" id="urgent-modal">
+    <div class="modal" style="max-width:520px">
+        <div class="modal-head" style="border-left:3px solid var(--danger)">
+            <span>🚨</span>
+            <span class="modal-title" style="color:var(--danger)">Shoshilinch xabar yuborish</span>
+            <button class="modal-close" onclick="closeUrgentModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="urgent-alert-ctx" style="display:none;padding:9px 13px;border-radius:var(--r2);background:var(--danger-dim);border:1px solid var(--danger-brd);font-size:.76rem;color:var(--danger);margin-bottom:14px"></div>
+            <div class="form-group">
+                <div class="form-label">Kimga yuborish</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap" id="urgent-target-btns">
+                    <button class="period-btn active" onclick="setUrgentTarget('waiter',this)">Ofitsiantlar</button>
+                    <button class="period-btn" onclick="setUrgentTarget('chef',this)">Oshpazlar</button>
+                    <button class="period-btn" onclick="setUrgentTarget('cashier',this)">Kassirlar</button>
+                    <button class="period-btn" onclick="setUrgentTarget('all',this)">Hammasi</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Muayyan xodim (ixtiyoriy)</div>
+                <select class="form-select" id="urgent-emp-select">
+                    <option value="">— Barcha tanlangan guruhga —</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Tez shablonlar</div>
+                <div class="urgent-tpl-grid">
+                    <button class="urgent-tpl" onclick="setUrgentTpl(this)">⏰ Taomni tezroq tayyorlang</button>
+                    <button class="urgent-tpl" onclick="setUrgentTpl(this)">📦 Darhol oshxonaga keling</button>
+                    <button class="urgent-tpl" onclick="setUrgentTpl(this)">⚠ Mijoz shikoyat qilmoqda</button>
+                    <button class="urgent-tpl" onclick="setUrgentTpl(this)">🧹 Stol darhol tozalansin</button>
+                    <button class="urgent-tpl" onclick="setUrgentTpl(this)">💳 Kassaga keling</button>
+                    <button class="urgent-tpl" onclick="setUrgentTpl(this)">🔄 Buyurtmani qayta tekshiring</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Xabar matni</div>
+                <textarea class="form-textarea" id="urgent-text" placeholder="Muammo tavsifi va talab..." style="min-height:90px"></textarea>
+            </div>
+            <button class="btn-submit danger" onclick="sendUrgentMessage()">🚨 Xabarni yuborish</button>
+        </div>
+    </div>
+</div>
+
+<!-- REPORT MODAL -->
+<div class="modal-overlay" id="report-modal">
+    <div class="modal">
+        <div class="modal-head">
+            <span>📋</span>
+            <span class="modal-title">Hisobotni tasdiqlash</span>
+            <button class="modal-close" onclick="closeReportModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div id="report-modal-info" style="margin-bottom:14px;padding:10px 13px;border-radius:var(--r2);background:var(--sur);font-size:.78rem;color:var(--muted)"></div>
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="form-label">Haqiqiy sarflangan</div>
+                    <input class="form-input" type="number" id="r-actual-used" placeholder="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <div class="form-label">Haqiqiy qolgan</div>
+                    <input class="form-input" type="number" id="r-actual-closing" placeholder="0" step="0.01">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Izoh</div>
+                <input class="form-input" type="text" id="r-note" placeholder="Qo'shimcha ma'lumot...">
+            </div>
+            <button class="btn-submit" id="report-submit-btn" onclick="submitReport()">Tasdiqlash</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     SETTINGS MODAL (dropdown dan ochiladi)
+     ══════════════════════════════════════════════════════════════════ -->
+<div class="settings-modal-overlay" id="settings-modal">
+    <div class="settings-modal">
+        <div class="settings-modal-head">
+            <span>⚙</span>
+            <span class="settings-modal-title">Sozlamalar</span>
+            <button class="settings-modal-close" onclick="closeSettingsModal()">✕</button>
+        </div>
+        <div class="settings-modal-body">
+            <!-- Sidebar nav -->
+            <div class="settings-sidebar">
+                <button class="settings-nav-item active" data-settings="profil" onclick="switchSettings('profil',this)">
+                    <span class="sni-icon">◉</span> Profil
+                </button>
+                <button class="settings-nav-item" data-settings="xavfsizlik" onclick="switchSettings('xavfsizlik',this)">
+                    <span class="sni-icon">◈</span> Xavfsizlik
+                </button>
+                <button class="settings-nav-item" data-settings="qurilmalar" onclick="switchSettings('qurilmalar',this)">
+                    <span class="sni-icon">📱</span> Qurilmalar
+                </button>
+                <button class="settings-nav-item" data-settings="websocket" onclick="switchSettings('websocket',this)">
+                    <span class="sni-icon">◎</span> Ulanish
+                </button>
+                <button class="settings-nav-item" data-settings="interfeys" onclick="switchSettings('interfeys',this)">
+                    <span class="sni-icon">▦</span> Interfeys
+                </button>
+            </div>
+
+            <!-- Panels -->
+            <div class="settings-content">
+
+                <!-- PROFIL -->
+                <div class="settings-panel active" id="sp-profil">
+                    <div class="settings-section-title">Profil rasmi</div>
+                    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+                        <div class="profile-photo-wrap" id="profile-photo-wrap" onclick="document.getElementById('set-photo-input').click()">
+                            <span id="profile-photo-init">M</span>
+                            <div class="profile-photo-overlay">📷 O'zgartirish</div>
+                        </div>
+                        <div>
+                            <input type="file" id="set-photo-input" accept="image/*" style="display:none" onchange="onPhotoSelected(event)">
+                            <button class="btn-sm cyan" onclick="document.getElementById('set-photo-input').click()">Rasm tanlash</button>
+                            <div style="font-size:.68rem;color:var(--muted);margin-top:6px">JPG, PNG · maks 5MB</div>
+                            <div style="font-size:.66rem;color:var(--muted2);margin-top:3px" id="set-photo-name"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-divider"></div>
+                    <div class="settings-section-title">Asosiy ma'lumotlar</div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="form-label">Ism</div>
+                            <input class="form-input" type="text" id="set-fname" placeholder="Ismingiz">
+                        </div>
+                        <div class="form-group">
+                            <div class="form-label">Familiya</div>
+                            <input class="form-input" type="text" id="set-lname" placeholder="Familiyangiz">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="form-label">Username</div>
+                            <input class="form-input" type="text" id="set-username" placeholder="username">
+                        </div>
+                        <div class="form-group">
+                            <div class="form-label">Telefon</div>
+                            <input class="form-input" type="tel" id="set-phone" placeholder="+998 90 000 00 00">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-label">Email</div>
+                        <input class="form-input" type="email" id="set-email">
+                    </div>
+
+                    <div class="form-divider"></div>
+                    <div class="settings-section-title">Qo'shimcha ma'lumotlar</div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="form-label">Bank kartasi</div>
+                            <input class="form-input" type="text" id="set-bank" placeholder="8600 0000 0000 0000" maxlength="19">
+                        </div>
+                        <div class="form-group">
+                            <div class="form-label">Favqulodda aloqa</div>
+                            <input class="form-input" type="tel" id="set-emergency" placeholder="+998 90 000 00 00">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="form-label">Smena</div>
+                            <select class="form-select" id="set-shift">
+                                <option value="day">Kunduzgi</option>
+                                <option value="night">Tungi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-label">Oylik maosh</div>
+                            <div class="info-field" id="set-salary-display">—</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="margin-top:4px">
+                        <div class="form-group">
+                            <div class="form-label">Jarima balansi</div>
+                            <div class="computed-field danger" id="set-fine-display">0 so'm</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-label">Ish holati</div>
+                            <div class="info-field" id="set-atwork-display">—</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:6px">
+                        <button class="btn-submit" style="max-width:200px" onclick="saveProfile()" id="save-profile-btn">💾 Saqlash</button>
+                    </div>
+                </div>
+
+                <!-- XAVFSIZLIK -->
+                <div class="settings-panel" id="sp-xavfsizlik">
+                    <div class="settings-section-title">Parolni o'zgartirish</div>
+                    <div class="form-group">
+                        <div class="form-label">Joriy parol</div>
+                        <input class="form-input" type="password" id="set-old-pass" placeholder="••••••••">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="form-label">Yangi parol</div>
+                            <input class="form-input" type="password" id="set-new-pass" placeholder="Kamida 8 belgi">
+                        </div>
+                        <div class="form-group">
+                            <div class="form-label">Takrorlang</div>
+                            <input class="form-input" type="password" id="set-confirm-pass" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <button class="btn-submit" style="max-width:220px" onclick="changePassword()">Parolni yangilash</button>
+                </div>
+
+                <!-- QURILMALAR -->
+                <div class="settings-panel" id="sp-qurilmalar">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+                        <div class="settings-section-title" style="margin-bottom:0;border:none;padding:0">
+                            Ulangan qurilmalar
+                            <span style="font-size:.7rem;font-weight:400;color:var(--muted);font-family:'Inter',sans-serif" id="dev-count-label"></span>
+                        </div>
+                        <button class="btn-sm cyan" onclick="loadDevices()">↺ Yangilash</button>
+                    </div>
+                    <div class="notice-box">
+                        <span class="ni">⚠</span>
+                        <span>Tanib olmagan qurilmani darhol o'chiring va parolingizni o'zgartiring. Qurilmani o'chirish email orqali tasdiqlanadi.</span>
+                    </div>
+                    <div id="devices-list">
+                        <div class="empty">Yuklanmoqda...</div>
+                    </div>
+                </div>
+
+                <!-- WEBSOCKET -->
+                <div class="settings-panel" id="sp-websocket">
+                    <div class="settings-section-title">Real-vaqt ulanish</div>
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:12px 14px;border-radius:var(--r2);background:var(--sur);border:1px solid var(--brd)">
+                        <span class="ws-dot" id="ws-dot-settings" style="width:10px;height:10px"></span>
+                        <div>
+                            <div style="font-size:.84rem;font-weight:500;color:var(--txt)" id="ws-status-text">Ulanmoqda...</div>
+                            <div style="font-size:.7rem;color:var(--muted);margin-top:2px" id="ws-url-display"></div>
+                        </div>
+                        <button class="btn-sm cyan" onclick="reconnectWS()" style="margin-left:auto">Qayta ulash</button>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">So'nggi xabar vaqti</div>
+                        <div class="computed-field" id="ws-last-msg">—</div>
+                    </div>
+                    <div style="margin-top:16px">
+                        <div class="settings-section-title">Bildirishnomalar</div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:var(--r2);background:var(--sur)">
+                            <div>
+                                <div style="font-size:.82rem;font-weight:500">Brauzer bildirishnomalar</div>
+                                <div style="font-size:.7rem;color:var(--muted);margin-top:2px">Urgent ogohlantirishlar uchun</div>
+                            </div>
+                            <button class="btn-sm cyan" onclick="requestNotifPermission()">Ruxsat so'rash</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INTERFEYS -->
+                <div class="settings-panel" id="sp-interfeys">
+                    <div class="settings-section-title">Saqlangan ma'lumotlar</div>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:var(--r2);background:var(--sur)">
+                            <div>
+                                <div style="font-size:.82rem;font-weight:500">Ogohlantirishlar</div>
+                                <div style="font-size:.7rem;color:var(--muted);margin-top:2px">localStorage</div>
+                            </div>
+                            <span class="tag tag-cyan" id="si-alert-count">0</span>
+                        </div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:var(--r2);background:var(--sur)">
+                            <div>
+                                <div style="font-size:.82rem;font-weight:500">Jarima tarixi</div>
+                                <div style="font-size:.7rem;color:var(--muted);margin-top:2px">localStorage</div>
+                            </div>
+                            <span class="tag tag-amber" id="si-fine-count">0</span>
+                        </div>
+                    </div>
+                    <div class="form-divider"></div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button class="btn-sm danger" onclick="clearAlerts();updateSettingsInfo()">Ogohlantirishlarni tozalash</button>
+                        <button class="btn-sm danger" onclick="clearFineHistory();updateSettingsInfo()">Jarima tarixini tozalash</button>
+                    </div>
+                </div>
+
+            </div><!-- /settings-content -->
+        </div><!-- /settings-modal-body -->
+    </div>
+</div>
+
+<!-- HEADER -->
+<header>
+    <div class="hd1">
+        <div class="brand">
+            <div class="brand-icon" id="brand-icon-wrap">R</div>
+            <div>
+                <div class="brand-name" id="rest-name">Restoran</div>
+                <div class="brand-sub">Menejer paneli</div>
+            </div>
+        </div>
+        <div class="hd1-right">
+            <span class="ws-dot" id="ws-dot" title="WebSocket holati"></span>
+            <button class="icon-btn urgent-btn" onclick="openUrgentModal(null)" title="Shoshilinch xabar">🚨</button>
+            <button class="icon-btn" id="fines-btn" onclick="openFinesPanel()" title="Jarimalar">
+                △
+                <span class="alert-badge" id="fines-badge" style="display:none">!</span>
+            </button>
+            <button class="icon-btn" id="alert-bell" onclick="openAlertsPanel()" title="Ogohlantirishlar">
+                🔔
+                <span class="alert-badge" id="alert-count" style="display:none">0</span>
+            </button>
+            <div class="prof-wrap">
+                <button class="prof-btn" onclick="toggleDD()">
+                    <div class="avatar" id="avatar-el">M</div>
+                    <span class="prof-name" id="prof-name-el">Menejer</span>
+                    <span style="font-size:.6rem;color:var(--muted2);margin-left:2px">▾</span>
+                </button>
+                <div class="dd" id="dd">
+                    <div class="dd-hd">
+                        <div class="dd-profile-row">
+                            <div class="dd-avatar-lg" id="dd-avatar-lg">M</div>
+                            <div>
+                                <div class="dd-name" id="dd-name">Menejer</div>
+                                <div class="dd-role" id="dd-role-label">Menejer</div>
+                            </div>
+                        </div>
+                        <div class="dd-phone" id="dd-phone"></div>
+                    </div>
+                    <button class="dd-item" onclick="openSettingsModal('profil');closeDD()"><span>◉</span> Profil</button>
+                    <button class="dd-item" onclick="openSettingsModal('qurilmalar');closeDD()"><span>📱</span> Qurilmalarim</button>
+                    <button class="dd-item" onclick="openSettingsModal('xavfsizlik');closeDD()"><span>◈</span> Xavfsizlik</button>
+                    <div class="dd-sep"></div>
+                    <button class="dd-item dd-danger" onclick="logout()"><span>→</span> Chiqish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hd2">
+        <div class="nav">
+            <button class="nav-item active" data-page="dashboard" onclick="goPage('dashboard',this)"><span>◈</span> Dashboard</button>
+            <button class="nav-item" data-page="orderlar" onclick="goPage('orderlar',this)"><span>≡</span> Orderlar</button>
+            <button class="nav-item" data-page="stollar" onclick="goPage('stollar',this)"><span>⊞</span> Stollar</button>
+            <button class="nav-item" data-page="xodimlar" onclick="goPage('xodimlar',this)"><span>◉</span> Xodimlar</button>
+            <button class="nav-item" data-page="hisobotlar" onclick="goPage('hisobotlar',this)"><span>▦</span> Hisobotlar</button>
+        </div>
+    </div>
+</header>
+
+<div class="content">
+
+    <!-- DASHBOARD -->
+    <div id="p-dashboard">
+        <div class="stats-grid">
+            <div class="stat-card amber">
+                <div class="stat-icon">◈</div>
+                <div class="stat-val" id="dash-orders">—</div>
+                <div class="stat-label">Bugungi orderlar</div>
+                <div class="stat-sub">Jami bugun</div>
+            </div>
+            <div class="stat-card danger">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-val" id="dash-waiting">—</div>
+                <div class="stat-label">Kutayotgan taomlar</div>
+                <div class="stat-sub">Chef qabul qilmagan</div>
+            </div>
+            <div class="stat-card cyan">
+                <div class="stat-icon">⊞</div>
+                <div class="stat-val" id="dash-tables">—</div>
+                <div class="stat-label">Band stollar</div>
+                <div class="stat-sub">Hozir</div>
+            </div>
+            <div class="stat-card purple">
+                <div class="stat-icon">◉</div>
+                <div class="stat-val" id="dash-staff">—</div>
+                <div class="stat-label">Ishdagi xodimlar</div>
+                <div class="stat-sub">Hozir</div>
+            </div>
+        </div>
+        <div class="two-col">
+            <div class="card">
+                <div class="card-head">
+                    <span class="card-head-icon">≡</span>
+                    <span class="card-head-title">Faol orderlar</span>
+                    <button class="btn-sm" onclick="loadOrders()">↺ Yangilash</button>
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>Order</th><th>Stol</th><th>Ofitsiant</th><th>Holat</th><th>Summa</th>
+                        </tr>
+                        </thead>
+                        <tbody id="dash-orders-tbody">
+                        <tr><td colspan="5" class="empty">Yuklanmoqda...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-head">
+                    <span class="card-head-icon">◎</span>
+                    <span class="card-head-title">Oxirgi ogohlantirishlar</span>
+                    <span style="font-size:.7rem;color:var(--muted)" id="dash-alert-count"></span>
+                </div>
+                <div class="card-body" style="max-height:320px;overflow-y:auto" id="dash-alerts-list">
+                    <div class="empty"><span class="empty-ico">✓</span>Ogohlantirishlar yo'q</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDERLAR -->
+    <div id="p-orderlar" style="display:none">
+        <div class="sec-title">Orderlar <small id="orders-count-label"></small></div>
+        <div class="card" style="margin-bottom:14px">
+            <div class="card-body" style="display:flex;gap:6px;flex-wrap:wrap;padding:12px 16px">
+                <button class="period-btn active" data-of="all" onclick="filterOrders('all',this)">Hammasi</button>
+                <button class="period-btn" data-of="pending" onclick="filterOrders('pending',this)">Kutilmoqda</button>
+                <button class="period-btn" data-of="confirmed" onclick="filterOrders('confirmed',this)">Tasdiqlangan</button>
+                <button class="period-btn" data-of="cooking" onclick="filterOrders('cooking',this)">Pishirilmoqda</button>
+                <button class="period-btn" data-of="ready" onclick="filterOrders('ready',this)">Tayyor</button>
+                <button class="period-btn" data-of="paid" onclick="filterOrders('paid',this)">To'langan</button>
+            </div>
+        </div>
+        <div style="overflow-x:auto">
+            <table class="data-table" style="background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r3)">
+                <thead>
+                <tr>
+                    <th>Order</th><th>Stol</th><th>Ofitsiant</th><th>To'lov turi</th><th>Holat</th><th>Vaqt</th><th>Summa</th>
+                </tr>
+                </thead>
+                <tbody id="orders-tbody">
+                <tr><td colspan="7" class="empty">Yuklanmoqda...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- STOLLAR -->
+    <div id="p-stollar" style="display:none">
+        <div class="sec-title">Stollar <small id="tables-stat-label"></small></div>
+        <div style="display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted)">
+                <div style="width:10px;height:10px;border-radius:3px;background:var(--sur);border:1px solid var(--brd)"></div>
+                Bo'sh
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--amber)">
+                <div style="width:10px;height:10px;border-radius:3px;background:var(--amber-dim);border:1px solid var(--amber-brd)"></div>
+                Band
+            </div>
+        </div>
+        <div class="table-grid" id="tables-grid">
+            <div class="empty" style="grid-column:1/-1">Yuklanmoqda...</div>
+        </div>
+        <div class="sec-title" style="margin-top:22px">Aktiv sessiyalar <small id="sessions-count-label"></small></div>
+        <div style="overflow-x:auto">
+            <table class="data-table" style="background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r3)">
+                <thead>
+                <tr>
+                    <th>Stol</th><th>Ofitsiant</th><th>Boshlangan</th><th>Tugash vaqti</th><th>Davomiyligi</th>
+                </tr>
+                </thead>
+                <tbody id="sessions-tbody">
+                <tr><td colspan="5" class="empty">Aktiv sessiyalar yo'q</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- XODIMLAR -->
+    <div id="p-xodimlar" style="display:none">
+        <div class="sec-title">
+            Xodimlar <small id="emp-count-label"></small>
+            <div style="margin-left:auto;display:flex;gap:6px">
+                <button class="btn-sm cyan" onclick="loadEmployees()">↺ Yangilash</button>
+                <button class="btn-sm amber" onclick="openUrgentModal(null)">🚨 Xabar yuborish</button>
+            </div>
+        </div>
+        <div style="overflow-x:auto">
+            <table class="data-table" style="background:var(--bg2);border:1px solid var(--brd);border-radius:var(--r3)">
+                <thead>
+                <tr>
+                    <th>Xodim</th><th>Rol</th><th>Ish holati</th><th>Smena</th><th>Amallar</th>
+                </tr>
+                </thead>
+                <tbody id="emp-tbody">
+                <tr><td colspan="5" class="empty">Yuklanmoqda...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- HISOBOTLAR -->
+    <div id="p-hisobotlar" style="display:none">
+        <div class="two-col">
+            <div>
+                <div class="sec-title">Kunlik ingredient hisobotlari</div>
+                <div id="reports-list">
+                    <div class="empty">Yuklanmoqda...</div>
+                </div>
+            </div>
+            <div>
+                <div class="sec-title">Kam qolgan ingredientlar</div>
+                <div class="card">
+                    <div style="overflow-x:auto">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>Ingredient</th><th>Qolgan</th><th>Minimal</th><th>Holat</th>
+                            </tr>
+                            </thead>
+                            <tbody id="low-stock-tbody">
+                            <tr><td colspan="4" class="empty">Yuklanmoqda...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /content -->
+
+<script>
+    const API = 'api/v1';
+    const WS_HOST = location.host;
+    const TOKEN_KEY = 'manager_access_token';
+    const USER_KEY  = 'manager_user';
+    const fmt = n => Number(n).toLocaleString('uz-UZ') + " so'm";
+
+    let state = {
+        ws: null, orders: [], tables: [], sessions: [], employees: [],
+        reports: [], ingredients: [], devices: [],
+        alerts: JSON.parse(localStorage.getItem('mgr_alerts') || '[]'),
+        fineHistory: JSON.parse(localStorage.getItem('mgr_fines') || '[]'),
+        orderFilter: 'all', currentReportId: null, wsLastMsg: null,
+        urgentTarget: 'waiter', removalSessionId: null,
+    };
+
+    const ROLES = {
+        owner:'Egasi', manager:'Menejer', chef:'Oshpaz',
+        waiter:'Ofitsiant', cashier:'Kassir', accountant:'Hisobchi'
+    };
+    const PM_LABELS = {cash:'Naqd', card:'Karta', online:'Online'};
+
+    /* ── AUTH ── */
+    function initAuth() {
+        const token = localStorage.getItem(TOKEN_KEY);
+        if (!token) { window.location.href = '/login/'; return; }
+        try {
+            const user = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
+            const name = ((user.first_name||'') + ' ' + (user.last_name||'')).trim() || 'Menejer';
+            const role = ROLES[user.role] || user.role || 'Menejer';
+            const init = name.charAt(0).toUpperCase();
+            const phone = user.phone_number || '';
+
+            document.getElementById('prof-name-el').textContent = name.split(' ')[0];
+            document.getElementById('dd-name').textContent = name;
+            document.getElementById('dd-role-label').textContent = role;
+            document.getElementById('dd-phone').textContent = phone;
+
+            if (user.photo) {
+                document.getElementById('avatar-el').innerHTML = `<img src="${user.photo}">`;
+                document.getElementById('dd-avatar-lg').innerHTML = `<img src="${user.photo}">`;
+                const wrap = document.getElementById('profile-photo-wrap');
+                if (wrap) wrap.innerHTML = `<img src="${user.photo}"><div class="profile-photo-overlay">📷 O'zgartirish</div>`;
+            } else {
+                document.getElementById('avatar-el').textContent = init;
+                document.getElementById('dd-avatar-lg').textContent = init;
+                const initEl = document.getElementById('profile-photo-init');
+                if (initEl) initEl.textContent = init;
+            }
+
+            // Fill settings form
+            document.getElementById('set-fname').value      = user.first_name || '';
+            document.getElementById('set-lname').value      = user.last_name  || '';
+            document.getElementById('set-email').value      = user.email      || '';
+            document.getElementById('set-phone').value      = phone;
+            document.getElementById('set-username').value   = user.username   || '';
+            document.getElementById('set-bank').value       = user.bank_card  || '';
+            document.getElementById('set-emergency').value  = user.emergency_contact || '';
+            if (user.shift) document.getElementById('set-shift').value = user.shift;
+
+            const salaryEl = document.getElementById('set-salary-display');
+            if (salaryEl) salaryEl.textContent = user.base_salary ? fmt(user.base_salary) : '—';
+
+            const fineEl = document.getElementById('set-fine-display');
+            if (fineEl) fineEl.textContent = fmt(user.fine_balance || 0);
+
+            const atWorkEl = document.getElementById('set-atwork-display');
+            if (atWorkEl) atWorkEl.textContent = user.is_at_work ? '● Ishda' : '○ Uyda';
+
+        } catch(e) {}
+    }
+
+    /* Profil ma'lumotlarini API dan yangilash */
+    async function refreshProfileFromAPI() {
+        try {
+            const res = await fetch(`/${API}/employees/me/`, { headers: authHeaders() });
+            if (!res.ok) return;
+            const user = await res.json();
+            const stored = JSON.parse(localStorage.getItem(USER_KEY) || '{}');
+            localStorage.setItem(USER_KEY, JSON.stringify({ ...stored, ...user }));
+            initAuth();
+        } catch(e) {}
+    }
+
+    let selectedPhotoFile = null;
+
+    function onPhotoSelected(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) { toast('Fayl hajmi 5MB dan oshmasligi kerak', 'err'); return; }
+        selectedPhotoFile = file;
+        const nameEl = document.getElementById('set-photo-name');
+        if (nameEl) nameEl.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = ev => {
+            const wrap = document.getElementById('profile-photo-wrap');
+            if (wrap) wrap.innerHTML = `<img src="${ev.target.result}"><div class="profile-photo-overlay">📷 O'zgartirish</div>`;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function logout() {
+        if (state.ws) try { state.ws.close(); } catch(e) {}
+        [TOKEN_KEY, 'manager_refresh_token', USER_KEY].forEach(k => localStorage.removeItem(k));
+        window.location.href = '/login/';
+    }
+
+    function authHeaders() {
+        return {'Content-Type':'application/json','Authorization':'Bearer '+localStorage.getItem(TOKEN_KEY)};
+    }
+
+    /* ── SETTINGS MODAL ── */
+    function openSettingsModal(panel) {
+        document.getElementById('settings-modal').classList.add('open');
+        if (panel) switchSettings(panel, document.querySelector(`[data-settings="${panel}"]`));
+        updateSettingsInfo();
+        if (panel === 'qurilmalar') loadDevices();
+    }
+
+    function closeSettingsModal() {
+        document.getElementById('settings-modal').classList.remove('open');
+    }
+
+    document.getElementById('settings-modal').addEventListener('click', e => {
+        if (e.target === document.getElementById('settings-modal')) closeSettingsModal();
+    });
+
+    /* ── NAV ── */
+    function goPage(id, btn) {
+        document.querySelectorAll('[id^="p-"]').forEach(p => p.style.display = 'none');
+        const el = document.getElementById('p-' + id);
+        if (el) el.style.display = '';
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        else document.querySelectorAll('.nav-item').forEach(b => {
+            if (b.dataset.page === id) b.classList.add('active');
+        });
+        closeDD();
+        if (id === 'orderlar') loadOrders();
+        if (id === 'stollar') loadTables();
+        if (id === 'xodimlar') renderEmployees();
+        if (id === 'hisobotlar') loadReports();
+    }
+
+    function toggleDD() { document.getElementById('dd').classList.toggle('open'); }
+    function closeDD() { document.getElementById('dd').classList.remove('open'); }
+    document.addEventListener('click', e => { if (!e.target.closest('.prof-wrap')) closeDD(); });
+
+    function switchSettings(id, btn) {
+        document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.settings-nav-item').forEach(b => b.classList.remove('active'));
+        const panel = document.getElementById('sp-' + id);
+        if (panel) panel.classList.add('active');
+        if (btn) btn.classList.add('active');
+        if (id === 'qurilmalar') loadDevices();
+    }
+
+    function updateSettingsInfo() {
+        document.getElementById('si-alert-count').textContent = state.alerts.length;
+        document.getElementById('si-fine-count').textContent  = state.fineHistory.length;
+        document.getElementById('ws-url-display').textContent = `ws://${WS_HOST}/ws/manager/`;
+        syncWsDots();
+    }
+
+    /* ── SIDE PANELS ── */
+    function openAlertsPanel() {
+        document.getElementById('alerts-panel').classList.add('open');
+        document.getElementById('sp-overlay').classList.add('open');
+        renderSpAlerts(); clearAlertBadge();
+    }
+    function closeAlertsPanel() {
+        document.getElementById('alerts-panel').classList.remove('open');
+        document.getElementById('sp-overlay').classList.remove('open');
+    }
+    function openFinesPanel() {
+        syncEmployeeSelects(); renderSpFineHistory();
+        document.getElementById('fines-panel').classList.add('open');
+        document.getElementById('sp-overlay').classList.add('open');
+    }
+    function closeFinesPanel() {
+        document.getElementById('fines-panel').classList.remove('open');
+        document.getElementById('sp-overlay').classList.remove('open');
+    }
+    function closeAllPanels() { closeAlertsPanel(); closeFinesPanel(); }
+
+    /* ── TOAST ── */
+    function toast(msg, type='', dur=3000) {
+        const t = document.getElementById('toast');
+        t.textContent = msg; t.className = 'toast ' + type + ' show';
+        setTimeout(() => t.classList.remove('show'), dur);
+    }
+
+    /* ── WS DOTS ── */
+    function syncWsDots() {
+        const on = state.ws && state.ws.readyState === WebSocket.OPEN;
+        ['ws-dot','ws-dot-settings'].forEach(id => {
+            const d = document.getElementById(id);
+            if (d) d.className = 'ws-dot ' + (on ? 'on' : 'off');
+        });
+        const txt = document.getElementById('ws-status-text');
+        if (txt) txt.textContent = on ? 'Ulandi ✓' : 'Uzildi';
+    }
+
+    /* ── RESTAURANT INFO ── */
+    async function loadRestaurantInfo() {
+        try {
+            const res = await fetch(`/${API}/restaurant/info/`, { headers: authHeaders() });
+            if (!res.ok) return;
+            const data = await res.json();
+            if (data.name) {
+                document.getElementById('rest-name').textContent = data.name;
+                document.title = data.name + ' · Menejer';
+            }
+            if (data.logo) {
+                document.getElementById('brand-icon-wrap').innerHTML = `<img src="${data.logo}" alt="logo">`;
+            } else if (data.name) {
+                document.getElementById('brand-icon-wrap').textContent = data.name.charAt(0).toUpperCase();
+            }
+        } catch(e) {}
+    }
+
+    /* ── DASHBOARD STATS ── */
+    async function loadDashboardStats() {
+        try {
+            const [ordersRes, tablesRes, empsRes] = await Promise.all([
+                fetch(`/${API}/manager/orders/`, { headers: authHeaders() }),
+                fetch(`/${API}/tables/`,          { headers: authHeaders() }),
+                fetch(`/${API}/employees/list/`,  { headers: authHeaders() }),
+            ]);
+            if (ordersRes.ok) {
+                const orders = await ordersRes.json();
+                const arr = Array.isArray(orders) ? orders : (orders.results||[]);
+                const today = new Date().toISOString().slice(0,10);
+                document.getElementById('dash-orders').textContent = arr.filter(o => (o.created_at||'').slice(0,10) === today).length;
+                document.getElementById('dash-waiting').textContent = arr.filter(o => o.status === 'pending' || o.status === 'confirmed').length;
+            }
+            if (tablesRes.ok) {
+                const tables = await tablesRes.json();
+                const arr = Array.isArray(tables) ? tables : (tables.results||[]);
+                document.getElementById('dash-tables').textContent = arr.filter(t => t.is_occupied).length;
+            }
+            if (empsRes.ok) {
+                const emps = await empsRes.json();
+                const arr = Array.isArray(emps) ? emps : (emps.results||[]);
+                document.getElementById('dash-staff').textContent = arr.filter(e => e.is_at_work && e.role !== 'customer').length;
+            }
+        } catch(e) {}
+    }
+
+    /* ── WEBSOCKET ── */
+    function connectWS() {
+        const token = localStorage.getItem(TOKEN_KEY);
+        if (!token) return;
+        try {
+            const ws = new WebSocket(`ws://${WS_HOST}/ws/manager/?token=${token}`);
+            state.ws = ws;
+            ws.onopen  = () => syncWsDots();
+            ws.onclose = () => { syncWsDots(); setTimeout(connectWS, 4000); };
+            ws.onerror = () => syncWsDots();
+            ws.onmessage = e => {
+                try {
+                    const data = JSON.parse(e.data);
+                    handleWS(data);
+                    state.wsLastMsg = new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});
+                    const el = document.getElementById('ws-last-msg');
+                    if (el) el.textContent = state.wsLastMsg;
+                } catch(err) {}
+            };
+        } catch(e) { setTimeout(connectWS, 4000); }
+    }
+
+    function reconnectWS() {
+        if (state.ws) try { state.ws.close(); } catch(e) {}
+        setTimeout(connectWS, 600);
+        toast('Qayta ulanmoqda...');
+    }
+
+    function handleWS(data) {
+        switch(data.type) {
+            case 'dashboard': updateDashStats(data); break;
+            case 'item_not_accepted':
+                addAlert({type:'urgent',icon:'❌',title:`Stol #${data.table_number} — "${data.product_name}" qabul qilinmadi`,msg:data.message||'Chef 3 daqiqada qabul qilmadi',time:now(),order_item_id:data.order_item_id,order_id:data.order_id,table_number:data.table_number});
+                break;
+            case 'pickup_alert':
+                addAlert({type:'urgent',icon:'⏰',title:`Order #${data.order_id} — Ofitsiant taomni olib ketmadi`,msg:"Taom 5 daqiqadan ko'p tayyor holda turibdi",time:now(),order_id:data.order_id,waiter_id:data.waiter_id,chef_id:data.chef_id});
+                break;
+            case 'table_session_long_open':
+                addAlert({type:'warning',icon:'⏱',title:`Stol #${data.table_number} — sessiya juda uzoq ochiq`,msg:data.message||`${data.duration_minutes||'?'} daqiqadan beri yopilmagan`,time:now()});
+                break;
+            case 'low_ingredient':
+                addAlert({type:'warning',icon:'▲',title:`"${data.name}" kam qoldi`,msg:`Qolgan: ${data.amount} ${data.unit}`,time:now(),ingredient_id:data.ingredient_id});
+                break;
+            case 'order_paid':
+                addAlert({type:'info',icon:'✓',title:`Order #${data.order_id} to'landi`,msg:`Stol #${data.table_number} — ${fmt(data.amount)}`,time:now()});
+                loadOrders(); loadDashboardStats();
+                break;
+            case 'daily_report':
+                addAlert({type:'warning',icon:'▦',title:`${data.date} — Kunlik hisobot tayyor`,msg:`${data.report?.length||0} ta ingredient`,time:now()});
+                loadReports();
+                break;
+        }
+    }
+
+    function now() {
+        return new Date().toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});
+    }
+
+    function updateDashStats(d) {
+        if (d.today_orders    !== undefined) document.getElementById('dash-orders').textContent  = d.today_orders;
+        if (d.waiting_items   !== undefined) document.getElementById('dash-waiting').textContent = d.waiting_items;
+        if (d.occupied_tables !== undefined) document.getElementById('dash-tables').textContent  = d.occupied_tables;
+        if (d.staff_at_work   !== undefined) document.getElementById('dash-staff').textContent   = d.staff_at_work;
+    }
+
+    /* ── ALERTS ── */
+    function addAlert(a) {
+        a.id = Date.now() + Math.random();
+        state.alerts.unshift(a);
+        if (state.alerts.length > 100) state.alerts = state.alerts.slice(0,100);
+        localStorage.setItem('mgr_alerts', JSON.stringify(state.alerts));
+        updateAlertBadge(); renderDashAlerts(); renderSpAlerts();
+        if (Notification.permission === 'granted' && a.type === 'urgent') {
+            new Notification('⚠ ' + a.title, { body: a.msg });
+        }
+    }
+
+    function updateAlertBadge() {
+        const c = state.alerts.length;
+        const badge = document.getElementById('alert-count');
+        const bell  = document.getElementById('alert-bell');
+        if (c > 0) {
+            badge.style.display = ''; badge.textContent = c > 99 ? '99+' : c;
+            bell.classList.add('danger-active');
+        } else {
+            badge.style.display = 'none'; bell.classList.remove('danger-active');
+        }
+    }
+    function clearAlertBadge() {
+        document.getElementById('alert-count').style.display = 'none';
+        document.getElementById('alert-bell').classList.remove('danger-active');
+    }
+    function clearAlerts() {
+        state.alerts = []; localStorage.setItem('mgr_alerts','[]');
+        updateAlertBadge(); renderDashAlerts(); renderSpAlerts();
+    }
+    function clearFineHistory() {
+        state.fineHistory = []; localStorage.setItem('mgr_fines','[]');
+        renderSpFineHistory();
+    }
+
+    function renderDashAlerts() {
+        const el = document.getElementById('dash-alerts-list');
+        document.getElementById('dash-alert-count').textContent = state.alerts.length + ' ta';
+        if (!state.alerts.length) { el.innerHTML='<div class="empty"><span class="empty-ico">✓</span>Ogohlantirishlar yo\'q</div>'; return; }
+        el.innerHTML = state.alerts.slice(0,5).map(a => alertHTML(a,true)).join('');
+    }
+
+    function renderSpAlerts() {
+        const el = document.getElementById('sp-alerts-body');
+        const cnt = document.getElementById('sp-alert-count');
+        if (cnt) cnt.textContent = state.alerts.length + ' ta';
+        if (!state.alerts.length) { el.innerHTML='<div class="empty"><span class="empty-ico">✓</span>Ogohlantirishlar yo\'q</div>'; return; }
+        el.innerHTML = state.alerts.map(a => alertHTML(a,false)).join('');
+    }
+
+    function alertHTML(a, compact) {
+        let actions = '';
+        if (!compact) {
+            if (a.order_item_id) actions += `<button class="btn-sm cyan" onclick="openAssignChef(${a.order_item_id})">👨‍🍳 Chef tayinlash</button>`;
+            const refId = a.order_item_id ? `item_${a.order_item_id}` : (a.order_id ? `order_${a.order_id}` : '');
+            const titleSafe = (a.title||'').replace(/'/g,'`').replace(/"/g,'&quot;');
+            const empId = a.waiter_id || a.chef_id || null;
+            actions += `<button class="btn-sm danger" onclick="openFineModalFromAlert('${refId}','${titleSafe}',${empId})">⚠ Jarima</button>`;
+            actions += `<button class="btn-sm amber" onclick="openUrgentFromAlert(${JSON.stringify(a).replace(/"/g,'&quot;')})">🚨 Xabar</button>`;
+            actions += `<button class="btn-sm" onclick="removeAlert(${a.id})">✕</button>`;
+        }
+        return `<div class="alert-item ${a.type}">
+  <div class="alert-item-top"><span class="alert-item-icon">${a.icon}</span><span class="alert-item-title">${a.title}</span><span class="alert-item-time">${a.time}</span></div>
+  <div class="alert-item-msg">${a.msg}</div>
+  ${actions ? `<div class="alert-item-actions">${actions}</div>` : ''}
+</div>`;
+    }
+
+    function removeAlert(id) {
+        state.alerts = state.alerts.filter(a => a.id !== id);
+        localStorage.setItem('mgr_alerts', JSON.stringify(state.alerts));
+        updateAlertBadge(); renderDashAlerts(); renderSpAlerts();
+    }
+
+    /* ── URGENT MODAL ── */
+    function openUrgentModal(alertObj) {
+        const sel = document.getElementById('urgent-emp-select');
+        sel.innerHTML = '<option value="">— Barcha tanlangan guruhga —</option>' +
+            state.employees.map(e => {
+                const name = `${e.first_name||''} ${e.last_name||''}`.trim();
+                return `<option value="${e.id}">${name} (${ROLES[e.role]||e.role})</option>`;
+            }).join('');
+        const ctx = document.getElementById('urgent-alert-ctx');
+        if (alertObj && alertObj.title) {
+            ctx.style.display = ''; ctx.textContent = "Bog'liq: " + alertObj.title;
+            document.getElementById('urgent-text').value = alertObj.msg || '';
+        } else {
+            ctx.style.display = 'none'; document.getElementById('urgent-text').value = '';
+        }
+        state.urgentTarget = 'waiter';
+        document.querySelectorAll('#urgent-target-btns .period-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+        document.getElementById('urgent-modal').classList.add('open');
+    }
+    function openUrgentFromAlert(alertJson) {
+        let a; try { a = typeof alertJson==='string' ? JSON.parse(alertJson) : alertJson; } catch(e) { a={}; }
+        openUrgentModal(a);
+    }
+    function closeUrgentModal() { document.getElementById('urgent-modal').classList.remove('open'); }
+    function setUrgentTarget(target, btn) {
+        state.urgentTarget = target;
+        document.querySelectorAll('#urgent-target-btns .period-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+    function setUrgentTpl(btn) {
+        document.getElementById('urgent-text').value = btn.textContent.replace(/^[^\w\s]*\s*/,'').trim();
+        document.getElementById('urgent-text').focus();
+    }
+    function sendUrgentMessage() {
+        const text = document.getElementById('urgent-text').value.trim();
+        if (!text) { toast('Xabar matnini kiriting','err'); return; }
+        const empId = document.getElementById('urgent-emp-select').value;
+        if (state.ws && state.ws.readyState === WebSocket.OPEN) {
+            state.ws.send(JSON.stringify({action:'urgent_message',target_role:empId?null:state.urgentTarget,target_user_id:empId?parseInt(empId):null,message:text}));
+            toast('Xabar yuborildi ✓','success');
+        } else { toast('WebSocket ulanmagan','err'); }
+        closeUrgentModal();
+    }
+
+    /* ── FETCH ── */
+    async function fetchJSON(url) {
+        const res = await fetch(url, { headers: authHeaders() });
+        if (res.status === 401) { logout(); throw new Error('401'); }
+        if (!res.ok) throw new Error(res.status);
+        const d = await res.json();
+        return Array.isArray(d) ? d : (d.results||d);
+    }
+
+    async function loadOrders() {
+        try { state.orders = await fetchJSON(`/${API}/manager/orders/`); }
+        catch(e) { state.orders = []; }
+        renderOrders(); renderDashOrders();
+    }
+    async function loadTables() {
+        try {
+            state.tables   = await fetchJSON(`/${API}/tables/`);
+            state.sessions = await fetchJSON(`/${API}/sessions/`).catch(()=>[]);
+        } catch(e) { state.tables=[]; state.sessions=[]; }
+        renderTables();
+    }
+    async function loadEmployees() {
+        try {
+            const all = await fetchJSON(`/${API}/employees/list/`);
+            state.employees = all.filter(e => e.role !== 'customer' && e.id != null);
+        } catch(e) { state.employees=[]; }
+        renderEmployees(); syncEmployeeSelects();
+    }
+    async function loadIngredients() {
+        try { state.ingredients = await fetchJSON(`/${API}/ingredients/`); }
+        catch(e) { state.ingredients=[]; }
+    }
+    async function loadReports() {
+        try { state.reports = await fetchJSON(`/${API}/reports/daily/`); }
+        catch(e) { state.reports=[]; }
+        renderReports(); renderLowStock();
+    }
+
+    /* ── DASHBOARD ORDERS ── */
+    function renderDashOrders() {
+        const active = state.orders.filter(o => !['paid','canceled'].includes(o.status));
+        const tbody = document.getElementById('dash-orders-tbody');
+        if (!active.length) { tbody.innerHTML='<tr><td colspan="5" class="empty">Faol orderlar yo\'q</td></tr>'; return; }
+        tbody.innerHTML = active.slice(0,8).map(o => {
+            const st = statusTag(o.status);
+            return `<tr>
+  <td style="font-weight:600">#${o.id}</td>
+  <td>Stol #${o.table?.number||o.table_number||'—'}</td>
+  <td style="color:var(--muted)">${o.waiter?.first_name||o.waiter_name||'—'}</td>
+  <td><span class="tag ${st.cls}">${st.lbl}</span></td>
+  <td style="font-weight:600">${fmt(o.total_price)}</td>
+</tr>`;
+        }).join('');
+    }
+
+    /* ── ORDERS ── */
+    function filterOrders(f, btn) {
+        state.orderFilter = f;
+        document.querySelectorAll('[data-of]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderOrders();
+    }
+    function renderOrders() {
+        const filtered = state.orderFilter==='all' ? state.orders : state.orders.filter(o => o.status===state.orderFilter);
+        document.getElementById('orders-count-label').textContent = filtered.length + ' ta';
+        const tbody = document.getElementById('orders-tbody');
+        if (!filtered.length) { tbody.innerHTML='<tr><td colspan="7" class="empty">Orderlar yo\'q</td></tr>'; return; }
+        tbody.innerHTML = filtered.map(o => {
+            const st = statusTag(o.status);
+            const rawPm = o.payment_type || '';
+            const pm = PM_LABELS[rawPm] || rawPm || '—';
+            const time = o.created_at ? new Date(o.created_at).toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'}) : '—';
+            return `<tr>
+  <td style="font-weight:600">#${o.id}</td>
+  <td>Stol #${o.table?.number||o.table_number||'—'}</td>
+  <td style="color:var(--muted)">${o.waiter?.first_name||o.waiter_name||'—'}</td>
+  <td><span class="tag tag-muted" style="font-size:.6rem">${pm}</span></td>
+  <td><span class="tag ${st.cls}">${st.lbl}</span></td>
+  <td style="color:var(--muted)">${time}</td>
+  <td style="font-weight:600">${fmt(o.total_price)}</td>
+</tr>`;
+        }).join('');
+    }
+
+    function statusTag(s) {
+        return {
+            pending:   {cls:'tag-amber',   lbl:'Kutilmoqda'},
+            confirmed: {cls:'tag-cyan',    lbl:'Tasdiqlangan'},
+            cooking:   {cls:'tag-purple',  lbl:'Pishirilmoqda'},
+            ready:     {cls:'tag-success', lbl:'Tayyor'},
+            paid:      {cls:'tag-success', lbl:"To'landi"},
+            canceled:  {cls:'tag-danger',  lbl:'Bekor'},
+        }[s] || {cls:'tag-muted', lbl:s};
+    }
+
+    /* ── TABLES ── */
+    function renderTables() {
+        const grid = document.getElementById('tables-grid');
+        const occupied = state.tables.filter(t => t.is_occupied).length;
+        document.getElementById('tables-stat-label').textContent = `${occupied} band / ${state.tables.length} jami`;
+        if (!state.tables.length) { grid.innerHTML='<div class="empty" style="grid-column:1/-1">Stollar topilmadi</div>'; return; }
+        grid.innerHTML = state.tables.map(t => {
+            const session = state.sessions.find(s => {
+                const tId = typeof s.table==='object' ? s.table?.id : s.table;
+                return tId === t.id;
+            });
+            const waiterName = session?.waiter?.first_name || session?.waiter_name || '';
+            return `<div class="table-cell ${t.is_occupied?'occupied':''}">
+  <div class="table-cell-num">${t.number}</div>
+  <div class="table-cell-cap">${t.capacity} kishi</div>
+  ${waiterName ? `<div class="table-cell-waiter">${waiterName}</div>` : ''}
+  <div class="table-cell-status" style="color:${t.is_occupied?'var(--amber)':'var(--muted2)'}">${t.is_occupied?'BAND':"BO'SH"}</div>
+</div>`;
+        }).join('');
+
+        const tbody = document.getElementById('sessions-tbody');
+        document.getElementById('sessions-count-label').textContent = state.sessions.length + ' ta';
+        if (!state.sessions.length) { tbody.innerHTML='<tr><td colspan="5" class="empty">Aktiv sessiyalar yo\'q</td></tr>'; return; }
+        tbody.innerHTML = state.sessions.map(s => {
+            const started = s.started_at ? new Date(s.started_at) : null;
+            const ended   = s.ended_at   ? new Date(s.ended_at)   : null;
+            const mins = started ? Math.round((new Date()-started)/60000) : 0;
+            const dur  = mins>=60 ? `${Math.floor(mins/60)}s ${mins%60}d` : `${mins} daqiqa`;
+            const tableNum    = typeof s.table==='object' ? s.table?.number : (s.table||'—');
+            const waiterName  = typeof s.waiter==='object' ? (s.waiter?.first_name||'—') : (s.waiter_name||'—');
+            const endedStr = ended ? ended.toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'}) : '<span style="color:var(--muted2)">—</span>';
+            return `<tr>
+  <td>Stol #${tableNum}</td>
+  <td>${waiterName}</td>
+  <td style="color:var(--muted)">${started?started.toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'}):'—'}</td>
+  <td>${endedStr}</td>
+  <td style="color:${mins>120?'var(--danger)':'var(--amber)'}">${dur}</td>
+</tr>`;
+        }).join('');
+    }
+
+    /* ── EMPLOYEES ── */
+    function renderEmployees() {
+        document.getElementById('emp-count-label').textContent = state.employees.length + ' ta';
+        const tbody = document.getElementById('emp-tbody');
+        if (!state.employees.length) { tbody.innerHTML='<tr><td colspan="5" class="empty">Xodimlar topilmadi</td></tr>'; return; }
+        tbody.innerHTML = state.employees.map(e => {
+            const name   = `${e.first_name||''} ${e.last_name||''}`.trim() || e.username || '—';
+            const atWork = !!e.is_at_work;
+            const shift  = e.shift==='day' ? 'Kunduzgi' : 'Tungi';
+            return `<tr>
+  <td>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="emp-avatar" style="width:28px;height:28px;font-size:.72rem">${name.charAt(0)}</div>
+      <span style="font-weight:500">${name}</span>
+    </div>
+  </td>
+  <td><span class="tag tag-muted">${ROLES[e.role]||e.role}</span></td>
+  <td>
+    <button class="work-toggle ${atWork?'at-work':'not-work'}" onclick="toggleWorkStatus(${e.id},${atWork},this)">
+      ${atWork?'● Ishda':'○ Uyda'}
+    </button>
+  </td>
+  <td style="font-size:.72rem;color:var(--muted)">${shift}</td>
+  <td>
+    <div style="display:flex;gap:5px">
+      <button class="btn-sm danger" onclick="openFineModalFromAlert('','${name.replace(/'/g,'`')} uchun jarima',${e.id})" title="Jarima">⚠</button>
+      <button class="btn-sm amber" onclick="openUrgentForEmp(${e.id})" title="Xabar">🚨</button>
+    </div>
+  </td>
+</tr>`;
+        }).join('');
+    }
+
+    /* ── WORK STATUS TOGGLE ── */
+    async function toggleWorkStatus(empId, currentStatus, btn) {
+        const newStatus = !currentStatus;
+        btn.disabled = true;
+        try {
+            const res = await fetch(`/${API}/employees/ru/${empId}/`, {
+                method:'PATCH', headers:authHeaders(),
+                body: JSON.stringify({is_at_work: newStatus}),
+            });
+            if (!res.ok) throw new Error();
+            const emp = state.employees.find(e => e.id===empId);
+            if (emp) emp.is_at_work = newStatus;
+            btn.className = `work-toggle ${newStatus?'at-work':'not-work'}`;
+            btn.textContent = newStatus ? '● Ishda' : '○ Uyda';
+            btn.disabled = false;
+            toast(`${newStatus?'Ishga keldi ✓':'Ishdan ketdi ✓'}`, 'success');
+            document.getElementById('dash-staff').textContent = state.employees.filter(e => e.is_at_work).length;
+        } catch(e) { btn.disabled=false; toast('Xatolik yuz berdi','err'); }
+    }
+
+    function syncEmployeeSelects() {
+        ['fine-emp-select','sp-fine-emp-select'].forEach(id => {
+            const sel = document.getElementById(id);
+            if (!sel) return;
+            const cur = sel.value;
+            sel.innerHTML = '<option value="">— Tanlang —</option>' +
+                state.employees.map(e => {
+                    const name = `${e.first_name||''} ${e.last_name||''}`.trim();
+                    return `<option value="${e.id}" data-fine="${e.fine_balance||0}">${name} (${ROLES[e.role]||e.role})</option>`;
+                }).join('');
+            if (cur) sel.value = cur;
+        });
+    }
+
+    function openUrgentForEmp(empId) {
+        openUrgentModal(null);
+        setTimeout(() => { const sel=document.getElementById('urgent-emp-select'); if(sel) sel.value=empId; }, 80);
+    }
+
+    /* ── FINE MODAL ── */
+    function openFineModalFromAlert(refId, refLabel, empId) {
+        syncEmployeeSelects();
+        const refWrap = document.getElementById('fine-ref-wrap');
+        if (refId) {
+            refWrap.style.display = '';
+            document.getElementById('fine-ref-display').textContent = refLabel || refId;
+            document.getElementById('fine-ref-id').value = refId;
+        } else {
+            refWrap.style.display = 'none';
+            document.getElementById('fine-ref-id').value = '';
+        }
+        const sel = document.getElementById('fine-emp-select');
+        if (empId) { sel.value=empId; onFineModalEmpChange(); }
+        else { sel.value=''; document.getElementById('fine-modal-balance-wrap').style.display='none'; }
+        document.getElementById('fine-amount').value = '';
+        document.getElementById('fine-desc').value   = '';
+        document.getElementById('fine-modal').classList.add('open');
+    }
+    function closeFineModal() { document.getElementById('fine-modal').classList.remove('open'); }
+    function onFineModalEmpChange() {
+        const sel = document.getElementById('fine-emp-select');
+        const opt = sel.options[sel.selectedIndex];
+        const wrap = document.getElementById('fine-modal-balance-wrap');
+        if (!opt||!opt.value) { wrap.style.display='none'; return; }
+        document.getElementById('fine-modal-balance').textContent = fmt(opt.dataset.fine||0);
+        wrap.style.display = '';
+    }
+    async function submitFineFromModal() {
+        const empId  = document.getElementById('fine-emp-select').value;
+        const amount = parseFloat(document.getElementById('fine-amount').value);
+        const desc   = document.getElementById('fine-desc').value.trim();
+        const refId  = document.getElementById('fine-ref-id').value;
+        if (!empId)          { toast('Xodimni tanlang','err'); return; }
+        if (!amount||amount<=0) { toast('Summani kiriting','err'); return; }
+        if (!desc)           { toast('Sabab yozing','err'); return; }
+        await applyFine(empId, amount, desc, refId);
+        closeFineModal();
+    }
+
+    /* ── FINE PANEL ── */
+    function onSpFineEmpChange() {
+        const sel = document.getElementById('sp-fine-emp-select');
+        const opt = sel.options[sel.selectedIndex];
+        const wrap = document.getElementById('sp-fine-balance-wrap');
+        if (!opt||!opt.value) { wrap.style.display='none'; return; }
+        document.getElementById('sp-fine-balance').textContent = fmt(opt.dataset.fine||0);
+        wrap.style.display = '';
+    }
+    async function submitSpFine() {
+        const empId  = document.getElementById('sp-fine-emp-select').value;
+        const amount = parseFloat(document.getElementById('sp-fine-amount').value);
+        const desc   = document.getElementById('sp-fine-desc').value.trim();
+        if (!empId)          { toast('Xodimni tanlang','err'); return; }
+        if (!amount||amount<=0) { toast('Summani kiriting','err'); return; }
+        if (!desc)           { toast('Sabab yozing','err'); return; }
+        await applyFine(empId, amount, desc, '');
+        document.getElementById('sp-fine-emp-select').value = '';
+        document.getElementById('sp-fine-amount').value     = '';
+        document.getElementById('sp-fine-desc').value       = '';
+        document.getElementById('sp-fine-balance-wrap').style.display = 'none';
+    }
+
+    function renderSpFineHistory() {
+        const el  = document.getElementById('sp-fine-history-body');
+        const cnt = document.getElementById('sp-fine-history-count');
+        if (cnt) cnt.textContent = '(' + state.fineHistory.length + ' ta)';
+        if (!state.fineHistory.length) { el.innerHTML='<div class="empty"><span class="empty-ico">△</span>Jarimalar yo\'q</div>'; return; }
+        el.innerHTML = state.fineHistory.map(f => `
+<div class="fine-item">
+  <div class="fine-item-top"><span class="fine-item-name">${f.empName}</span><span class="fine-item-amount">${fmt(f.amount)}</span></div>
+  <div class="fine-item-desc">${f.desc}</div>
+  <div class="fine-item-time">${f.time}</div>
+</div>`).join('');
+    }
+
+    async function applyFine(empId, amount, desc, refId) {
+        const emp = state.employees.find(e => e.id==empId);
+        if (!emp) { toast('Xodim topilmadi','err'); return; }
+        try {
+            const res = await fetch(`/${API}/fines/`, {
+                method:'POST', headers:authHeaders(),
+                body: JSON.stringify({employee:empId, amount, reason:desc}),
+            });
+            if (!res.ok) throw new Error();
+            emp.fine_balance = Number(emp.fine_balance||0) + amount;
+            state.fineHistory.unshift({
+                id:Date.now(), empId,
+                empName:`${emp.first_name||''} ${emp.last_name||''}`.trim(),
+                amount, desc, refId, time:new Date().toLocaleString('uz-UZ'),
+            });
+            localStorage.setItem('mgr_fines', JSON.stringify(state.fineHistory));
+            renderEmployees(); renderSpFineHistory(); syncEmployeeSelects();
+            toast(`${emp.first_name} ga ${fmt(amount)} jarima belgilandi`,'success');
+        } catch(e) { toast('Xatolik yuz berdi','err'); }
+    }
+
+    /* ── ASSIGN CHEF ── */
+    async function openAssignChef(orderItemId) {
+        const chefs = state.employees.filter(e => e.role==='chef');
+        if (!chefs.length) { toast("Ishda chef yo'q",'err'); return; }
+        const list  = chefs.map(c => `${c.first_name||''} ${c.last_name||''}`.trim()+` — ID: ${c.id}`).join('\n');
+        const input = prompt(`Chef tanlang — ID kiriting:\n${list}`);
+        if (!input) return;
+        const chefId = parseInt(input);
+        if (!chefId) { toast("Noto'g'ri ID",'err'); return; }
+        if (state.ws && state.ws.readyState===WebSocket.OPEN) {
+            state.ws.send(JSON.stringify({action:'assign_chef',order_item_id:orderItemId,chef_id:chefId}));
+            toast('Chef tayinlandi ✓','success');
+        } else { toast("WebSocket ulanmagan",'err'); }
+    }
+
+    /* ── DEVICES ── */
+    const DEVICE_ICONS = {mobile:'📱',desktop:'🖥️',tablet:'📱',unknown:'💻'};
+
+    function guessDeviceKind(d) {
+        const os = (d.os||'').toLowerCase();
+        const dn = (d.device_name||'').toLowerCase();
+        if (os.includes('ios')||os.includes('android')||dn.includes('phone')||dn.includes('iphone')) return 'mobile';
+        if (dn.includes('ipad')||dn.includes('tablet')) return 'tablet';
+        return 'desktop';
+    }
+    function timeAgo(dateStr) {
+        if (!dateStr) return '—';
+        const d = new Date(dateStr);
+        const mins = Math.floor((new Date()-d)/60000);
+        if (mins<1) return 'hozir';
+        if (mins<60) return `${mins} daqiqa oldin`;
+        const hrs = Math.floor(mins/60);
+        if (hrs<24) return `${hrs} soat oldin`;
+        return `${Math.floor(hrs/24)} kun oldin`;
+    }
+    function formatDeviceDate(dateStr) {
+        if (!dateStr) return '—';
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('uz-UZ',{day:'2-digit',month:'short'})+', '+d.toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});
+    }
+
+    async function loadDevices() {
+        const list = document.getElementById('devices-list');
+        list.innerHTML = '<div class="empty">Yuklanmoqda...</div>';
+        try { state.devices = await fetchJSON(`/${API}/employees/devices/`); }
+        catch(e) {
+            state.devices = [];
+            list.innerHTML = '<div class="empty">Qurilmalarni yuklab bo\'lmadi</div>';
+            document.getElementById('dev-count-label').textContent = '';
+            return;
+        }
+        renderDevices();
+    }
+
+    function renderDevices() {
+        const list = document.getElementById('devices-list');
+        document.getElementById('dev-count-label').textContent = state.devices.length + ' ta';
+        if (!state.devices.length) { list.innerHTML='<div class="empty"><span class="empty-ico">📱</span>Ulangan qurilmalar topilmadi</div>'; return; }
+        const sorted = [...state.devices].sort((a,b) => (b.is_current===true)-(a.is_current===true));
+        list.innerHTML = sorted.map(d => {
+            const kind = guessDeviceKind(d);
+            const icon = DEVICE_ICONS[kind]||DEVICE_ICONS.unknown;
+            const name = d.device_name||(kind==='mobile'?'Mobil qurilma':'Kompyuter');
+            const osBrowser = [d.os,d.browser].filter(Boolean).join(' · ')||'—';
+            return `<div class="device-item ${d.is_current?'current':''}" id="device-${d.id}">
+  <div class="device-item-top">
+    <div class="device-icon">${icon}</div>
+    <div class="device-info">
+      <div class="device-name-row">
+        <span class="device-name">${name}</span>
+        ${d.is_current?'<span class="tag tag-cyan">JORIY</span>':'<span class="tag tag-muted">BOSHQA</span>'}
+      </div>
+      <div class="device-meta">
+        <div class="device-meta-row"><span class="mi">⚙</span> ${osBrowser}</div>
+        <div class="device-meta-row"><span class="mi">🌐</span> ${d.ip_address||'—'}</div>
+        <div class="device-meta-row"><span class="mi">🕐</span> Kirish: ${formatDeviceDate(d.logged_in_at)}</div>
+      </div>
+    </div>
+  </div>
+  <div class="device-bottom">
+    ${d.is_current
+        ? `<div class="device-status"><span class="dot"></span> Hozir faol</div><button class="btn-sm" disabled>Joriy qurilma</button>`
+        : `<div class="device-status" style="color:var(--muted2)">Oxirgi faollik: ${timeAgo(d.last_active)}</div><button class="btn-sm danger" onclick="requestDeviceRemoval(${d.id})">🗑 O'chirish</button>`
+    }
+  </div>
+  <div class="otp-box" id="otp-box-${d.id}">
+    <div style="font-size:.74rem;color:var(--cyan)">Tasdiqlash kodi emailingizga yuborildi:</div>
+    <div class="otp-row">
+      <input class="form-input" type="text" maxlength="6" placeholder="000000" id="otp-input-${d.id}">
+      <button class="btn-sm danger" style="white-space:nowrap" onclick="confirmDeviceRemoval(${d.id})">Tasdiqlash</button>
+    </div>
+  </div>
+</div>`;
+        }).join('');
+    }
+
+    async function requestDeviceRemoval(sessionId) {
+        try {
+            const res = await fetch(`/${API}/employees/devices/${sessionId}/remove/`, { method:'POST', headers:authHeaders() });
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            const box = document.getElementById(`otp-box-${sessionId}`);
+            if (box) box.classList.add('open');
+            toast(data.message||"Tasdiqlash kodi yuborildi ✓",'success');
+        } catch(e) { toast('Xatolik yuz berdi','err'); }
+    }
+
+    async function confirmDeviceRemoval(sessionId) {
+        const input = document.getElementById(`otp-input-${sessionId}`);
+        const code  = (input?.value||'').trim();
+        if (!code||code.length!==6) { toast('6 xonali kodni kiriting','err'); return; }
+        try {
+            const res = await fetch(`/${API}/employees/devices/${sessionId}/confirm/`, {
+                method:'POST', headers:authHeaders(), body:JSON.stringify({code}),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error||'');
+            toast(data.message||"Qurilma o'chirildi ✓",'success');
+            state.devices = state.devices.filter(d => d.id!==sessionId);
+            renderDevices();
+        } catch(e) { toast(e.message||"Kod xato yoki muddati tugagan",'err'); }
+    }
+
+    /* ── REPORTS ── */
+    function renderReports() {
+        const el = document.getElementById('reports-list');
+        if (!state.reports.length) { el.innerHTML='<div class="empty"><span class="empty-ico">▦</span>Hisobotlar yo\'q</div>'; return; }
+        el.innerHTML = state.reports.map(r => {
+            const pct = r.opening_amount>0 ? Math.round(r.estimated_used/r.opening_amount*100) : 0;
+            const isLow = pct>80;
+            const isPending = r.status==='pending';
+            return `<div class="report-card ${r.status}">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+    <span style="font-size:.83rem;font-weight:600;flex:1">${r.ingredient_name}</span>
+    <span class="tag ${isPending?'tag-amber':'tag-success'}">${isPending?'Kutilmoqda':'Tasdiqlangan'}</span>
+    <span style="font-size:.64rem;color:var(--muted2)">${r.date}</span>
+  </div>
+  <div style="font-size:.72rem;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;margin-bottom:4px">
+    <span>Boshlanish: <b style="color:var(--txt)">${r.opening_amount} ${r.ingredient_unit||''}</b></span>
+    <span>Sarflangan: <b style="color:var(--danger)">${r.estimated_used} ${r.ingredient_unit||''}</b></span>
+    <span>Qolgan: <b style="color:var(--success)">${r.estimated_closing} ${r.ingredient_unit||''}</b></span>
+  </div>
+  <div class="report-bar"><div class="report-bar-fill ${isLow?'':'ok'}" style="width:${Math.min(pct,100)}%"></div></div>
+  ${isPending
+    ? `<button class="btn-sm cyan" style="margin-top:6px" onclick="openReportModal(${r.id},${r.estimated_used},${r.estimated_closing},'${r.ingredient_name}','${r.ingredient_unit||''}')">✓ Tasdiqlash</button>`
+    : `<div style="margin-top:4px;font-size:.68rem;color:var(--muted2)">Haqiqiy: ${r.actual_used??'—'} sarflangan / ${r.actual_closing??'—'} qolgan</div>`
+  }
+</div>`;
+        }).join('');
+    }
+
+    function renderLowStock() {
+        const tbody = document.getElementById('low-stock-tbody');
+        const low = state.ingredients.filter(i => i.stack_amount<=i.min_amount);
+        if (!low.length) { tbody.innerHTML='<tr><td colspan="4" class="empty">Hamma yaxshi ✓</td></tr>'; return; }
+        tbody.innerHTML = low.map(i => {
+            const pct = i.min_amount>0 ? Math.round(i.stack_amount/i.min_amount*100) : 0;
+            return `<tr>
+  <td style="font-weight:500">${i.name}</td>
+  <td style="font-weight:700;color:var(--danger)">${i.stack_amount} ${i.stack_type}</td>
+  <td style="color:var(--muted)">${i.min_amount} ${i.stack_type}</td>
+  <td><span class="tag ${pct<50?'tag-danger':'tag-amber'}">${pct<50?'Kritik':'Kam'}</span></td>
+</tr>`;
+        }).join('');
+    }
+
+    function openReportModal(id, estUsed, estClosing, name, unit) {
+        state.currentReportId = id;
+        document.getElementById('report-modal-info').innerHTML = `<b>${name}</b> — Taxminiy sarflangan: <b>${estUsed} ${unit}</b>, qolgan: <b>${estClosing} ${unit}</b>`;
+        document.getElementById('r-actual-used').value    = estUsed;
+        document.getElementById('r-actual-closing').value = estClosing;
+        document.getElementById('r-note').value = '';
+        document.getElementById('report-modal').classList.add('open');
+    }
+    function closeReportModal() {
+        document.getElementById('report-modal').classList.remove('open');
+        state.currentReportId = null;
+    }
+    async function submitReport() {
+        if (!state.currentReportId) return;
+        const au   = parseFloat(document.getElementById('r-actual-used').value);
+        const ac   = parseFloat(document.getElementById('r-actual-closing').value);
+        const note = document.getElementById('r-note').value.trim();
+        if (isNaN(au)||isNaN(ac)) { toast('Qiymatlarni kiriting','err'); return; }
+        const btn = document.getElementById('report-submit-btn');
+        btn.disabled=true; btn.textContent='Saqlanmoqda...';
+        try {
+            const res = await fetch(`/${API}/reports/daily/confirm/`, {
+                method:'POST', headers:authHeaders(),
+                body:JSON.stringify({report_id:state.currentReportId,actual_used:au,actual_closing:ac,note}),
+            });
+            if (!res.ok) throw new Error();
+            closeReportModal(); await loadReports();
+            toast('Hisobot tasdiqlandi ✓','success');
+        } catch(e) { toast('Xatolik yuz berdi','err'); }
+        btn.disabled=false; btn.textContent='Tasdiqlash';
+    }
+
+    /* ── PROFILE SAVE ── */
+    async function saveProfile() {
+        const btn = document.getElementById('save-profile-btn');
+        btn.disabled = true; btn.textContent = '⏳ Saqlanmoqda...';
+        try {
+            const form = new FormData();
+            form.append('first_name',        document.getElementById('set-fname').value.trim());
+            form.append('last_name',         document.getElementById('set-lname').value.trim());
+            form.append('email',             document.getElementById('set-email').value.trim());
+            form.append('phone_number',      document.getElementById('set-phone').value.trim());
+            form.append('username',          document.getElementById('set-username').value.trim());
+            form.append('bank_card',         document.getElementById('set-bank').value.trim());
+            form.append('emergency_contact', document.getElementById('set-emergency').value.trim());
+            form.append('shift',             document.getElementById('set-shift').value);
+            if (selectedPhotoFile) form.append('photo', selectedPhotoFile);
+
+            const res = await fetch(`/${API}/employees/me/update/`, {
+                method: 'PATCH',
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem(TOKEN_KEY) },
+                body: form,
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(()=>({}));
+                throw new Error(JSON.stringify(err));
+            }
+            const data = await res.json();
+            // Update localStorage
+            const stored = JSON.parse(localStorage.getItem(USER_KEY)||'{}');
+            localStorage.setItem(USER_KEY, JSON.stringify({...stored, ...data}));
+            selectedPhotoFile = null;
+            document.getElementById('set-photo-name').textContent = '';
+            initAuth();
+            toast('Profil yangilandi ✓','success');
+        } catch(e) {
+            console.error(e);
+            toast('Xatolik yuz berdi','err');
+        }
+        btn.disabled=false; btn.textContent='💾 Saqlash';
+    }
+
+    /* ── PASSWORD CHANGE ── */
+    async function changePassword() {
+        const oldP  = document.getElementById('set-old-pass').value;
+        const newP  = document.getElementById('set-new-pass').value;
+        const confP = document.getElementById('set-confirm-pass').value;
+        if (!oldP||!newP||!confP) { toast("Barcha maydonlarni to'ldiring",'err'); return; }
+        if (newP!==confP)         { toast("Parollar mos kelmaydi",'err'); return; }
+        if (newP.length<8)        { toast("Parol kamida 8 belgi bo'lishi kerak",'err'); return; }
+        try {
+            const form = new FormData();
+            form.append('password', newP);
+            const res = await fetch(`/${API}/employees/me/update/`, {
+                method:'PATCH',
+                headers:{'Authorization':'Bearer '+localStorage.getItem(TOKEN_KEY)},
+                body: form,
+            });
+            if (!res.ok) throw new Error();
+            toast('Parol yangilandi ✓','success');
+            ['set-old-pass','set-new-pass','set-confirm-pass'].forEach(id => document.getElementById(id).value='');
+        } catch(e) { toast('Xatolik yuz berdi','err'); }
+    }
+
+    function requestNotifPermission() {
+        if (!('Notification' in window)) { toast("Bu brauzer bildirishnomalarni qo'llab-quvvatlamaydi",'err'); return; }
+        Notification.requestPermission().then(p => toast(p==='granted'?'Ruxsat berildi ✓':'Rad etildi', p==='granted'?'success':'err'));
+    }
+
+    /* ── INIT ── */
+    async function init() {
+        initAuth();
+        updateAlertBadge();
+        renderDashAlerts();
+        await Promise.all([
+            loadRestaurantInfo(),
+            loadOrders(),
+            loadEmployees(),
+            loadIngredients(),
+            loadDashboardStats(),
+        ]);
+        renderDashOrders();
+        connectWS();
+        // Refresh profile from API on load
+        refreshProfileFromAPI();
+    }
+
+    init();
+</script>
+</body>
+</html>

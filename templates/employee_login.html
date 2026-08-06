@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kirish</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        :root {
+            --deep: #000221;
+            --bright: #00bbff;
+            --surface: rgba(255, 255, 255, 0.04);
+            --surface2: rgba(255, 255, 255, 0.06);
+            --border: rgba(0, 187, 255, 0.18);
+            --border-strong: rgba(0, 187, 255, 0.45);
+            --text: #f2f8ff;
+            --text2: #9fb4cc;
+            --text3: #5f7390;
+            --red: #ff6b6b;
+            --red-bg: rgba(255, 107, 107, 0.1);
+            --red-border: rgba(255, 107, 107, 0.35);
+            --green: #2ee6a6;
+            --green-bg: rgba(46, 230, 166, 0.1);
+            --green-border: rgba(46, 230, 166, 0.35);
+            --sans: 'Manrope', sans-serif;
+            --mono: 'Manrope', sans-serif;
+            --r2: 14px;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--sans);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 18% 12%, rgba(0, 187, 255, 0.35), transparent 45%),
+                radial-gradient(circle at 85% 18%, rgba(0, 80, 160, 0.4), transparent 50%),
+                radial-gradient(circle at 50% 90%, rgba(0, 187, 255, 0.15), transparent 55%),
+                linear-gradient(160deg, #00040f 0%, var(--deep) 45%, #000814 100%);
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 187, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 187, 255, 0.05) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: radial-gradient(circle at 50% 30%, black, transparent 75%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 380px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tag-row {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .01em;
+            color: var(--bright);
+            background: rgba(0, 187, 255, 0.1);
+            border: 1px solid var(--border-strong);
+            padding: 6px 16px;
+            border-radius: 30px;
+        }
+
+        .welcome {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin: 14px 0 32px;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #ffffff 30%, var(--bright) 110%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card {
+            background: linear-gradient(165deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        .field {
+            margin-bottom: 16px
+        }
+
+        .field label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text2);
+            margin-bottom: 8px
+        }
+
+        .field-wrap {
+            position: relative
+        }
+
+        .field input {
+            width: 100%;
+            height: 46px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0 44px 0 14px;
+            font-size: 14px;
+            color: var(--text);
+            font-family: var(--sans);
+            outline: none;
+            transition: border-color .15s, background .15s;
+            -webkit-appearance: none
+        }
+
+        .field input:focus {
+            border-color: var(--bright);
+            background: var(--surface2);
+            box-shadow: 0 0 0 3px rgba(0, 187, 255, 0.12);
+        }
+
+        .field input::placeholder {
+            color: var(--text3)
+        }
+
+        .field input.err {
+            border-color: var(--red)
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 44px;
+            height: 46px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3)
+        }
+
+        .eye-btn:hover {
+            color: var(--bright)
+        }
+
+        .eye-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5
+        }
+
+        .row-between {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 4px 0 18px;
+            font-size: 12px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text2);
+        }
+
+        .remember input {
+            width: 15px;
+            height: 15px;
+            accent-color: var(--bright);
+            cursor: pointer;
+        }
+
+        .forgot {
+            color: var(--bright);
+            text-decoration: none;
+        }
+
+        .forgot:hover {
+            text-decoration: underline;
+        }
+
+        .err-box {
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--red);
+            margin-top: 4px;
+            margin-bottom: 14px;
+            display: none;
+            padding: 10px 12px;
+            background: var(--red-bg);
+            border: 1px solid var(--red-border);
+            border-radius: 10px
+        }
+
+        .err-box.show {
+            display: block
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 48px;
+            background: linear-gradient(135deg, var(--bright), #0077b3);
+            color: #000814;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: var(--sans);
+            cursor: pointer;
+            transition: opacity .15s, transform .1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 8px 24px rgba(0, 187, 255, 0.3);
+        }
+
+        .submit-btn:hover {
+            opacity: .9
+        }
+
+        .submit-btn:active {
+            transform: scale(.98)
+        }
+
+        .submit-btn:disabled {
+            opacity: .4;
+            cursor: not-allowed
+        }
+
+        .spin {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            display: none;
+            flex-shrink: 0
+        }
+
+        .loading .spin {
+            display: block;
+            animation: spin .7s linear infinite
+        }
+
+        .loading .btn-text {
+            opacity: .8
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 22px 0;
+            color: var(--text3);
+            font-size: 12.5px;
+            font-weight: 500;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .google-btn {
+            width: 100%;
+            height: 48px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text2);
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: not-allowed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            opacity: .85;
+            position: relative;
+        }
+
+        .google-btn .soon {
+            position: absolute;
+            right: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--bright);
+            background: rgba(0, 187, 255, 0.12);
+            border: 1px solid var(--border-strong);
+            padding: 3px 8px;
+            border-radius: 20px;
+        }
+
+        .google-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: var(--text3);
+            font-weight: 500;
+            text-align: center;
+            margin-top: 22px;
+            line-height: 1.7
+        }
+
+        /* SUCCESS */
+        .success-state {
+            display: none;
+            text-align: center
+        }
+
+        .success-state.show {
+            display: block
+        }
+
+        .suc-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--green-bg);
+            border: 1px solid var(--green-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px
+        }
+
+        .suc-icon svg {
+            width: 26px;
+            height: 26px;
+            stroke: var(--green);
+            fill: none;
+            stroke-width: 2
+        }
+
+        .suc-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px
+        }
+
+        .suc-role {
+            font-size: 13px;
+            color: var(--text3);
+            font-weight: 500;
+            margin-bottom: 20px
+        }
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            font-size: 12.5px;
+            font-weight: 700;
+            margin-bottom: 20px
+        }
+
+        .role-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--bright)
+        }
+
+        .progress-bar {
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--bright), var(--green));
+            border-radius: 2px;
+            width: 0%;
+            transition: width .1s linear
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: var(--text3);
+            font-weight: 500;
+            margin-top: 8px;
+            text-align: center
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="tag-row">
+        <span class="tag" id="tag-label">Xodimlar tizimi</span>
+    </div>
+    <div class="welcome" id="welcome-title">Xush kelibsiz!</div>
+
+    <div class="card">
+        <div id="form-section">
+            <div class="field">
+                <label>Telefon yoki username</label>
+                <div class="field-wrap">
+                    <input id="inp-phone" type="text" placeholder="+998901234567 yoki username" autocomplete="username"
+                           inputmode="text">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Parol</label>
+                <div class="field-wrap">
+                    <input id="inp-pwd" type="password" placeholder="••••••••••" autocomplete="current-password">
+                    <button class="eye-btn" type="button" onclick="togglePwd()" aria-label="Ko'rsatish">
+                        <svg id="eye-icon" viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row-between">
+                <label class="remember">
+                    <input type="checkbox" id="inp-remember">
+                    Eslab qolish
+                </label>
+                <a class="forgot" href="#" onclick="return false;">Parolni unutdingizmi?</a>
+            </div>
+
+            <div class="err-box" id="err-box"></div>
+
+            <button class="submit-btn" id="submit-btn" onclick="doLogin()">
+                <svg class="spin" viewBox="0 0 24 24">
+                    <path d="M4 12a8 8 0 0 1 8-8"/>
+                </svg>
+                <span class="btn-text">Kirish</span>
+            </button>
+
+            <div class="divider">yoki</div>
+
+            <button class="google-btn" type="button" disabled title="Tez orada">
+                <svg class="google-icon" viewBox="0 0 48 48">
+                    <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
+                    <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
+                    <path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34A21.97 21.97 0 0 0 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/>
+                    <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
+                </svg>
+                Google orqali kirish
+                <span class="soon">Tez orada</span>
+            </button>
+
+            <div class="hint">Parolni unutdingizmi?<br>Manager yoki Owner bilan bog'laning.</div>
+        </div>
+
+        <div class="success-state" id="success-section">
+            <div class="suc-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+            <div class="suc-name" id="suc-name">—</div>
+            <div class="suc-role" id="suc-role">—</div>
+            <div class="role-badge"><span class="role-dot"></span><span id="suc-role-badge">—</span></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="prog-fill"></div>
+            </div>
+            <div class="progress-label" id="prog-label">Panelga o'tkazilmoqda...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API = '/api/v1';
+
+    const ROLE_ROUTES = {
+        chef: '/chef/',
+        waiter: '/waiter/',
+        manager: '/manager/',
+        owner: '/owner/',
+        cashier: '/cashier/',
+        accountant: '/accountant/',
+    };
+
+    const ROLE_LABELS = {
+        chef: 'Oshpaz',
+        waiter: 'Ofitsiant',
+        manager: 'Menejer',
+        owner: 'Egasi',
+        cashier: 'Kassir',
+        accountant: 'Hisobchi',
+    };
+
+    const TOKEN_KEY = role => `${role}_access_token`;
+    const REFRESH_KEY = role => `${role}_refresh_token`;
+    const USER_KEY = role => `${role}_user`;
+
+    // Restoran nomini API'dan olib kelish, topilmasa default qoladi
+    (async function loadRestaurantName() {
+        try {
+            const res = await fetch(API + '/restaurant/info/');
+            if (!res.ok) return;
+            const data = await res.json();
+            const info = Array.isArray(data) ? data[0] : (data.results ? data.results[0] : data);
+            const name = info?.name;
+            if (name) {
+                document.getElementById('tag-label').textContent = `${name} · Xodimlar tizimi`;
+                document.getElementById('welcome-title').textContent = `Xush kelibsiz, ${name}!`;
+                document.title = `${name} · Kirish`;
+            }
+        } catch (e) {
+            // tinch o'tkazib yuboramiz, default matn qoladi
+        }
+    })();
+
+    function togglePwd() {
+        const inp = document.getElementById('inp-pwd');
+        const icon = document.getElementById('eye-icon');
+        if (inp.type === 'password') {
+            inp.type = 'text';
+            icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+        } else {
+            inp.type = 'password';
+            icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        }
+    }
+
+    function setLoading(on) {
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = on;
+        btn.classList.toggle('loading', on);
+        btn.querySelector('.btn-text').textContent = on ? 'Tekshirilmoqda...' : 'Kirish';
+    }
+
+    function showErr(msg) {
+        const el = document.getElementById('err-box');
+        el.textContent = msg;
+        el.classList.add('show');
+        document.getElementById('inp-phone').classList.add('err');
+        document.getElementById('inp-pwd').classList.add('err');
+    }
+
+    function clearErr() {
+        document.getElementById('err-box').classList.remove('show');
+        document.getElementById('inp-phone').classList.remove('err');
+        document.getElementById('inp-pwd').classList.remove('err');
+    }
+
+    async function doLogin() {
+        clearErr();
+        const phone = document.getElementById('inp-phone').value.trim();
+        const pwd = document.getElementById('inp-pwd').value;
+        if (!phone) {
+            showErr('Telefon raqam yoki username kiriting');
+            return;
+        }
+        if (!pwd) {
+            showErr('Parol kiriting');
+            return;
+        }
+        setLoading(true);
+        try {
+            const res = await fetch(API + '/employees/token/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({login: phone, temporary_password: pwd})
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                const msg = data.detail
+                    || data.non_field_errors?.[0]
+                    || data.phone_number?.[0]
+                    || data.temporary_password?.[0]
+                    || 'login yoki parol xato';
+                showErr(msg);
+                setLoading(false);
+                return;
+            }
+            const role = data.user?.role;
+            const route = ROLE_ROUTES[role];
+            if (!route) {
+                showErr(`"${role}" roli uchun panel mavjud emas. Administrator bilan bog'laning.`);
+                setLoading(false);
+                return;
+            }
+
+            // ═══ HOZIRCHA (localhost uchun) ═══
+            localStorage.setItem('access_token', data.access);
+            localStorage.setItem('refresh_token', data.refresh);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem(TOKEN_KEY(role), data.access);
+            localStorage.setItem(REFRESH_KEY(role), data.refresh);
+            localStorage.setItem(USER_KEY(role), JSON.stringify(data.user));
+
+            // ═══ PRODUCTION UCHUN (commentariyadan chiqaring) ═══
+            // localStorage.setItem(`access_token_${data.user.id}`, data.access);
+            // localStorage.setItem(`refresh_token_${data.user.id}`, data.refresh);
+            // localStorage.setItem(`user_${data.user.id}`, JSON.stringify(data.user));
+            // localStorage.setItem(`${role}_access_token_${data.user.id}`, data.access);
+            // localStorage.setItem(`${role}_refresh_token_${data.user.id}`, data.refresh);
+            // localStorage.setItem(`${role}_user_${data.user.id}`, JSON.stringify(data.user));
+            // sessionStorage.setItem('current_user_id', data.user.id);
+
+            setLoading(false);
+            showSuccess(data.user, role, route);
+        } catch (e) {
+            showErr("Server bilan aloqa yo'q");
+            setLoading(false);
+        }
+    }
+
+    function showSuccess(user, role, route) {
+        document.getElementById('form-section').style.display = 'none';
+        const ss = document.getElementById('success-section');
+        ss.classList.add('show');
+
+        const fullName = [user.first_name || '', user.last_name || ''].filter(Boolean).join(' ') || 'Xodim';
+        document.getElementById('suc-name').textContent = fullName;
+        document.getElementById('suc-role').textContent = user.phone_number || '';
+        document.getElementById('suc-role-badge').textContent = ROLE_LABELS[role] || role;
+
+        let pct = 0;
+        const fill = document.getElementById('prog-fill');
+        const label = document.getElementById('prog-label');
+        const iv = setInterval(() => {
+            pct += 4;
+            fill.style.width = pct + '%';
+            const sec = Math.ceil((100 - pct) / 40);
+            label.textContent = sec > 0 ? `${sec} soniyada panelga o'tkazilmoqda...` : 'O\'tkazilmoqda...';
+            if (pct >= 100) {
+                clearInterval(iv);
+                window.location.href = route;
+            }
+        }, 100);
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Enter') doLogin();
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+[
+  {
+    "model": "apps.restaurantinfo",
+    "pk": 1,
+    "fields": {
+      "name": "Saviya",
+      "slogan": "Taomlar tillarda qoladi",
+      "description": "Milliy va uyg'ur taomlari, kabablar va choyxona muhitida eng sara taomlar.",
+      "address": "Toshkent, Chilonzor tumani",
+      "phone": "+998901234567",
+      "email": "info@saviya.uz",
+      "instagram": "saviya_restaurant",
+      "telegram": "saviya_bot",
+      "open_time": "09:00:00",
+      "close_time": "23:00:00",
+      "hero_image": "",
+      "logo": "",
+      "bot_username": "saviya_bot"
+    }
+  },
+
+  { "model": "apps.gallery", "pk": 1, "fields": { "image": "gallery/hall.jpg", "caption": "Asosiy zal", "order": 1 } },
+  { "model": "apps.gallery", "pk": 2, "fields": { "image": "gallery/terrace.jpg", "caption": "Ochiq terasda", "order": 2 } },
+
+  {
+    "model": "apps.user", "pk": 1,
+    "fields": {
+      "username": "owner_ali", "first_name": "Ali", "last_name": "Valiyev",
+      "email": "owner@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$F7DBTEfadVDCKLBZY0l035$q3bL7kst76lSH55722zkoL/XqG9Ox0tnwgUcV5tzhro=",
+      "role": "owner", "is_active": true, "is_staff": true, "is_superuser": true,
+      "date_joined": "2026-01-01T07:00:00Z", "date_of_hire": "2026-01-01",
+      "phone_number": "+998901000001", "photo": "", "is_at_work": true, "shift": "day",
+      "base_salary": "0.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": null
+    }
+  },
+  {
+    "model": "apps.user", "pk": 2,
+    "fields": {
+      "username": "manager_kamola", "first_name": "Kamola", "last_name": "Karimova",
+      "email": "manager@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$8WYkpzJNxKsn4Awyk6PzUJ$HRRg1Iq4BpiikxxDqqiu23CRErXAvepq4SCCyAdCLIA=",
+      "role": "manager", "is_active": true, "is_staff": true, "is_superuser": false,
+      "date_joined": "2026-01-10T07:00:00Z", "date_of_hire": "2026-01-10",
+      "phone_number": "+998901000002", "photo": "", "is_at_work": true, "shift": "day",
+      "base_salary": "5000000.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": "manager1234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 3,
+    "fields": {
+      "username": "chef_ahmad", "first_name": "Ahmad", "last_name": "Solihiy",
+      "email": "chef1@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$hCbBjfRJ1apcEi4eJoac5m$Y5qsPvm7FEWI2yi1d3Jffxsi3VfcEvUJ+QAuQzXKuTc=",
+      "role": "chef", "is_active": true, "is_staff": false, "is_superuser": false,
+      "date_joined": "2026-02-01T07:00:00Z", "date_of_hire": "2026-02-01",
+      "phone_number": "+998901000003", "photo": "", "is_at_work": true, "shift": "day",
+      "base_salary": "4000000.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": "chef1234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 4,
+    "fields": {
+      "username": "chef_bobur", "first_name": "Bobur", "last_name": "Rahimov",
+      "email": "chef2@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$hCbBjfRJ1apcEi4eJoac5m$Y5qsPvm7FEWI2yi1d3Jffxsi3VfcEvUJ+QAuQzXKuTc=",
+      "role": "chef", "is_active": true, "is_staff": false, "is_superuser": false,
+      "date_joined": "2026-02-05T07:00:00Z", "date_of_hire": "2026-02-05",
+      "phone_number": "+998901000004", "photo": "", "is_at_work": true, "shift": "day",
+      "base_salary": "4000000.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": "chef2234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 5,
+    "fields": {
+      "username": "chef_sardor", "first_name": "Sardor", "last_name": "Toshmatov",
+      "email": "chef3@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$hCbBjfRJ1apcEi4eJoac5m$Y5qsPvm7FEWI2yi1d3Jffxsi3VfcEvUJ+QAuQzXKuTc=",
+      "role": "chef", "is_active": true, "is_staff": false, "is_superuser": false,
+      "date_joined": "2026-02-10T07:00:00Z", "date_of_hire": "2026-02-10",
+      "phone_number": "+998901000005", "photo": "", "is_at_work": true, "shift": "night",
+      "base_salary": "4200000.00", "fine_balance": "200000.00", "bank_card": null, "emergency_contact": null, "temporary_password": "chef3234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 6,
+    "fields": {
+      "username": "chef_ulmas", "first_name": "Ulmas", "last_name": "Qodirov",
+      "email": "chef4@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$hCbBjfRJ1apcEi4eJoac5m$Y5qsPvm7FEWI2yi1d3Jffxsi3VfcEvUJ+QAuQzXKuTc=",
+      "role": "chef", "is_active": true, "is_staff": false, "is_superuser": false,
+      "date_joined": "2026-03-01T07:00:00Z", "date_of_hire": "2026-03-01",
+      "phone_number": "+998901000006", "photo": "", "is_at_work": false, "shift": "night",
+      "base_salary": "3800000.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": "chef4234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 7,
+    "fields": {
+      "username": "waiter_jasur", "first_name": "Jasur", "last_name": "Hikmatov",
+      "email": "waiter1@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$S6r9RLGjO4XpI3kTCcBg3f$NP6iJE6PKB4OspZLLu52YmQP3QKV41tWMStiePiFJww=",
+      "role": "waiter", "is_active": true, "is_staff": false, "is_superuser": false,
+      "date_joined": "2026-02-15T07:00:00Z", "date_of_hire": "2026-02-15",
+      "phone_number": "+998901000007", "photo": "", "is_at_work": true, "shift": "day",
+      "base_salary": "3000000.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": "waiter1234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 8,
+    "fields": {
+      "username": "waiter_dilnoza", "first_name": "Dilnoza", "last_name": "Yusupova",
+      "email": "waiter2@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$S6r9RLGjO4XpI3kTCcBg3f$NP6iJE6PKB4OspZLLu52YmQP3QKV41tWMStiePiFJww=",
+      "role": "waiter", "is_active": true, "is_staff": false, "is_superuser": false,
+      "date_joined": "2026-03-01T07:00:00Z", "date_of_hire": "2026-03-01",
+      "phone_number": "+998901000008", "photo": "", "is_at_work": true, "shift": "day",
+      "base_salary": "3000000.00", "fine_balance": "100000.00", "bank_card": null, "emergency_contact": null, "temporary_password": "waiter2234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 9,
+    "fields": {
+      "username": "waiter_sherzod", "first_name": "Sherzod", "last_name": "Mirzayev",
+      "email": "waiter3@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$S6r9RLGjO4XpI3kTCcBg3f$NP6iJE6PKB4OspZLLu52YmQP3QKV41tWMStiePiFJww=",
+      "role": "waiter", "is_active": true, "is_staff": false, "is_superuser": false,
+      "date_joined": "2026-03-15T07:00:00Z", "date_of_hire": "2026-03-15",
+      "phone_number": "+998901000009", "photo": "", "is_at_work": true, "shift": "day",
+      "base_salary": "3200000.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": "waiter3234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 10,
+    "fields": {
+      "username": "waiter_malika", "first_name": "Malika", "last_name": "Hasanova",
+      "email": "waiter4@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$S6r9RLGjO4XpI3kTCcBg3f$NP6iJE6PKB4OspZLLu52YmQP3QKV41tWMStiePiFJww=",
+      "role": "waiter", "is_active": true, "is_staff": false, "is_superuser": false,
+      "date_joined": "2026-04-01T07:00:00Z", "date_of_hire": "2026-04-01",
+      "phone_number": "+998901000010", "photo": "", "is_at_work": false, "shift": "night",
+      "base_salary": "3000000.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": "waiter4234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 11,
+    "fields": {
+      "username": "cashier_madina", "first_name": "Madina", "last_name": "Asilova",
+      "email": "cashier@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$7O1EOeOSYoTlpYAenyVJqB$jjkiqyw2xNvLJH5f/HsJPf/jbWjxCDJj7WGqteKUx/w=",
+      "role": "cashier", "is_active": true, "is_staff": false, "is_superuser": false,
+      "date_joined": "2026-03-01T07:00:00Z", "date_of_hire": "2026-03-01",
+      "phone_number": "+998901000011", "photo": "", "is_at_work": true, "shift": "day",
+      "base_salary": "3000000.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": "cashier1234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 12,
+    "fields": {
+      "username": "accountant_nozir", "first_name": "Nozir", "last_name": "Abduvaliyev",
+      "email": "accountant@saviya.uz",
+      "password": "pbkdf2_sha256$1200000$odTXaOZ9XkcLvSblpcN15o$6eD+CVWP6GcI8LfgnZQ53qWfD7J0foXkUj7rUfjgjoY=",
+      "role": "accountant", "is_active": true, "is_staff": true, "is_superuser": false,
+      "date_joined": "2026-01-05T07:00:00Z", "date_of_hire": "2026-01-05",
+      "phone_number": "+998901000012", "photo": "", "is_at_work": true, "shift": "day",
+      "base_salary": "4500000.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": "account1234"
+    }
+  },
+  {
+    "model": "apps.user", "pk": 13,
+    "fields": {
+      "username": "customer_test", "first_name": "Test", "last_name": "Mijoz",
+      "email": "customer@example.com",
+      "password": "pbkdf2_sha256$1200000$jEVQeN9RXtzvaPuNKFn6on$qDYQs1Vq+SwsBsGQTmiv9XyhZQpObe4ARQbvGgbOkvY=",
+      "role": "customer", "is_active": true, "is_staff": false, "is_superuser": false,
+      "date_joined": "2026-04-01T07:00:00Z", "date_of_hire": "2026-04-01",
+      "phone_number": "+998901000013", "photo": "", "is_at_work": false, "shift": "day",
+      "base_salary": "0.00", "fine_balance": "0.00", "bank_card": null, "emergency_contact": null, "temporary_password": null
+    }
+  },
+
+  { "model": "apps.table", "pk": 1,  "fields": { "number": 1,  "capacity": 2, "is_active": true, "is_occupied": true  } },
+  { "model": "apps.table", "pk": 2,  "fields": { "number": 2,  "capacity": 4, "is_active": true, "is_occupied": true  } },
+  { "model": "apps.table", "pk": 3,  "fields": { "number": 3,  "capacity": 6, "is_active": true, "is_occupied": true  } },
+  { "model": "apps.table", "pk": 4,  "fields": { "number": 4,  "capacity": 4, "is_active": true, "is_occupied": true  } },
+  { "model": "apps.table", "pk": 5,  "fields": { "number": 5,  "capacity": 8, "is_active": true, "is_occupied": true  } },
+  { "model": "apps.table", "pk": 6,  "fields": { "number": 6,  "capacity": 4, "is_active": true, "is_occupied": true  } },
+  { "model": "apps.table", "pk": 7,  "fields": { "number": 7,  "capacity": 2, "is_active": true, "is_occupied": true  } },
+  { "model": "apps.table", "pk": 8,  "fields": { "number": 8,  "capacity": 6, "is_active": true, "is_occupied": false } },
+  { "model": "apps.table", "pk": 9,  "fields": { "number": 9,  "capacity": 4, "is_active": true, "is_occupied": true  } },
+  { "model": "apps.table", "pk": 10, "fields": { "number": 10, "capacity": 8, "is_active": true, "is_occupied": false } },
+  { "model": "apps.table", "pk": 11, "fields": { "number": 11, "capacity": 4, "is_active": true, "is_occupied": true  } },
+  { "model": "apps.table", "pk": 12, "fields": { "number": 12, "capacity": 2, "is_active": true, "is_occupied": false } },
+  { "model": "apps.table", "pk": 13, "fields": { "number": 13, "capacity": 6, "is_active": true, "is_occupied": false } },
+  { "model": "apps.table", "pk": 14, "fields": { "number": 14, "capacity": 4, "is_active": true, "is_occupied": false } },
+  { "model": "apps.table", "pk": 15, "fields": { "number": 15, "capacity": 2, "is_active": true, "is_occupied": false } },
+
+  { "model": "apps.tablesession", "pk": 1,  "fields": { "table": 1,  "waiter": 7, "started_at": "2026-06-25T07:00:00Z", "ended_at": null, "is_active": true } },
+  { "model": "apps.tablesession", "pk": 2,  "fields": { "table": 2,  "waiter": 7, "started_at": "2026-06-25T07:10:00Z", "ended_at": null, "is_active": true } },
+  { "model": "apps.tablesession", "pk": 3,  "fields": { "table": 3,  "waiter": 8, "started_at": "2026-06-25T08:00:00Z", "ended_at": null, "is_active": true } },
+  { "model": "apps.tablesession", "pk": 4,  "fields": { "table": 4,  "waiter": 8, "started_at": "2026-06-25T08:15:00Z", "ended_at": null, "is_active": true } },
+  { "model": "apps.tablesession", "pk": 5,  "fields": { "table": 5,  "waiter": 9, "started_at": "2026-06-25T09:00:00Z", "ended_at": null, "is_active": true } },
+  { "model": "apps.tablesession", "pk": 6,  "fields": { "table": 6,  "waiter": 9, "started_at": "2026-06-25T09:30:00Z", "ended_at": null, "is_active": true } },
+  { "model": "apps.tablesession", "pk": 7,  "fields": { "table": 7,  "waiter": 7, "started_at": "2026-06-25T10:00:00Z", "ended_at": null, "is_active": true } },
+  { "model": "apps.tablesession", "pk": 8,  "fields": { "table": 9,  "waiter": 8, "started_at": "2026-06-25T10:30:00Z", "ended_at": null, "is_active": true } },
+  { "model": "apps.tablesession", "pk": 9,  "fields": { "table": 11, "waiter": 9, "started_at": "2026-06-25T11:00:00Z", "ended_at": null, "is_active": true } },
+
+  { "model": "apps.tableqrcode", "pk": 1,  "fields": { "table": 1,  "label": "Stol 1",  "image": "qr_codes/table_1_qr.png",  "created_at": "2026-06-01T08:00:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 2,  "fields": { "table": 2,  "label": "Stol 2",  "image": "qr_codes/table_2_qr.png",  "created_at": "2026-06-01T08:05:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 3,  "fields": { "table": 3,  "label": "Stol 3",  "image": "qr_codes/table_3_qr.png",  "created_at": "2026-06-01T08:10:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 4,  "fields": { "table": 4,  "label": "Stol 4",  "image": "qr_codes/table_4_qr.png",  "created_at": "2026-06-01T08:15:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 5,  "fields": { "table": 5,  "label": "Stol 5",  "image": "qr_codes/table_5_qr.png",  "created_at": "2026-06-01T08:20:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 6,  "fields": { "table": 6,  "label": "Stol 6",  "image": "qr_codes/table_6_qr.png",  "created_at": "2026-06-01T08:25:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 7,  "fields": { "table": 7,  "label": "Stol 7",  "image": "qr_codes/table_7_qr.png",  "created_at": "2026-06-01T08:30:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 8,  "fields": { "table": 8,  "label": "Stol 8",  "image": "qr_codes/table_8_qr.png",  "created_at": "2026-06-01T08:35:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 9,  "fields": { "table": 9,  "label": "Stol 9",  "image": "qr_codes/table_9_qr.png",  "created_at": "2026-06-01T08:40:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 10, "fields": { "table": 10, "label": "Stol 10", "image": "qr_codes/table_10_qr.png", "created_at": "2026-06-01T08:45:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 11, "fields": { "table": 11, "label": "Stol 11", "image": "qr_codes/table_11_qr.png", "created_at": "2026-06-01T08:50:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 12, "fields": { "table": 12, "label": "Stol 12", "image": "qr_codes/table_12_qr.png", "created_at": "2026-06-01T08:55:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 13, "fields": { "table": 13, "label": "Stol 13", "image": "qr_codes/table_13_qr.png", "created_at": "2026-06-01T09:00:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 14, "fields": { "table": 14, "label": "Stol 14", "image": "qr_codes/table_14_qr.png", "created_at": "2026-06-01T09:05:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+  { "model": "apps.tableqrcode", "pk": 15, "fields": { "table": 15, "label": "Stol 15", "image": "qr_codes/table_15_qr.png", "created_at": "2026-06-01T09:10:00Z", "is_deleted": false, "deleted_at": null, "deleted_by": null, "deleted_reason": "" } },
+
+  { "model": "apps.category", "pk": 1, "fields": { "title": "Milliy taomlar" } },
+  { "model": "apps.category", "pk": 2, "fields": { "title": "Uyg'ur taomlari" } },
+  { "model": "apps.category", "pk": 3, "fields": { "title": "Kabablar" } },
+  { "model": "apps.category", "pk": 4, "fields": { "title": "Ichimliklar" } },
+  { "model": "apps.category", "pk": 5, "fields": { "title": "Salatlar" } },
+
+  { "model": "apps.product", "pk": 1,  "fields": { "category": 1, "name": "Choyxona Palov",         "description": "Eng sarxil masalliqlar va yangi go'shtdan tayyorlangan milliy palov.", "price": "45000.00", "photo": "", "is_featured": true  } },
+  { "model": "apps.product", "pk": 2,  "fields": { "category": 2, "name": "Qovurma Lag'mon",         "description": "Qo'lda cho'zilgan xamir, sarxil sabzavotlar va go'sht bo'laklari bilan.", "price": "40000.00", "photo": "", "is_featured": true  } },
+  { "model": "apps.product", "pk": 3,  "fields": { "category": 3, "name": "Mol go'shtidan shashlik", "description": "Yumshoq va me'yorida marinadlangan go'sht bo'laklari.", "price": "18000.00", "photo": "", "is_featured": false } },
+  { "model": "apps.product", "pk": 4,  "fields": { "category": 4, "name": "Ko'k choy choynakda",     "description": "Limon va novvot bilan maxsus damlangan ko'k choy.", "price": "8000.00",  "photo": "", "is_featured": false } },
+  { "model": "apps.product", "pk": 5,  "fields": { "category": 5, "name": "Achchiq-chuchuk",          "description": "Yangi uzilgan pomidor, bodring va piyozdan tayyorlangan milliy salat.", "price": "12000.00", "photo": "", "is_featured": false } },
+  { "model": "apps.product", "pk": 6,  "fields": { "category": 1, "name": "Mastava",                  "description": "Issiq sho'rva, go'sht va guruch bilan.", "price": "25000.00", "photo": "", "is_featured": false } },
+  { "model": "apps.product", "pk": 7,  "fields": { "category": 2, "name": "Bug'lama Lag'mon",         "description": "Yumshoq bug'da pishirilgan lag'mon, sabzavotlar va go'sht bilan.", "price": "38000.00", "photo": "", "is_featured": false } },
+  { "model": "apps.product", "pk": 8,  "fields": { "category": 3, "name": "Tovuq shashlik",           "description": "Limon va ziravorlarda marinadlangan tovuq go'shti.", "price": "15000.00", "photo": "", "is_featured": true  } },
+  { "model": "apps.product", "pk": 9,  "fields": { "category": 4, "name": "Qora choy (piyolada)",     "description": "Issiq qora choy, qand bilan.", "price": "5000.00",  "photo": "", "is_featured": false } },
+  { "model": "apps.product", "pk": 10, "fields": { "category": 5, "name": "Toshkent salati",          "description": "Pisgan go'sht, tuxum va mayonez bilan tayyorlangan salat.", "price": "18000.00", "photo": "", "is_featured": false } },
+
+  { "model": "apps.ingredient", "pk": 1, "fields": { "name": "Guruch (Lazer)",  "stack_type": "kg", "stack_amount": 50.0, "min_amount": 10.0 } },
+  { "model": "apps.ingredient", "pk": 2, "fields": { "name": "Mol go'shti",     "stack_type": "kg", "stack_amount": 30.0, "min_amount": 5.0  } },
+  { "model": "apps.ingredient", "pk": 3, "fields": { "name": "O'simlik yog'i",  "stack_type": "l",  "stack_amount": 20.0, "min_amount": 4.0  } },
+  { "model": "apps.ingredient", "pk": 4, "fields": { "name": "Sabzi",           "stack_type": "kg", "stack_amount": 11.0, "min_amount": 12.0 } },
+  { "model": "apps.ingredient", "pk": 5, "fields": { "name": "Piyoz",           "stack_type": "kg", "stack_amount": 40.0, "min_amount": 8.0  } },
+  { "model": "apps.ingredient", "pk": 6, "fields": { "name": "Tuz",             "stack_type": "kg", "stack_amount": 10.0, "min_amount": 2.0  } },
+  { "model": "apps.ingredient", "pk": 7, "fields": { "name": "Tovuq go'shti",   "stack_type": "kg", "stack_amount": 6.0,  "min_amount": 4.0  } },
+  { "model": "apps.ingredient", "pk": 8, "fields": { "name": "Xamir (lag'mon)", "stack_type": "kg", "stack_amount": 15.0, "min_amount": 3.0  } },
+
+  { "model": "apps.recipe", "pk": 1, "fields": { "product": 1, "ingredient": 1, "amount": 150.0, "unit": "gr" } },
+  { "model": "apps.recipe", "pk": 2, "fields": { "product": 1, "ingredient": 2, "amount": 150.0, "unit": "gr" } },
+  { "model": "apps.recipe", "pk": 3, "fields": { "product": 1, "ingredient": 4, "amount": 200.0, "unit": "gr" } },
+  { "model": "apps.recipe", "pk": 4, "fields": { "product": 1, "ingredient": 3, "amount": 50.0,  "unit": "ml" } },
+  { "model": "apps.recipe", "pk": 5, "fields": { "product": 3, "ingredient": 2, "amount": 220.0, "unit": "gr" } },
+  { "model": "apps.recipe", "pk": 6, "fields": { "product": 2, "ingredient": 8, "amount": 200.0, "unit": "gr" } },
+  { "model": "apps.recipe", "pk": 7, "fields": { "product": 2, "ingredient": 2, "amount": 100.0, "unit": "gr" } },
+  { "model": "apps.recipe", "pk": 8, "fields": { "product": 8, "ingredient": 7, "amount": 250.0, "unit": "gr" } },
+
+  { "model": "apps.order", "pk": 1,  "fields": { "payment_type": "cash", "table": 1,  "waiter": 7, "status": "cooking",   "total_price": "103000.00", "comment": "Palovda piyoz kamroq bo'lsin.", "created_at": "2026-06-25T07:20:00Z" } },
+  { "model": "apps.order", "pk": 2,  "fields": { "payment_type": "card", "table": 2,  "waiter": 7, "status": "cooking",   "total_price": "71000.00",  "comment": "", "created_at": "2026-06-25T07:40:00Z" } },
+  { "model": "apps.order", "pk": 3,  "fields": { "payment_type": "cash", "table": 3,  "waiter": 8, "status": "pending",   "total_price": "88000.00",  "comment": "Tez keltiring.", "created_at": "2026-06-25T08:05:00Z" } },
+  { "model": "apps.order", "pk": 4,  "fields": { "payment_type": "card", "table": 4,  "waiter": 8, "status": "confirmed", "total_price": "56000.00",  "comment": "", "created_at": "2026-06-25T08:20:00Z" } },
+  { "model": "apps.order", "pk": 5,  "fields": { "payment_type": "cash", "table": 5,  "waiter": 9, "status": "ready",     "total_price": "120000.00", "comment": "", "created_at": "2026-06-25T09:10:00Z" } },
+  { "model": "apps.order", "pk": 6,  "fields": { "payment_type": "card", "table": 6,  "waiter": 9, "status": "ready",     "total_price": "95000.00",  "comment": "Choy issiq bo'lsin.", "created_at": "2026-06-25T09:35:00Z" } },
+  { "model": "apps.order", "pk": 7,  "fields": { "payment_type": "cash", "table": 7,  "waiter": 7, "status": "paid",      "total_price": "68000.00",  "comment": "", "created_at": "2026-06-25T07:05:00Z" } },
+  { "model": "apps.order", "pk": 8,  "fields": { "payment_type": "card", "table": 9,  "waiter": 8, "status": "paid",      "total_price": "145000.00", "comment": "", "created_at": "2026-06-25T08:00:00Z" } },
+  { "model": "apps.order", "pk": 9,  "fields": { "payment_type": "cash", "table": 11, "waiter": 9, "status": "paid",      "total_price": "83000.00",  "comment": "", "created_at": "2026-06-25T09:00:00Z" } },
+  { "model": "apps.order", "pk": 10, "fields": { "payment_type": "cash", "table": 1,  "waiter": 7, "status": "pending",   "total_price": "53000.00",  "comment": "Lag'mon ko'p bo'lsin.", "created_at": "2026-06-25T10:00:00Z" } },
+  { "model": "apps.order", "pk": 11, "fields": { "payment_type": "card", "table": 2,  "waiter": 7, "status": "cooking",   "total_price": "76000.00",  "comment": "", "created_at": "2026-06-25T10:15:00Z" } },
+  { "model": "apps.order", "pk": 12, "fields": { "payment_type": "cash", "table": 3,  "waiter": 8, "status": "pending",   "total_price": "44000.00",  "comment": "", "created_at": "2026-06-25T10:30:00Z" } },
+
+  { "model": "apps.orderitem", "pk": 1,  "fields": { "order": 1,  "product": 1,  "quantity": 1, "chef": 3,    "status": "cooking", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 2,  "fields": { "order": 1,  "product": 3,  "quantity": 2, "chef": 3,    "status": "cooking", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 3,  "fields": { "order": 1,  "product": 4,  "quantity": 1, "chef": null, "status": "waiting", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 4,  "fields": { "order": 2,  "product": 2,  "quantity": 1, "chef": 4,    "status": "cooking", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 5,  "fields": { "order": 2,  "product": 5,  "quantity": 2, "chef": null, "status": "waiting", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 6,  "fields": { "order": 2,  "product": 9,  "quantity": 3, "chef": null, "status": "waiting", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 7,  "fields": { "order": 3,  "product": 1,  "quantity": 2, "chef": null, "status": "waiting", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 8,  "fields": { "order": 3,  "product": 8,  "quantity": 2, "chef": null, "status": "waiting", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 9,  "fields": { "order": 3,  "product": 4,  "quantity": 2, "chef": null, "status": "waiting", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 10, "fields": { "order": 4,  "product": 6,  "quantity": 1, "chef": 3,    "status": "cooking", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 11, "fields": { "order": 4,  "product": 5,  "quantity": 2, "chef": null, "status": "waiting", "is_urgent": true,  "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 12, "fields": { "order": 5,  "product": 1,  "quantity": 2, "chef": 4,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 13, "fields": { "order": 5,  "product": 2,  "quantity": 1, "chef": 4,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 14, "fields": { "order": 5,  "product": 3,  "quantity": 4, "chef": 5,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 15, "fields": { "order": 6,  "product": 7,  "quantity": 2, "chef": 5,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 16, "fields": { "order": 6,  "product": 10, "quantity": 1, "chef": 5,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 17, "fields": { "order": 6,  "product": 4,  "quantity": 3, "chef": null, "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 18, "fields": { "order": 7,  "product": 8,  "quantity": 2, "chef": 3,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 19, "fields": { "order": 7,  "product": 5,  "quantity": 1, "chef": 3,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 20, "fields": { "order": 7,  "product": 9,  "quantity": 4, "chef": 3,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 21, "fields": { "order": 8,  "product": 1,  "quantity": 2, "chef": 4,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 22, "fields": { "order": 8,  "product": 2,  "quantity": 1, "chef": 4,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 23, "fields": { "order": 8,  "product": 3,  "quantity": 3, "chef": 5,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 24, "fields": { "order": 9,  "product": 6,  "quantity": 2, "chef": 3,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 25, "fields": { "order": 9,  "product": 10, "quantity": 1, "chef": 3,    "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 26, "fields": { "order": 9,  "product": 9,  "quantity": 3, "chef": null, "status": "ready",   "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 27, "fields": { "order": 10, "product": 2,  "quantity": 1, "chef": null, "status": "waiting", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 28, "fields": { "order": 10, "product": 5,  "quantity": 1, "chef": null, "status": "waiting", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 29, "fields": { "order": 11, "product": 1,  "quantity": 1, "chef": 4,    "status": "cooking", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 30, "fields": { "order": 11, "product": 8,  "quantity": 2, "chef": 5,    "status": "cooking", "is_urgent": true,  "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 31, "fields": { "order": 12, "product": 3,  "quantity": 2, "chef": null, "status": "waiting", "is_urgent": false, "celery_task_id": null } },
+  { "model": "apps.orderitem", "pk": 32, "fields": { "order": 12, "product": 4,  "quantity": 2, "chef": null, "status": "waiting", "is_urgent": false, "celery_task_id": null } },
+
+  { "model": "apps.payment", "pk": 1, "fields": { "order": 5,  "method": "cash", "status": "waiting",   "amount": "120000.00", "telegram_payment_charge_id": null, "stripe_charge_id": null, "created_at": "2026-06-25T09:10:00Z", "paid_at": null } },
+  { "model": "apps.payment", "pk": 2, "fields": { "order": 6,  "method": "card", "status": "waiting",   "amount": "95000.00",  "telegram_payment_charge_id": null, "stripe_charge_id": null, "created_at": "2026-06-25T09:35:00Z", "paid_at": null } },
+  { "model": "apps.payment", "pk": 3, "fields": { "order": 7,  "method": "cash", "status": "completed", "amount": "68000.00",  "telegram_payment_charge_id": null, "stripe_charge_id": null, "created_at": "2026-06-25T07:05:00Z", "paid_at": "2026-06-25T08:45:00Z" } },
+  { "model": "apps.payment", "pk": 4, "fields": { "order": 8,  "method": "card", "status": "completed", "amount": "145000.00", "telegram_payment_charge_id": null, "stripe_charge_id": null, "created_at": "2026-06-25T08:00:00Z", "paid_at": "2026-06-25T09:50:00Z" } },
+  { "model": "apps.payment", "pk": 5, "fields": { "order": 9,  "method": "cash", "status": "completed", "amount": "83000.00",  "telegram_payment_charge_id": null, "stripe_charge_id": null, "created_at": "2026-06-25T09:00:00Z", "paid_at": "2026-06-25T10:20:00Z" } },
+
+  { "model": "apps.ingredientpurchase", "pk": 1, "fields": { "ingredient": 1, "quantity": 100.0, "unit_price": "3500.00",  "total_price": "350000.00",  "supplier": "Andijon bozori",  "purchased_by": 12, "purchased_at": "2026-06-20T09:00:00Z", "note": "Yangi hosil" } },
+  { "model": "apps.ingredientpurchase", "pk": 2, "fields": { "ingredient": 2, "quantity": 50.0,  "unit_price": "65000.00", "total_price": "3250000.00", "supplier": "Go'sht bozori",   "purchased_by": 12, "purchased_at": "2026-06-20T10:00:00Z", "note": "" } },
+  { "model": "apps.ingredientpurchase", "pk": 3, "fields": { "ingredient": 7, "quantity": 30.0,  "unit_price": "45000.00", "total_price": "1350000.00", "supplier": "Dehqon bozori",   "purchased_by": 12, "purchased_at": "2026-06-22T09:00:00Z", "note": "Yangi tovuq" } },
+  { "model": "apps.ingredientpurchase", "pk": 4, "fields": { "ingredient": 3, "quantity": 40.0,  "unit_price": "12000.00", "total_price": "480000.00",  "supplier": "Yog' zavodi",     "purchased_by": 12, "purchased_at": "2026-06-23T10:00:00Z", "note": "" } },
+  { "model": "apps.ingredientpurchase", "pk": 5, "fields": { "ingredient": 4, "quantity": 80.0,  "unit_price": "2500.00",  "total_price": "200000.00",  "supplier": "Sabzavot bozori", "purchased_by": 12, "purchased_at": "2026-06-25T07:30:00Z", "note": "Bugungi" } },
+
+  { "model": "apps.salarypayment", "pk": 1, "fields": { "employee": 7,  "paid_by": 12, "amount": "3000000.00", "month": "2026-05-01", "payment_type": "card", "status": "paid", "paid_at": "2026-06-05T10:00:00Z", "created_at": "2026-06-04T09:00:00Z" } },
+  { "model": "apps.salarypayment", "pk": 2, "fields": { "employee": 3,  "paid_by": 12, "amount": "4000000.00", "month": "2026-05-01", "payment_type": "cash", "status": "paid", "paid_at": "2026-06-05T11:00:00Z", "created_at": "2026-06-04T09:30:00Z" } },
+  { "model": "apps.salarypayment", "pk": 3, "fields": { "employee": 8,  "paid_by": 12, "amount": "3000000.00", "month": "2026-05-01", "payment_type": "card", "status": "paid", "paid_at": "2026-06-05T12:00:00Z", "created_at": "2026-06-04T10:00:00Z" } },
+  { "model": "apps.salarypayment", "pk": 4, "fields": { "employee": 4,  "paid_by": 12, "amount": "4000000.00", "month": "2026-05-01", "payment_type": "cash", "status": "paid", "paid_at": "2026-06-05T13:00:00Z", "created_at": "2026-06-04T10:30:00Z" } },
+  { "model": "apps.salarypayment", "pk": 5, "fields": { "employee": 11, "paid_by": 12, "amount": "3000000.00", "month": "2026-05-01", "payment_type": "card", "status": "paid", "paid_at": "2026-06-06T10:00:00Z", "created_at": "2026-06-05T09:00:00Z" } },
+
+  { "model": "apps.comment", "pk": 1, "fields": { "product": 1, "user": 13, "display_name": "Test Mijoz", "ip_address": "127.0.0.1", "user_agent": "Mozilla/5.0", "session_key": null, "text": "Juda mazali palov, tavsiya qilaman!", "rating": 5, "is_blocked": false, "created_at": "2026-06-05T12:00:00Z" } },
+  { "model": "apps.comment", "pk": 2, "fields": { "product": 1, "user": null, "display_name": "Kamola",    "ip_address": "192.168.1.1", "user_agent": "Mozilla/5.0", "session_key": null, "text": "Har safar yeb ko'raman, doim yaxshi!", "rating": 5, "is_blocked": false, "created_at": "2026-06-06T14:00:00Z" } },
+  { "model": "apps.comment", "pk": 3, "fields": { "product": 2, "user": null, "display_name": "Jasur",     "ip_address": "10.0.0.1",   "user_agent": "Mozilla/5.0", "session_key": null, "text": "Lag'mon yaxshi lekin go'sht ko'proq bo'lsa yaxshiroq.", "rating": 4, "is_blocked": false, "created_at": "2026-06-06T15:00:00Z" } },
+
+  { "model": "apps.reservation", "pk": 1, "fields": { "table": 13, "full_name": "Asror Shokirov",   "email": "asror@gmail.com",  "capacity": 4, "date_of_reserve": "2026-06-25T18:00:00Z", "ended_date": "2026-06-25T20:00:00Z" } },
+  { "model": "apps.reservation", "pk": 2, "fields": { "table": 14, "full_name": "Dilnoza Yusupova", "email": "dilnoza@gmail.com", "capacity": 4, "date_of_reserve": "2026-06-25T19:00:00Z", "ended_date": "2026-06-25T21:00:00Z" } },
+  { "model": "apps.reservation", "pk": 3, "fields": { "table": 15, "full_name": "Sardor Alimov",    "email": "sardor@gmail.com",  "capacity": 2, "date_of_reserve": "2026-06-25T20:00:00Z", "ended_date": "2026-06-25T22:00:00Z" } },
+
+  { "model": "apps.notification", "pk": 1, "fields": { "user": 2, "message": "Stol #13 uchun yangi rezervatsiya: Asror Shokirov, 25-iyun 21:00", "is_read": false, "created_at": "2026-06-25T09:00:00Z" } },
+  { "model": "apps.notification", "pk": 2, "fields": { "user": 2, "message": "Stol #1 dagi buyurtma 3 daqiqadan beri qabul qilinmadi!", "is_read": false, "created_at": "2026-06-25T07:23:00Z" } },
+  { "model": "apps.notification", "pk": 3, "fields": { "user": 2, "message": "Sabzi zaxirasi kritik darajada kam: 11 kg qoldi (min: 12 kg)", "is_read": false, "created_at": "2026-06-25T08:00:00Z" } },
+
+  { "model": "apps.dailyingredient", "pk": 1, "fields": { "ingredient": 1, "date": "2026-06-25", "opening_amount": 50.0, "used_amount": 4.5, "closing_amount": 45.5 } },
+  { "model": "apps.dailyingredient", "pk": 2, "fields": { "ingredient": 2, "date": "2026-06-25", "opening_amount": 30.0, "used_amount": 2.2, "closing_amount": 27.8 } }
+]

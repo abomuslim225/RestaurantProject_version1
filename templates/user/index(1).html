@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Royal Taste — Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap"
+          rel="stylesheet"/>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #080c0a;
+            --bg2: #0e1410;
+            --surface: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f0ede6;
+            --muted: #8a9488;
+            --accent: #b5d27a;
+            --accent2: #d4a853;
+            --danger: #e06060;
+            --r: 16px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        .serif {
+            font-family: 'Cormorant Garamond', serif
+        }
+
+        /* NAV */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(8, 12, 10, 0.85);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.04em
+        }
+
+        .nav-brand span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            color: var(--accent)
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px
+        }
+
+        .nav-links a {
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--muted);
+            transition: all 0.2s
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text);
+            background: var(--surface)
+        }
+
+        .nav-badge {
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: rgba(181, 210, 122, 0.12);
+            border: 1px solid rgba(181, 210, 122, 0.2);
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 500
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            min-height: 92vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1800&q=80') center/cover;
+            filter: brightness(0.32)
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(8, 12, 10, 0.92) 0%, rgba(8, 12, 10, 0.5) 60%, transparent 100%)
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 80px 64px;
+            max-width: 800px
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: rgba(212, 168, 83, 0.12);
+            border: 1px solid rgba(212, 168, 83, 0.25);
+            color: var(--accent2);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 28px
+        }
+
+        .hero-tag i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent2);
+            display: inline-block
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(52px, 7vw, 96px);
+            line-height: 0.92;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em
+        }
+
+        .hero h1 em {
+            color: var(--accent);
+            font-style: italic
+        }
+
+        .hero p {
+            color: #b0b8aa;
+            font-size: 17px;
+            line-height: 1.8;
+            max-width: 520px;
+            margin-bottom: 40px;
+            font-weight: 300
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap
+        }
+
+        .btn-primary {
+            padding: 16px 32px;
+            border-radius: 999px;
+            background: var(--accent);
+            color: #1a2410;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer
+        }
+
+        .btn-primary:hover {
+            background: #c8e48a;
+            transform: translateY(-2px)
+        }
+
+        .btn-outline {
+            padding: 16px 32px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text);
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.2s;
+            background: transparent
+        }
+
+        .btn-outline:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: var(--surface)
+        }
+
+        .hero-stats {
+            position: absolute;
+            right: 64px;
+            bottom: 80px;
+            z-index: 2;
+            display: flex;
+            gap: 40px
+        }
+
+        .stat {
+            text-align: right
+        }
+
+        .stat-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 48px;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-top: 4px
+        }
+
+        /* SECTIONS */
+        .section {
+            padding: 80px 64px
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 48px
+        }
+
+        .section-kicker {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(36px, 4vw, 56px);
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: -0.02em
+        }
+
+        .section-desc {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.8;
+            margin-top: 10px;
+            max-width: 600px
+        }
+
+        .see-all {
+            padding: 12px 22px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.2s
+        }
+
+        .see-all:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text)
+        }
+
+        /* PROMO CAROUSEL */
+        .carousel {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(360px, 1fr);
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scroll-snap-type: x mandatory
+        }
+
+        .carousel::-webkit-scrollbar {
+            height: 3px
+        }
+
+        .carousel::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px
+        }
+
+        .promo {
+            scroll-snap-align: start;
+            min-height: 340px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 28px;
+            background-size: cover;
+            background-position: center
+        }
+
+        .promo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(8, 12, 10, 0.08), rgba(8, 12, 10, 0.86))
+        }
+
+        .promo-inner {
+            position: relative;
+            z-index: 1
+        }
+
+        .promo-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            backdrop-filter: blur(8px)
+        }
+
+        .promo-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 34px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.1
+        }
+
+        .promo-text {
+            color: #c8d0c4;
+            font-size: 14px;
+            line-height: 1.7
+        }
+
+        /* CATEGORIES */
+        .cat-grid {
+            display: grid;
+            grid-template-columns:repeat(4, 1fr);
+            gap: 16px
+        }
+
+        .cat-tile {
+            min-height: 240px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            transition: transform 0.25s
+        }
+
+        .cat-tile:hover {
+            transform: translateY(-4px)
+        }
+
+        .cat-tile::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 30%, rgba(8, 12, 10, 0.88))
+        }
+
+        .cat-inner {
+            position: relative;
+            z-index: 1
+        }
+
+        .cat-inner h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 4px
+        }
+
+        .cat-inner p {
+            color: #c8d0c4;
+            font-size: 13px;
+            font-weight: 300
+        }
+
+        /* MENU CARDS */
+        .menu-grid {
+            display: grid;
+            grid-template-columns:repeat(4, 1fr);
+            gap: 20px
+        }
+
+        .menu-card {
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            overflow: hidden;
+            transition: all 0.25s
+        }
+
+        .menu-card:hover {
+            border-color: rgba(255, 255, 255, 0.14);
+            transform: translateY(-4px)
+        }
+
+        .menu-img {
+            aspect-ratio: 1;
+            overflow: hidden
+        }
+
+        .menu-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s
+        }
+
+        .menu-card:hover .menu-img img {
+            transform: scale(1.05)
+        }
+
+        .menu-body {
+            padding: 18px
+        }
+
+        .menu-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px
+        }
+
+        .menu-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 600;
+            line-height: 1.1
+        }
+
+        .menu-price {
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(181, 210, 122, 0.12);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap
+        }
+
+        .menu-desc {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 12px
+        }
+
+        .menu-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px
+        }
+
+        .tag {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #aab4a8;
+            font-size: 11px;
+            font-weight: 500
+        }
+
+        /* TABLES OVERVIEW */
+        .tables-grid {
+            display: grid;
+            grid-template-columns:repeat(4, 1fr);
+            gap: 16px
+        }
+
+        .table-card {
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            padding: 22px
+        }
+
+        .table-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px
+        }
+
+        .table-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 40px;
+            font-weight: 600;
+            line-height: 1
+        }
+
+        .table-cap {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 4px
+        }
+
+        .state {
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase
+        }
+
+        .state.empty {
+            background: rgba(181, 210, 122, 0.14);
+            color: #a8cc6a
+        }
+
+        .state.pending {
+            background: rgba(212, 168, 83, 0.14);
+            color: #d4a853
+        }
+
+        .state.occupied {
+            background: rgba(224, 96, 96, 0.14);
+            color: #e06060
+        }
+
+        .table-bar {
+            height: 4px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            margin-bottom: 14px;
+            overflow: hidden
+        }
+
+        .table-bar span {
+            display: block;
+            height: 100%;
+            border-radius: inherit
+        }
+
+        .bar-green {
+            background: var(--accent)
+        }
+
+        .bar-yellow {
+            background: var(--accent2)
+        }
+
+        .bar-red {
+            background: var(--danger)
+        }
+
+        .table-note {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.7
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 48px 64px;
+            display: grid;
+            grid-template-columns:1.4fr 1fr 1fr 1fr;
+            gap: 32px
+        }
+
+        .footer-brand-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text)
+        }
+
+        .footer-text {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8
+        }
+
+        .footer-col h4 {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px
+        }
+
+        .footer-col p, .footer-col a {
+            display: block;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8
+        }
+
+        .footer-col a:hover {
+            color: var(--text)
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding: 20px 64px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .footer-bottom p {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        @media (max-width: 1100px) {
+            .cat-grid, .menu-grid, .tables-grid {
+                grid-template-columns:repeat(2, 1fr)
+            }
+
+            footer {
+                grid-template-columns:1fr 1fr
+            }
+
+            .hero-stats {
+                display: none
+            }
+        }
+
+        @media (max-width: 700px) {
+            nav {
+                padding: 0 20px
+            }
+
+            .hero-content {
+                padding: 60px 24px
+            }
+
+            .section {
+                padding: 60px 24px
+            }
+
+            .cat-grid, .menu-grid, .tables-grid {
+                grid-template-columns:1fr
+            }
+
+            footer {
+                padding: 40px 24px;
+                grid-template-columns:1fr
+            }
+
+            .footer-bottom {
+                padding: 20px 24px;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-brand">
+        <span>R</span> Royal Taste
+    </div>
+    <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="menu.html">Menyu</a>
+        <a href="reservation.html">Rezervatsiya</a>
+        <a href="about.html">Haqimizda</a>
+        <a href="settings.html">Sozlamalar</a>
+    </div>
+    <div class="nav-badge">⏰ 09:00 — 23:00</div>
+</nav>
+
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-tag"><i></i> Premium restoran tajribasi</div>
+        <h1>Har bir<br/><em>taom</em> bir<br/>san'at asari</h1>
+        <p>Royal Taste — bu faqat ovqat emas, bu yodda qoladigan lahzalar. Chef tavsiyalari, fresc ingredientlar va
+            noyob atmosfera.</p>
+        <div class="hero-actions">
+            <a href="reservation.html" class="btn-primary">Stol bron qilish</a>
+            <a href="menu.html" class="btn-outline">Menyuni ko'rish</a>
+        </div>
+    </div>
+    <div class="hero-stats">
+        <div class="stat">
+            <div class="stat-num">240+</div>
+            <div class="stat-label">Taomlar</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">8+</div>
+            <div class="stat-label">Yil tajriba</div>
+        </div>
+        <div class="stat">
+            <div class="stat-num">4.9</div>
+            <div class="stat-label">Reyting</div>
+        </div>
+    </div>
+</section>
+
+<!-- PROMO -->
+<section class="section" style="padding-top:64px">
+    <div class="section-header">
+        <div>
+            <p class="section-kicker">Bugungi takliflar</p>
+            <h2 class="section-title">Maxsus tavsiyalar</h2>
+            <p class="section-desc">Haftaning eng kuchli aksiyalari va chef tanlovlari.</p>
+        </div>
+        <a href="menu.html" class="see-all">Barchasini ko'rish →</a>
+    </div>
+    <div class="carousel">
+        <article class="promo"
+                 style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80')">
+            <div class="promo-inner">
+                <span class="promo-tag">Best Seller</span>
+                <h3 class="promo-title">Premium Steak</h3>
+                <p class="promo-text">Eng ko'p buyurtma qilinadigan asosiy taomlardan biri.</p>
+            </div>
+        </article>
+        <article class="promo"
+                 style="background-image:url('https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&w=1200&q=80')">
+            <div class="promo-inner">
+                <span class="promo-tag">Chegirma</span>
+                <h3 class="promo-title">Family Pizza Deal</h3>
+                <p class="promo-text">Oilaviy to'plam — 4 kishilik, maxsus narxda.</p>
+            </div>
+        </article>
+        <article class="promo"
+                 style="background-image:url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1200&q=80')">
+            <div class="promo-inner">
+                <span class="promo-tag">Chef tanlov</span>
+                <h3 class="promo-title">Signature Burger</h3>
+                <p class="promo-text">Oshpazimizning sevimli va eng mashhur burgeri.</p>
+            </div>
+        </article>
+        <article class="promo"
+                 style="background-image:url('https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=1200&q=80')">
+            <div class="promo-inner">
+                <span class="promo-tag">Yangi</span>
+                <h3 class="promo-title">Seafood Platter</h3>
+                <p class="promo-text">Dengiz mahsulotlaridan yangi tayyorlangan maxsus lagan.</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section" style="padding-top:0">
+    <div class="section-header">
+        <div>
+            <p class="section-kicker">Kategoriyalar</p>
+            <h2 class="section-title">Nima iste'mol qilasiz?</h2>
+        </div>
+        <a href="menu.html" class="see-all">Menyu →</a>
+    </div>
+    <div class="cat-grid">
+        <article class="cat-tile"
+                 style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80')">
+            <div class="cat-inner"><h3>Pizza</h3>
+                <p>Qalin va yupqa asosli</p></div>
+        </article>
+        <article class="cat-tile"
+                 style="background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80')">
+            <div class="cat-inner"><h3>Burger</h3>
+                <p>Signature & combo</p></div>
+        </article>
+        <article class="cat-tile"
+                 style="background-image:url('https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80')">
+            <div class="cat-inner"><h3>Sho'rva</h3>
+                <p>Issiq va yengil</p></div>
+        </article>
+        <article class="cat-tile"
+                 style="background-image:url('https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=80')">
+            <div class="cat-inner"><h3>Ichimliklar</h3>
+                <p>Sovuq & kokteyllar</p></div>
+        </article>
+    </div>
+</section>
+
+<!-- MENU PREVIEW -->
+<section class="section" style="padding-top:0">
+    <div class="section-header">
+        <div>
+            <p class="section-kicker">Tavsiya etilgan</p>
+            <h2 class="section-title">Mashhur taomlar</h2>
+        </div>
+        <a href="menu.html" class="see-all">To'liq menyu →</a>
+    </div>
+    <div class="menu-grid">
+        <article class="menu-card">
+            <div class="menu-img"><img
+                    src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80"
+                    alt="Salad"/></div>
+            <div class="menu-body">
+                <div class="menu-row"><h3 class="menu-name">Caesar Salad</h3><span class="menu-price">38 000 so'm</span>
+                </div>
+                <p class="menu-desc">Yengil va chiroyli starter. Fresc romaine, krouton, parmezan.</p>
+                <div class="menu-tags"><span class="tag">Fresh</span><span class="tag">Popular</span></div>
+            </div>
+        </article>
+        <article class="menu-card">
+            <div class="menu-img"><img
+                    src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=800&q=80"
+                    alt="Pasta"/></div>
+            <div class="menu-body">
+                <div class="menu-row"><h3 class="menu-name">Pasta Alfredo</h3><span
+                        class="menu-price">52 000 so'm</span></div>
+                <p class="menu-desc">Qaymoqli sous bilan tayyorlangan klassik pasta.</p>
+                <div class="menu-tags"><span class="tag">Creamy</span><span class="tag">Chef pick</span></div>
+            </div>
+        </article>
+        <article class="menu-card">
+            <div class="menu-img"><img
+                    src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80"
+                    alt="Burger"/></div>
+            <div class="menu-body">
+                <div class="menu-row"><h3 class="menu-name">Royal Burger</h3><span class="menu-price">49 000 so'm</span>
+                </div>
+                <p class="menu-desc">Qalin bun, go'sht va maxsus sous bilan.</p>
+                <div class="menu-tags"><span class="tag">Best seller</span><span class="tag">Hot</span></div>
+            </div>
+        </article>
+        <article class="menu-card">
+            <div class="menu-img"><img
+                    src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?auto=format&fit=crop&w=800&q=80"
+                    alt="Seafood"/></div>
+            <div class="menu-body">
+                <div class="menu-row"><h3 class="menu-name">Seafood Mix</h3><span class="menu-price">78 000 so'm</span>
+                </div>
+                <p class="menu-desc">Aralash dengiz mahsulotlari, limon va zaytun yog'i.</p>
+                <div class="menu-tags"><span class="tag">Premium</span><span class="tag">New</span></div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- TABLES STATUS -->
+<section class="section" style="padding-top:0">
+    <div class="section-header">
+        <div>
+            <p class="section-kicker">Stollar holati</p>
+            <h2 class="section-title">Bugungi ko'rinish</h2>
+            <p class="section-desc">Real vaqtda stollar band yoki bo'sh ekanligi.</p>
+        </div>
+        <a href="reservation.html" class="see-all">Bron qilish →</a>
+    </div>
+    <div class="tables-grid">
+        <article class="table-card">
+            <div class="table-top">
+                <div>
+                    <div class="table-num">01</div>
+                    <div class="table-cap">4 kishilik</div>
+                </div>
+                <span class="state empty">Bo'sh</span>
+            </div>
+            <div class="table-bar"><span class="bar-green" style="width:25%"></span></div>
+            <p class="table-note">Hozir bo'sh, rezervatsiya qilish mumkin.</p>
+        </article>
+        <article class="table-card">
+            <div class="table-top">
+                <div>
+                    <div class="table-num">02</div>
+                    <div class="table-cap">2 kishilik</div>
+                </div>
+                <span class="state pending">Kutyapti</span>
+            </div>
+            <div class="table-bar"><span class="bar-yellow" style="width:60%"></span></div>
+            <p class="table-note">Xizmat jarayoni davom etmoqda.</p>
+        </article>
+        <article class="table-card">
+            <div class="table-top">
+                <div>
+                    <div class="table-num">03</div>
+                    <div class="table-cap">6 kishilik</div>
+                </div>
+                <span class="state occupied">Band</span>
+            </div>
+            <div class="table-bar"><span class="bar-red" style="width:100%"></span></div>
+            <p class="table-note">Hozir band, 21:00 gacha.</p>
+        </article>
+        <article class="table-card">
+            <div class="table-top">
+                <div>
+                    <div class="table-num">04</div>
+                    <div class="table-cap">8 kishilik</div>
+                </div>
+                <span class="state empty">Bo'sh</span>
+            </div>
+            <div class="table-bar"><span class="bar-green" style="width:35%"></span></div>
+            <p class="table-note">Katta guruhlar uchun mos.</p>
+        </article>
+    </div>
+</section>
+
+<footer>
+    <div>
+        <div class="footer-brand-name">Royal Taste</div>
+        <p class="footer-text">Premium restoran tajribasi. Har bir taom sevgi va mahorat bilan tayyorlanadi.</p>
+    </div>
+    <div class="footer-col">
+        <h4>Bog'lanish</h4>
+        <p>+998 90 123 45 67</p>
+        <p>+998 90 765 43 21</p>
+        <a href="#">Telegram</a>
+        <a href="#">Instagram</a>
+    </div>
+    <div class="footer-col">
+        <h4>Lokatsiya</h4>
+        <p>Toshkent shahri</p>
+        <p>Yunusobod tumani</p>
+        <p>Amir Temur ko'chasi, 12</p>
+    </div>
+    <div class="footer-col">
+        <h4>Ish vaqti</h4>
+        <p>Dushanba — Juma</p>
+        <p>09:00 — 23:00</p>
+        <p>Shanba — Yakshanba</p>
+        <p>10:00 — 00:00</p>
+    </div>
+</footer>
+<div class="footer-bottom">
+    <p>© 2025 Royal Taste. Barcha huquqlar himoyalangan.</p>
+    <p>Made with care in Tashkent</p>
+</div>
+
+</body>
+</html>

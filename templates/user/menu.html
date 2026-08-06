@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Royal Taste — Menyu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap"
+          rel="stylesheet"/>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #080c0a;
+            --bg2: #0e1410;
+            --surface: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f0ede6;
+            --muted: #8a9488;
+            --accent: #b5d27a;
+            --accent2: #d4a853;
+            --danger: #e06060;
+            --r: 16px
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(8, 12, 10, 0.85);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 700
+        }
+
+        .nav-brand span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 26px;
+            color: var(--accent)
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px
+        }
+
+        .nav-links a {
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--muted);
+            transition: all 0.2s
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text);
+            background: var(--surface)
+        }
+
+        .nav-badge {
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: rgba(181, 210, 122, 0.12);
+            border: 1px solid rgba(181, 210, 122, 0.2);
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 500
+        }
+
+        .page-header {
+            padding: 56px 64px 40px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .page-kicker {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px
+        }
+
+        .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(48px, 6vw, 80px);
+            font-weight: 600;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px
+        }
+
+        .page-desc {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.8;
+            max-width: 560px
+        }
+
+        .menu-layout {
+            display: grid;
+            grid-template-columns:240px 1fr;
+            min-height: calc(100vh - 300px)
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            border-right: 1px solid var(--border);
+            padding: 32px 24px;
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px);
+            overflow-y: auto
+        }
+
+        .sidebar-title {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px
+        }
+
+        .cat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px
+        }
+
+        .cat-btn {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .cat-btn:hover {
+            background: var(--surface);
+            color: var(--text)
+        }
+
+        .cat-btn.active {
+            background: rgba(181, 210, 122, 0.12);
+            color: var(--accent);
+            border: 1px solid rgba(181, 210, 122, 0.2)
+        }
+
+        .cat-count {
+            font-size: 12px;
+            opacity: 0.6
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 20px 0
+        }
+
+        .price-filter label {
+            font-size: 13px;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 12px
+        }
+
+        .price-inputs {
+            display: flex;
+            gap: 8px
+        }
+
+        .price-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none
+        }
+
+        .price-input:focus {
+            border-color: rgba(181, 210, 122, 0.4)
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-direction: column;
+            gap: 4px
+        }
+
+        .filter-tag {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .filter-tag:hover {
+            background: var(--surface);
+            color: var(--text)
+        }
+
+        .filter-tag.active {
+            color: var(--accent)
+        }
+
+        .filter-tag-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            flex-shrink: 0;
+            transition: background 0.2s
+        }
+
+        .filter-tag.active .filter-tag-dot {
+            background: var(--accent)
+        }
+
+        /* CONTENT */
+        .menu-content {
+            padding: 32px 40px
+        }
+
+        .menu-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1;
+            max-width: 340px
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: border-color 0.2s
+        }
+
+        .search-wrap input:focus {
+            border-color: rgba(181, 210, 122, 0.4)
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 16px;
+            pointer-events: none
+        }
+
+        .sort-select {
+            padding: 12px 16px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            cursor: pointer
+        }
+
+        .result-count {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns:repeat(3, 1fr);
+            gap: 20px
+        }
+
+        .item-card {
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            overflow: hidden;
+            transition: all 0.25s
+        }
+
+        .item-card:hover {
+            border-color: rgba(255, 255, 255, 0.14);
+            transform: translateY(-3px)
+        }
+
+        .item-img {
+            aspect-ratio: 4/3;
+            overflow: hidden
+        }
+
+        .item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s
+        }
+
+        .item-card:hover .item-img img {
+            transform: scale(1.06)
+        }
+
+        .item-body {
+            padding: 18px
+        }
+
+        .item-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px
+        }
+
+        .item-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 600;
+            line-height: 1.1
+        }
+
+        .item-price {
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(181, 210, 122, 0.12);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap
+        }
+
+        .item-desc {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            margin-bottom: 12px
+        }
+
+        .item-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px
+        }
+
+        .tag {
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #9aa898;
+            font-size: 11px;
+            font-weight: 500
+        }
+
+        .tag.hot {
+            background: rgba(212, 168, 83, 0.12);
+            color: var(--accent2)
+        }
+
+        .tag.new {
+            background: rgba(181, 210, 122, 0.1);
+            color: var(--accent)
+        }
+
+        .tag.veg {
+            background: rgba(74, 222, 128, 0.1);
+            color: #6ee7a0
+        }
+
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 80px 20px
+        }
+
+        .empty-state p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
+            color: var(--muted);
+            margin-bottom: 8px
+        }
+
+        .empty-state small {
+            font-size: 14px;
+            color: var(--muted);
+            opacity: 0.6
+        }
+
+        @media (max-width: 1100px) {
+            .items-grid {
+                grid-template-columns:repeat(2, 1fr)
+            }
+        }
+
+        @media (max-width: 900px) {
+            .menu-layout {
+                grid-template-columns:1fr
+            }
+
+            .sidebar {
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border)
+            }
+
+            .cat-list {
+                flex-direction: row;
+                flex-wrap: wrap
+            }
+
+            .cat-btn {
+                padding: 8px 14px
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page-header {
+                padding: 40px 24px 28px
+            }
+
+            .menu-content {
+                padding: 20px 20px
+            }
+
+            .items-grid {
+                grid-template-columns:1fr
+            }
+
+            nav {
+                padding: 0 16px
+            }
+
+            .nav-links {
+                display: none
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-brand"><span>R</span> Royal Taste</div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="menu.html" class="active">Menyu</a>
+        <a href="reservation.html">Rezervatsiya</a>
+        <a href="about.html">Haqimizda</a>
+        <a href="settings.html">Sozlamalar</a>
+    </div>
+    <div class="nav-badge">⏰ 09:00 — 23:00</div>
+</nav>
+
+<div class="page-header">
+    <p class="page-kicker">To'liq menyu</p>
+    <h1 class="page-title">Barcha<br/><em
+            style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--accent)">taomlar</em></h1>
+    <p class="page-desc">Kategoriya bo'yicha filtrlash, narx va teglar orqali tez topish.</p>
+</div>
+
+<div class="menu-layout">
+    <aside class="sidebar">
+        <div class="sidebar-title">Kategoriyalar</div>
+        <div class="cat-list" id="catList">
+            <button class="cat-btn active" data-cat="all" onclick="filterCat(this,'all')">Barchasi<span
+                    class="cat-count">24</span></button>
+            <button class="cat-btn" data-cat="pizza" onclick="filterCat(this,'pizza')">Pizza<span
+                    class="cat-count">6</span></button>
+            <button class="cat-btn" data-cat="burger" onclick="filterCat(this,'burger')">Burger<span
+                    class="cat-count">5</span></button>
+            <button class="cat-btn" data-cat="soup" onclick="filterCat(this,'soup')">Sho'rva<span
+                    class="cat-count">4</span></button>
+            <button class="cat-btn" data-cat="pasta" onclick="filterCat(this,'pasta')">Pasta<span
+                    class="cat-count">4</span></button>
+            <button class="cat-btn" data-cat="salad" onclick="filterCat(this,'salad')">Salat<span
+                    class="cat-count">3</span></button>
+            <button class="cat-btn" data-cat="drink" onclick="filterCat(this,'drink')">Ichimlik<span
+                    class="cat-count">6</span></button>
+        </div>
+
+        <div class="sidebar-divider"></div>
+        <div class="price-filter">
+            <label>Narx oralig'i (so'm)</label>
+            <div class="price-inputs">
+                <input class="price-input" type="number" id="priceMin" placeholder="Min" oninput="applyFilters()"/>
+                <input class="price-input" type="number" id="priceMax" placeholder="Max" oninput="applyFilters()"/>
+            </div>
+        </div>
+
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-title">Teglar</div>
+        <div class="filter-tags">
+            <button class="filter-tag" data-tag="bestseller" onclick="toggleTag(this)"><span
+                    class="filter-tag-dot"></span>Best seller
+            </button>
+            <button class="filter-tag" data-tag="veg" onclick="toggleTag(this)"><span class="filter-tag-dot"></span>Vegetarian
+            </button>
+            <button class="filter-tag" data-tag="new" onclick="toggleTag(this)"><span class="filter-tag-dot"></span>Yangi
+            </button>
+            <button class="filter-tag" data-tag="hot" onclick="toggleTag(this)"><span class="filter-tag-dot"></span>Oshpaz
+                tavsiyasi
+            </button>
+        </div>
+    </aside>
+
+    <main class="menu-content">
+        <div class="menu-toolbar">
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Taom nomini qidiring..." oninput="applyFilters()"/>
+            </div>
+            <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+                <option value="default">Standart tartib</option>
+                <option value="price-asc">Narx: arzondan</option>
+                <option value="price-desc">Narx: qimmatdan</option>
+                <option value="name">Nom bo'yicha</option>
+            </select>
+            <span class="result-count" id="resultCount">24 ta taom</span>
+        </div>
+
+        <div class="items-grid" id="itemsGrid"></div>
+    </main>
+</div>
+
+<script>
+    const ITEMS = [
+        {
+            id: 1,
+            cat: 'pizza',
+            name: 'Margherita',
+            price: 42000,
+            desc: 'Klassik italyan pizzasi, mozzarella va tomat sous.',
+            tags: ['veg'],
+            img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 2,
+            cat: 'pizza',
+            name: 'Pepperoni',
+            price: 52000,
+            desc: 'Pepperoni va qaymoqli sous bilan.',
+            tags: ['bestseller', 'hot'],
+            img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 3,
+            cat: 'pizza',
+            name: 'BBQ Chicken',
+            price: 58000,
+            desc: 'Go\'sht, BBQ sous va qo\'shimcha mozzarella.',
+            tags: ['hot'],
+            img: 'https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 4,
+            cat: 'pizza',
+            name: 'Vegetarian',
+            price: 46000,
+            desc: 'Qo\'ziqorin, pomidor, qalampir va zaitun.',
+            tags: ['veg', 'new'],
+            img: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 5,
+            cat: 'burger',
+            name: 'Royal Burger',
+            price: 49000,
+            desc: 'Qalin go\'sht kotlet, maxsus sous va sabzavotlar.',
+            tags: ['bestseller'],
+            img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 6,
+            cat: 'burger',
+            name: 'Double Stack',
+            price: 62000,
+            desc: 'Ikki qavat go\'sht, cheddar va karamelized piyoz.',
+            tags: ['hot', 'bestseller'],
+            img: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 7,
+            cat: 'burger',
+            name: 'Mushroom Swiss',
+            price: 54000,
+            desc: 'Qo\'ziqorin, swiss pishloq va truffle mayo.',
+            tags: ['hot'],
+            img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 8,
+            cat: 'burger',
+            name: 'Veggie Delight',
+            price: 44000,
+            desc: 'Plant-based kotlet, avokado va chipotle sous.',
+            tags: ['veg', 'new'],
+            img: 'https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 9,
+            cat: 'soup',
+            name: 'Tom Yum',
+            price: 38000,
+            desc: 'Tailand oshpazi uslubida tayyorlangan achchiq sho\'rva.',
+            tags: ['hot'],
+            img: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 10,
+            cat: 'soup',
+            name: 'Pumpkin Soup',
+            price: 31000,
+            desc: 'Krema qovoq sho\'rvasi, kreml va nut yog\'i.',
+            tags: ['veg', 'new'],
+            img: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 11,
+            cat: 'soup',
+            name: 'Beef Broth',
+            price: 35000,
+            desc: 'Uzoq pishirilgan mol go\'shti bulyoni.',
+            tags: [],
+            img: 'https://images.unsplash.com/photo-1619021897855-8c1c49a2ad15?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 12,
+            cat: 'pasta',
+            name: 'Pasta Alfredo',
+            price: 52000,
+            desc: 'Qaymoqli sous, parmezan va petruska.',
+            tags: ['bestseller', 'hot'],
+            img: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 13,
+            cat: 'pasta',
+            name: 'Spaghetti Bolognese',
+            price: 56000,
+            desc: 'Italyan klassikasi — go\'shtli bolognese.',
+            tags: ['bestseller'],
+            img: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 14,
+            cat: 'pasta',
+            name: 'Penne Arrabbiata',
+            price: 48000,
+            desc: 'Achchiq pomidor sous va chesnok bilan.',
+            tags: ['veg'],
+            img: 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 15,
+            cat: 'salad',
+            name: 'Caesar Salad',
+            price: 38000,
+            desc: 'Romaine, krouton, parmezan, caesar dressing.',
+            tags: ['bestseller'],
+            img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 16,
+            cat: 'salad',
+            name: 'Greek Salad',
+            price: 34000,
+            desc: 'Pomidor, bodring, zaytun, feta pishloq.',
+            tags: ['veg', 'new'],
+            img: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 17,
+            cat: 'salad',
+            name: 'Tuna Nicoise',
+            price: 45000,
+            desc: 'Tunets, yumurta, zaytun va anjobar.',
+            tags: [],
+            img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 18,
+            cat: 'drink',
+            name: 'Lemonade',
+            price: 18000,
+            desc: 'Limon, nane va sparkling water.',
+            tags: ['veg', 'new'],
+            img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 19,
+            cat: 'drink',
+            name: 'Mango Smoothie',
+            price: 22000,
+            desc: 'Fresc mango, yogurt va asal.',
+            tags: ['veg'],
+            img: 'https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 20,
+            cat: 'drink',
+            name: 'Cold Brew Coffee',
+            price: 26000,
+            desc: '12 soat sovuq bilan tayyorlangan kofe.',
+            tags: ['bestseller'],
+            img: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 21,
+            cat: 'drink',
+            name: 'Mojito',
+            price: 32000,
+            desc: 'Nane, limon, shakar va sparkling water.',
+            tags: [],
+            img: 'https://images.unsplash.com/photo-1551538827-9c037cb4f32a?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 22,
+            cat: 'pizza',
+            name: 'Four Cheese',
+            price: 60000,
+            desc: 'To\'rtta turdagi pishloq aralashmasidan tayyorlangan.',
+            tags: ['hot', 'bestseller'],
+            img: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 23,
+            cat: 'drink',
+            name: 'Fresh Orange Juice',
+            price: 20000,
+            desc: 'To\'g\'ridan-to\'g\'ri siqilgan apelsin sharbati.',
+            tags: ['veg'],
+            img: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+            id: 24,
+            cat: 'pasta',
+            name: 'Truffle Tagliatelle',
+            price: 72000,
+            desc: 'Qora truffle, krem sous va parmezan.',
+            tags: ['new', 'hot'],
+            img: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80'
+        },
+    ];
+
+    let activeCat = 'all';
+    let activeTags = [];
+
+    function filterCat(btn, cat) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCat = cat;
+        applyFilters();
+    }
+
+    function toggleTag(btn) {
+        const tag = btn.dataset.tag;
+        btn.classList.toggle('active');
+        if (activeTags.includes(tag)) activeTags = activeTags.filter(t => t !== tag);
+        else activeTags.push(tag);
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const minP = Number(document.getElementById('priceMin').value) || 0;
+        const maxP = Number(document.getElementById('priceMax').value) || Infinity;
+        const sort = document.getElementById('sortSelect').value;
+
+        let filtered = ITEMS.filter(i => {
+            if (activeCat !== 'all' && i.cat !== activeCat) return false;
+            if (!i.name.toLowerCase().includes(search)) return false;
+            if (i.price < minP || i.price > maxP) return false;
+            if (activeTags.length > 0 && !activeTags.some(t => i.tags.includes(t))) return false;
+            return true;
+        });
+
+        if (sort === 'price-asc') filtered.sort((a, b) => a.price - b.price);
+        else if (sort === 'price-desc') filtered.sort((a, b) => b.price - a.price);
+        else if (sort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+        const grid = document.getElementById('itemsGrid');
+        document.getElementById('resultCount').textContent = filtered.length + ' ta taom';
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div class="empty-state"><p>Hech narsa topilmadi</p><small>Filtlarni o\'zgartiring</small></div>';
+            return;
+        }
+
+        grid.innerHTML = filtered.map(i => {
+            const tagHTML = i.tags.map(t => {
+                const cls = t === 'hot' ? 'hot' : t === 'new' ? 'new' : t === 'veg' ? 'veg' : '';
+                const label = t === 'bestseller' ? 'Best seller' : t === 'hot' ? 'Chef tavsiyasi' : t === 'veg' ? 'Vegetarian' : 'Yangi';
+                return `<span class="tag ${cls}">${label}</span>`;
+            }).join('');
+            const price = i.price.toLocaleString('uz-UZ');
+            return `<article class="item-card">
+      <div class="item-img"><img src="${i.img}" alt="${i.name}" loading="lazy"/></div>
+      <div class="item-body">
+        <div class="item-row"><h3 class="item-name">${i.name}</h3><span class="item-price">${price} so'm</span></div>
+        <p class="item-desc">${i.desc}</p>
+        <div class="item-tags">${tagHTML}</div>
+      </div>
+    </article>`;
+        }).join('');
+    }
+
+    applyFilters();
+</script>
+</body>
+</html>

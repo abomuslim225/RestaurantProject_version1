@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="d449261a-a4f4-4f50-b5c3-f99964af1d59" name="restaurant">
+        <fileTransfer rootFolder="/home/ubuntu" accessType="SFTP" host="54.86.164.50" port="22" sshConfigId="8fc61507-12b8-4315-83ba-683d808c0ae3" sshConfig="ubuntu@54.86.164.50:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

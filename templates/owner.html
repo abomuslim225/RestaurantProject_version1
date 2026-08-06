@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signum | Owner Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- ==========================================
+             1. SIDEBAR NAV (Chap Menyu)
+        =========================================== -->
+        <aside class="w-64 bg-gray-950 flex flex-col justify-between border-r border-gray-800 shrink-0">
+            <div class="p-6">
+                <div class="flex items-center space-x-3 text-orange-500 font-bold text-2xl tracking-wider mb-8">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>SIGNUM</span>
+                </div>
+
+                <nav class="space-y-1">
+                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-orange-600 text-white font-medium transition">
+                        <i class="fa-solid fa-chart-pie w-5"></i><span>Dashboard</span>
+                    </button>
+                    <button onclick="switchTab('orders')" id="btn-orders" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+                        <i class="fa-solid fa-utensils w-5"></i><span>Buyurtmalar</span>
+                    </button>
+                    <button onclick="switchTab('tables')" id="btn-tables" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+                        <i class="fa-solid fa-border-all w-5"></i><span>Stollar</span>
+                    </button>
+                    <button onclick="switchTab('staff')" id="btn-staff" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+                        <i class="fa-solid fa-users w-5"></i><span>Xodimlar</span>
+                    </button>
+                    <button onclick="switchTab('warehouse')" id="btn-warehouse" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+                        <i class="fa-solid fa-warehouse w-5"></i><span>Omborxona</span>
+                    </button>
+                    <button onclick="switchTab('salaries')" id="btn-salaries" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+                        <i class="fa-solid fa-wallet w-5"></i><span>Maoshlar</span>
+                    </button>
+                    <button onclick="switchTab('reports')" id="btn-reports" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+                        <i class="fa-solid fa-chart-line w-5"></i><span>Hisobotlar</span>
+                    </button>
+                    <button onclick="switchTab('qrcodes')" id="btn-qrcodes" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white transition">
+                        <i class="fa-solid fa-qrcode w-5"></i><span>QR Kodlar</span>
+                    </button>
+                </nav>
+            </div>
+
+            <div class="p-4 border-t border-gray-800">
+                <a href="/logout" class="flex items-center space-x-3 px-4 py-3 text-red-400 hover:bg-red-950/30 rounded-lg transition">
+                    <i class="fa-solid fa-right-from-bracket"></i><span>Tizimdan chiqish</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- ==========================================
+             2. MAIN CONTENT AREA (Asosiy Oyna)
+        =========================================== -->
+        <main class="flex-1 flex flex-col overflow-y-auto">
+
+            <!-- Yuqori Header -->
+            <header class="bg-gray-950 border-b border-gray-800 px-8 py-4 flex justify-between items-center sticky top-0 z-40">
+                <div>
+                    <h1 id="page-title" class="text-xl font-bold">Dashboard</h1>
+                    <p id="page-subtitle" class="text-sm text-gray-400">Tizimning umumiy real-time holati</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <p class="text-sm font-medium">Asliddin (Owner)</p>
+                        <p class="text-xs text-green-400 flex items-center justify-end">
+                            <span class="w-2 h-2 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>Online
+                        </p>
+                    </div>
+                    <div class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold">A</div>
+                </div>
+            </header>
+
+            <!-- Bo'limlar Kontoneri -->
+            <div class="p-8 space-y-8 flex-1">
+
+                <!-- ==========================================
+                     TAB 1: DASHBOARD (Analitika va monitoring)
+                =========================================== -->
+                <div id="tab-dashboard" class="tab-content space-y-8">
+
+                    <!-- Global Filtr Paneli -->
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-950 p-4 rounded-xl border border-gray-800 gap-4">
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-200">Moliyaviy va Resurslar Analitikasi</h2>
+                            <p class="text-xs text-gray-400">Tizimdagi barcha restoranlar tarmog'i bo'yicha umumiy hisobot</p>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-gray-900 p-1 rounded-lg border border-gray-800">
+                            <button onclick="filterDashboard('daily')" id="filter-daily" class="dashboard-filter-btn px-4 py-1.5 rounded-md text-xs font-medium bg-orange-600 text-white transition">Kunlik</button>
+                            <button onclick="filterDashboard('weekly')" id="filter-weekly" class="dashboard-filter-btn px-4 py-1.5 rounded-md text-xs font-medium text-gray-400 hover:text-white transition">Haftalik</button>
+                            <button onclick="filterDashboard('monthly')" id="filter-monthly" class="dashboard-filter-btn px-4 py-1.5 rounded-md text-xs font-medium text-gray-400 hover:text-white transition">Oylik</button>
+                        </div>
+                    </div>
+
+                    <!-- Qo'shaloq Moliyaviy Diagrammalar (Foyda / Zarar) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Foyda Diagrammasi -->
+                        <div class="bg-gray-950 p-6 rounded-xl border border-gray-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="font-bold text-gray-300 flex items-center">
+                                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span> Foyda va Pul Tushumlari
+                                    </h3>
+                                    <span class="text-xs text-gray-500">Mln UZS</span>
+                                </div>
+                                <div class="h-60 w-full relative">
+                                    <canvas id="profitChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-800 pt-4 mt-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs text-gray-400">Filtr bo'yicha jami foyda:</p>
+                                    <h4 id="total-profit-amount" class="text-2xl font-black text-green-400 tracking-tight mt-1">50,500,000 UZS</h4>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-500">O'rtacha barqarorlik</p>
+                                    <span class="text-sm font-semibold text-green-400">+12.4% <i class="fa-solid fa-arrow-trend-up"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Zarar Diagrammasi -->
+                        <div class="bg-gray-950 p-6 rounded-xl border border-gray-800 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="font-bold text-gray-300 flex items-center">
+                                        <span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span> Zararlar va Chiqimlar
+                                    </h3>
+                                    <span class="text-xs text-gray-500">Mln UZS</span>
+                                </div>
+                                <div class="h-60 w-full relative">
+                                    <canvas id="lossChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-800 pt-4 mt-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs text-gray-400">Filtr bo'yicha jami zarar:</p>
+                                    <h4 id="total-loss-amount" class="text-2xl font-black text-red-400 tracking-tight mt-1">8,900,000 UZS</h4>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-500">Buzilgan/Yaroqsiz resurslar</p>
+                                    <span class="text-sm font-semibold text-red-400">17.6% xarajat</span>
+                                }</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ingredientlar Sarfi Balansi -->
+                    <div class="bg-gray-950 p-6 rounded-xl border border-gray-800 space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-800 pb-4 gap-2">
+                            <div>
+                                <h3 class="font-bold text-gray-300 flex items-center">
+                                    <i class="fa-solid fa-boxes-stacked text-orange-500 mr-2"></i> Ingredientlar Sarfi Ko'rsatkichlari
+                                </h3>
+                                <p class="text-xs text-gray-500">Taomlar mantiqi bo'yicha ombordan sarflangan xomashyolar hajmi</p>
+                            </div>
+                            <select onchange="filterIngredients(this.value)" id="ing-select-filter" class="bg-gray-900 border border-gray-800 rounded-lg text-xs px-3 py-2 text-gray-300 focus:outline-none focus:border-orange-500">
+                                <option value="daily">Bugungi sarf miqdori</option>
+                                <option value="weekly" selected>Shu haftalik sarf miqdori</option>
+                                <option value="monthly">Shu oylik sarf miqdori</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-900 p-4 rounded-lg border border-gray-800/60 flex justify-between items-center">
+                                <div class="space-y-1 flex-1 mr-4">
+                                    <div class="flex justify-between text-xs font-semibold">
+                                        <span class="text-gray-300">Mol go'shti (File)</span>
+                                        <span class="text-orange-400" id="ing-beef-val">112.0 kg</span>
+                                    </div>
+                                    <div class="w-full bg-gray-950 h-1.5 rounded-full"><div class="bg-orange-500 h-1.5 rounded-full" style="width: 78%"></div></div>
+                                </div>
+                                <span class="text-[10px] bg-orange-950 text-orange-300 px-2 py-1 rounded font-mono ml-2">Top Sarf</span>
+                            </div>
+
+                            <div class="bg-gray-900 p-4 rounded-lg border border-gray-800/60 flex justify-between items-center">
+                                <div class="space-y-1 flex-1 mr-4">
+                                    <div class="flex justify-between text-xs font-semibold">
+                                        <span class="text-gray-300">O'simlik yog'i</span>
+                                        <span class="text-orange-400" id="ing-oil-val">64.0 litr</span>
+                                    </div>
+                                    <div class="w-full bg-gray-950 h-1.5 rounded-full"><div class="bg-amber-600 h-1.5 rounded-full" style="width: 52%"></div></div>
+                                </div>
+                                <span class="text-[10px] bg-gray-800 text-gray-400 px-2 py-1 rounded font-mono ml-2">Me'yor</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Xodimlarning Foyda Keltirish Ko'rsatkichi (Top 5 & Pagination) -->
+                    <div class="bg-gray-950 p-6 rounded-xl border border-gray-800 space-y-4">
+                        <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                            <div>
+                                <h3 class="font-bold text-gray-300 flex items-center">
+                                    <i class="fa-solid fa-trophy text-yellow-500 mr-2"></i> Xodimlarning Foyda Keltirish Ko'rsatkichi
+                                </h3>
+                                <p class="text-xs text-gray-500">Ofitsiant va Oshpazlarning umumiy savdoga qo'shgan real hissasi</p>
+                            </div>
+                            <span class="text-xs bg-gray-900 px-2.5 py-1 rounded text-gray-400 border border-gray-800">Top 5 xodim</span>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-gray-900 text-gray-400 text-xs uppercase tracking-wider">
+                                    <tr>
+                                        <th class="p-3 rounded-l-lg">Xodim</th>
+                                        <th class="p-3">Lavozimi</th>
+                                        <th class="p-3">Yopilgan Buyurtmalar</th>
+                                        <th class="p-3 text-right rounded-r-lg">Keltirilgan Foyda (UZS)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="staff-performance-rows" class="divide-y divide-gray-900">
+                                    <tr class="hover:bg-gray-900/40 transition">
+                                        <td class="p-3 flex items-center space-x-3">
+                                            <div class="w-7 h-7 bg-yellow-500/10 rounded-full flex items-center justify-center font-bold text-yellow-500 text-xs">1</div>
+                                            <span class="font-medium">Diyorbek M.</span>
+                                        </td>
+                                        <td class="p-3 text-gray-400 text-xs">Ofitsiant</td>
+                                        <td class="p-3 font-mono text-gray-300">114 ta</td>
+                                        <td class="p-3 text-right font-bold text-green-400">14,250,000</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-900/40 transition">
+                                        <td class="p-3 flex items-center space-x-3">
+                                            <div class="w-7 h-7 bg-gray-500/10 rounded-full flex items-center justify-center font-bold text-gray-400 text-xs">2</div>
+                                            <span class="font-medium">Chef Xasanboy</span>
+                                        </td>
+                                        <td class="p-3 text-gray-400 text-xs">Bosh Oshpaz</td>
+                                        <td class="p-3 font-mono text-gray-300">340 ta taom</td>
+                                        <td class="p-3 text-right font-bold text-green-400">11,800,000</td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-900/40 transition">
+                                        <td class="p-3 flex items-center space-x-3">
+                                            <div class="w-7 h-7 bg-gray-500/10 rounded-full flex items-center justify-center font-bold text-gray-400 text-xs">3</div>
+                                            <span class="font-medium">Sardor Alimov</span>
+                                        </td>
+                                        <td class="p-3 text-gray-400 text-xs">Ofitsiant</td>
+                                        <td class="p-3 font-mono text-gray-300">92 ta</td>
+                                        <td class="p-3 text-right font-bold text-green-400">9,400,000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination boshqaruvi -->
+                        <div class="flex flex-col sm:flex-row justify-between items-center border-t border-gray-900 pt-4 text-xs gap-2">
+                            <p class="text-gray-500">1-5 oralig'idagi xodimlar ko'rsatilmoqda (Jami: 18 ta)</p>
+                            <div class="flex space-x-1">
+                                <button class="px-2.5 py-1.5 bg-gray-900 text-gray-500 rounded border border-gray-800 cursor-not-allowed" disabled><i class="fa-solid fa-chevron-left"></i></button>
+                                <button class="px-3 py-1.5 bg-gray-800 text-white rounded border border-gray-700">1</button>
+                                <button class="px-3 py-1.5 bg-gray-900 text-gray-400 hover:text-white rounded border border-gray-800 transition">2</button>
+                                <button class="px-3 py-1.5 bg-gray-900 text-gray-400 hover:text-white rounded border border-gray-800 transition">3</button>
+                                <button class="px-2.5 py-1.5 bg-gray-900 text-gray-400 hover:text-white rounded border border-gray-800 transition"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ==========================================
+                     TAB 2: BUYURTMALAR (Orders)
+                =========================================== -->
+                <div id="tab-orders" class="tab-content hidden space-y-4">
+                    <div class="flex space-x-2 border-b border-gray-800 pb-3 overflow-x-auto">
+                        <button class="px-4 py-2 shrink-0 bg-gray-800 rounded-lg font-medium text-sm text-orange-400">Barchasi</button>
+                        <button class="px-4 py-2 shrink-0 hover:bg-gray-800 rounded-lg font-medium text-sm text-gray-400">Kutilmoqda</button>
+                        <button class="px-4 py-2 shrink-0 hover:bg-gray-800 rounded-lg font-medium text-sm text-gray-400">Tayyorlanmoqda</button>
+                        <button class="px-4 py-2 shrink-0 hover:bg-gray-800 rounded-lg font-medium text-sm text-gray-400">Yakunlandi</button>
+                    </div>
+                    <div class="bg-gray-950 rounded-xl border border-gray-800 overflow-hidden">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-900 text-gray-400 uppercase text-xs tracking-wider">
+                                <tr><th class="p-4">ID</th><th class="p-4">Stol</th><th class="p-4">Ofitsiant</th><th class="p-4">Summa</th><th class="p-4">Status</th><th class="p-4">Amal</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800">
+                                <tr class="hover:bg-gray-900/50 cursor-pointer transition" onclick="openModal('modal-order-detail')">
+                                    <td class="p-4 font-bold text-orange-400">#1024</td>
+                                    <td class="p-4">Stol #5</td>
+                                    <td class="p-4">Diyorbek M.</td>
+                                    <td class="p-4 font-mono">345,000 UZS</td>
+                                    <td class="p-4"><span class="bg-amber-950 text-amber-400 px-2.5 py-1 rounded-full text-xs font-semibold border border-amber-900">Tayyorlanmoqda</span></td>
+                                    <td class="p-4"><button class="text-gray-400 hover:text-white"><i class="fa-solid fa-eye"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ==========================================
+                     TAB 3: STOLLAR (Tables)
+                =========================================== -->
+                <div id="tab-tables" class="tab-content hidden space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-lg font-bold">Zaldagi Mavjud Stollar</h2>
+                        <button onclick="openModal('modal-add-table')" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"><i class="fa-solid fa-plus mr-2"></i>Yangi Stol Qo'shish</button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="bg-gray-950 p-6 rounded-xl border border-gray-800 relative group">
+                            <div class="absolute top-4 right-4 text-green-400 text-xs flex items-center"><span class="w-2 h-2 rounded-full bg-green-500 mr-1.5"></span> Bo'sh</div>
+                            <h3 class="text-xl font-bold mb-1">Stol #1</h3>
+                            <p class="text-xs text-gray-400 mb-4">Maksimal sig'im: 4 kishilik</p>
+                            <button onclick="openModal('modal-view-qr')" class="w-full bg-gray-900 hover:bg-gray-800 py-2 rounded-lg text-xs font-medium border border-gray-800 transition"><i class="fa-solid fa-qrcode mr-1.5"></i>QR Kodni Tekshirish</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==========================================
+                     TAB 4: XODIMLAR (Staff)
+                =========================================== -->
+                <div id="tab-staff" class="tab-content hidden space-y-4">
+                    <div class="bg-gray-950 rounded-xl border border-gray-800 overflow-hidden">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-900 text-gray-400 text-xs uppercase tracking-wider">
+                                <tr><th class="p-4">Xodim</th><th class="p-4">Lavozim</th><th class="p-4">Telefon</th><th class="p-4">Status</th><th class="p-4">Amallar</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800">
+                                <tr>
+                                    <td class="p-4 flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center font-bold">S</div>
+                                        <span class="font-medium">Sardor Alimov</span>
+                                    </td>
+                                    <td class="p-4 text-gray-400">Ofitsiant</td>
+                                    <td class="p-4 font-mono text-gray-400">+998 90 123 45 67</td>
+                                    <td class="p-4"><span class="text-green-400 bg-green-950/50 px-2.5 py-0.5 rounded text-xs border border-green-900">Smenada</span></td>
+                                    <td class="p-4"><button onclick="openModal('modal-add-fine')" class="bg-red-950 hover:bg-red-900 text-red-400 px-3 py-1 rounded text-xs border border-red-800 font-medium transition">Jarima Yozish</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ==========================================
+                     TAB 5: OMBORXONA (Warehouse)
+                =========================================== -->
+                <div id="tab-warehouse" class="tab-content hidden space-y-4">
+                    <div class="bg-gray-950 rounded-xl border border-gray-800 overflow-hidden">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-900 text-gray-400 text-xs uppercase tracking-wider">
+                                <tr><th class="p-4">Masalliq nomi</th><th class="p-4">Hozirgi Zaxira</th><th class="p-4">Kritik Chegara</th><th class="p-4">Xavf Darajasi</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800">
+                                <tr class="bg-red-950/20 text-red-200">
+                                    <td class="p-4 font-medium">Mol go'shti (File)</td>
+                                    <td class="p-4 font-bold font-mono">4.2 kg</td>
+                                    <td class="p-4 text-gray-400 font-mono">15.0 kg</td>
+                                    <td class="p-4"><span class="bg-red-900 text-white px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-tight">Kritik kam!</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-medium">Guruch (Lazer)</td>
+                                    <td class="p-4 font-mono">45.0 kg</td>
+                                    <td class="p-4 text-gray-400 font-mono">20.0 kg</td>
+                                    <td class="p-4"><span class="text-green-400 bg-green-950 px-2 py-0.5 rounded text-xs">Xavfsiz</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ==========================================
+                     TAB 6: MAOSHLAR (Salaries)
+                =========================================== -->
+                <div id="tab-salaries" class="tab-content hidden space-y-4">
+                    <div class="bg-gray-950 rounded-xl border border-gray-800 overflow-hidden">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-gray-900 text-gray-400 text-xs uppercase tracking-wider">
+                                <tr><th class="p-4">Xodim</th><th class="p-4">Belgilangan Oylik</th><th class="p-4">Joriy Jarimalar</th><th class="p-4">To'lanadigan Sof Summa</th><th class="p-4">Amal</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800">
+                                <tr>
+                                    <td class="p-4 font-medium">Sardor Alimov</td>
+                                    <td class="p-4 font-mono">3,000,000 UZS</td>
+                                    <td class="p-4 text-red-400 font-mono">-50,000 UZS</td>
+                                    <td class="p-4 text-green-400 font-bold font-mono">2,950,000 UZS</td>
+                                    <td class="p-4"><button class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-1 rounded text-xs font-semibold transition">Yopish</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ==========================================
+                     TAB 7: HISOBOTLAR (Reports)
+                =========================================== -->
+                <div id="tab-reports" class="tab-content hidden space-y-6">
+                    <div class="bg-gray-950 p-6 rounded-xl border border-gray-800">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold">Umumiy Savdo Dinamikasi</h3>
+                            <button class="text-xs bg-gray-900 border border-gray-800 px-3 py-1.5 rounded text-gray-400 hover:text-white transition"><i class="fa-solid fa-download mr-1"></i> Hisobot yuklash (PDF)</button>
+                        </div>
+                        <div class="p-8 text-center text-gray-500 border border-dashed border-gray-800 rounded-lg">
+                            <i class="fa-solid fa-chart-bar text-4xl mb-2 text-gray-700"></i>
+                            <p>Kengaytirilgan tahliliy grafiklar va buxgalteriya balansi hisoboti ushbu bo'limda shakllanadi.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==========================================
+                     TAB 8: QR CODES (Digital Menu)
+                =========================================== -->
+                <div id="tab-qrcodes" class="tab-content hidden space-y-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-6">
+                        <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 text-center space-y-3 group">
+                            <p class="font-bold text-sm">Stol #1</p>
+                            <div class="bg-white p-2 rounded-lg inline-block mx-auto">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://signum.uz/menu/table1" alt="QR" class="w-24 h-24">
+                            </div>
+                            <div class="flex space-x-1 justify-center">
+                                <button class="bg-gray-900 hover:bg-gray-800 p-2 rounded text-xs border border-gray-800 text-gray-300 flex-1 transition"><i class="fa-solid fa-print"></i></button>
+                                <button class="bg-gray-900 hover:bg-gray-800 p-2 rounded text-xs border border-gray-800 text-gray-300 flex-1 transition"><i class="fa-solid fa-download"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ==========================================
+         3. MODALS REGION (Modal oynalar)
+    =========================================== -->
+
+    <!-- Modal: Order Detail -->
+    <div id="modal-order-detail" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-gray-950 border border-gray-800 w-full max-w-md rounded-2xl p-6 relative">
+            <button onclick="closeModal('modal-order-detail')" class="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-lg font-bold mb-4">Buyurtma #1024 Tafsilotlari</h3>
+            <div class="space-y-3 text-sm border-b border-gray-800 pb-4 mb-4">
+                <div class="flex justify-between"><span>1x Maxsus Palov</span><span class="font-bold">45,000 UZS</span></div>
+                <div class="flex justify-between"><span>2x Mol go'shtli Kabob</span><span class="font-bold">70,000 UZS</span></div>
+                <div class="flex justify-between text-gray-400"><span>Xizmat haqi (10%)</span><span>11,500 UZS</span></div>
+            </div>
+            <div class="flex justify-between font-bold text-base mb-6"><span>Jami summa:</span><span class="text-green-400">126,500 UZS</span></div>
+            <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2.5 rounded-xl font-medium transition">Kassadan yopishni tasdiqlash</button>
+        </div>
+    </div>
+
+    <!-- Modal: Add Table -->
+    <div id="modal-add-table" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-gray-950 border border-gray-800 w-full max-w-sm rounded-2xl p-6 relative">
+            <button onclick="closeModal('modal-add-table')" class="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-lg font-bold mb-4">Yangi Stol Yaratish</h3>
+            <form class="space-y-4" onsubmit="event.preventDefault(); closeModal('modal-add-table');">
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Stol Nomi / Raqami</label>
+                    <input type="text" required class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500" placeholder="Masalan: Stol #12">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">O'rindiqlar soni</label>
+                    <input type="number" required class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-orange-500" placeholder="6">
+                </div>
+                <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-lg text-sm font-medium transition">Bazaga saqlash</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Add Fine -->
+    <div id="modal-add-fine" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-gray-950 border border-gray-800 w-full max-w-sm rounded-2xl p-6 relative">
+            <button onclick="closeModal('modal-add-fine')" class="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-lg font-bold mb-3 text-red-400">Intizomiy Jarima Varag'i</h3>
+            <form class="space-y-4" onsubmit="event.preventDefault(); closeModal('modal-add-fine');">
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Jarima miqdori (UZS)</label>
+                    <input type="number" required class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500" placeholder="50000">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Qoidabuzarlik sababi</label>
+                    <textarea rows="3" required class="w-full bg-gray-900 border border-gray-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-red-500" placeholder="Mijozga asossiz kechikish..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg text-sm font-medium transition">Jarimani tasdiqlash</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: View QR -->
+    <div id="modal-view-qr" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-gray-950 border border-gray-800 w-full max-w-xs rounded-2xl p-6 relative text-center">
+            <button onclick="closeModal('modal-view-qr')" class="absolute top-4 right-4 text-gray-500 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-sm font-bold mb-4">Stol uchun raqamli menyu</h3>
+            <div class="bg-white p-4 rounded-xl inline-block mb-4">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://signum.uz/menu/table1" alt="QR" class="w-40 h-40">
+            </div>
+            <p class="text-xs text-gray-400">Mijozlar ushbu kodni skanerlash orqali buyurtma berishadi.</p>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         4. JAVASCRIPT SYSTEM (Mantiqiy qismi)
+    =========================================== -->
+    <script>
+        // 1. NAVIGATION CONTROL (Single Page App mexanizmi)
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-orange-600', 'text-white');
+                btn.classList.add('text-gray-400', 'hover:bg-gray-800', 'hover:text-white');
+            });
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-orange-600', 'text-white');
+                activeBtn.classList.remove('text-gray-400', 'hover:bg-gray-800', 'hover:text-white');
+            }
+
+            const titleMap = {
+                dashboard: ["Dashboard", "Tizimning umumiy real-time holati"],
+                orders: ["Buyurtmalar boshqaruvi", "Jonli buyurtmalar xronologiyasi"],
+                tables: ["Restorandagi stollar", "Zal xaritasi va raqamli menyu bog'lanishi"],
+                staff: ["Xodimlar paneli", "Faol ishchi kuchi va samaradorlik monitoringi"],
+                warehouse: ["Omborxona zaxirasi", "Xomashyo va minimal qoldiq balansi"],
+                salaries: ["Maosh hisob-kitobi", "Sof daromad va jarimalar varaqasi"],
+                reports: ["Biznes tahlil va hisobotlar", "Uzoq muddatli strategik diagrammalar"],
+                qrcodes: ["Raqamli menyu QR kodlari", "Chop etish va tarqatish markazi"]
+            };
+
+            document.getElementById('page-title').innerText = titleMap[tabId][0];
+            document.getElementById('page-subtitle').innerText = titleMap[tabId][1];
+        }
+
+        // 2. MODAL INTERACTION LOGIC
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); }, 10);
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        // 3. ANALYSIS & DATA SYSTEM (Diagrammalar bazasi)
+        let profitChart, lossChart;
+
+        const dynamicMockData = {
+            daily: {
+                labels: ['09:00', '12:00', '15:00', '18:00', '21:00', '00:00'],
+                profit: [0.5, 1.2, 0.8, 2.1, 3.5, 1.4],
+                loss: [0.1, 0.2, 0.05, 0.4, 0.1, 0.3],
+                totalProfit: "9,500,000 UZS",
+                totalLoss: "1,150,000 UZS",
+                beef: "14.2 kg", oil: "8.5 litr"
+            },
+            weekly: {
+                labels: ['Dush', 'Sesh', 'Chor', 'Pay', 'Jum', 'Shan', 'Yak'],
+                profit: [4.2, 5.1, 4.8, 6.5, 8.8, 11.2, 9.9],
+                loss: [0.8, 1.1, 0.5, 1.2, 1.4, 2.1, 1.8],
+                totalProfit: "50,500,000 UZS",
+                totalLoss: "8,900,000 UZS",
+                beef: "112.0 kg", oil: "64.0 litr"
+            },
+            monthly: {
+                labels: ['1-Hafta', '2-Hafta', '3-Hafta', '4-Hafta'],
+                profit: [45.0, 52.3, 49.1, 68.4],
+                loss: [8.5, 9.2, 7.0, 11.4],
+                totalProfit: "214,800,000 UZS",
+                totalLoss: "36,100,000 UZS",
+                beef: "485.0 kg", oil: "290.0 litr"
+            }
+        };
+
+        // 4. CHART INITIALIZATION
+        function buildDashboardCharts() {
+            const ctxProfit = document.getElementById('profitChart').getContext('2d');
+            const ctxLoss = document.getElementById('lossChart').getContext('2d');
+
+            // Foyda grafigi
+            profitChart = new Chart(ctxProfit, {
+                type: 'line',
+                data: {
+                    labels: dynamicMockData.weekly.labels,
+                    datasets: [{
+                        label: 'Foyda',
+                        data: dynamicMockData.weekly.profit,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.04)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af' } },
+                        x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+                    }
+                }
+            });
+
+            // Zarar grafigi
+            lossChart = new Chart(ctxLoss, {
+                type: 'bar',
+                data: {
+                    labels: dynamicMockData.weekly.labels,
+                    datasets: [{
+                        label: 'Zarar',
+                        data: dynamicMockData.weekly.loss,
+                        backgroundColor: '#ef4444',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af' } },
+                        x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+                    }
+                }
+            });
+        }
+
+        // 5. FILTER ACTIONS (Sinxron yangilash tizimi)
+        function filterDashboard(timeline) {
+            document.querySelectorAll('.dashboard-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-orange-600', 'text-white');
+                btn.classList.add('text-gray-400', 'hover:text-white');
+            });
+            document.getElementById(`filter-${timeline}`).classList.add('bg-orange-600', 'text-white');
+
+            // Grafik ma'lumotlarini yangilash
+            profitChart.data.labels = dynamicMockData[timeline].labels;
+            profitChart.data.datasets[0].data = dynamicMockData[timeline].profit;
+            profitChart.update();
+
+            lossChart.data.labels = dynamicMockData[timeline].labels;
+            lossChart.data.datasets[0].data = dynamicMockData[timeline].loss;
+            lossChart.update();
+
+            // Matnli pul miqdorlarini yangilash
+            document.getElementById('total-profit-amount').innerText = dynamicMockData[timeline].totalProfit;
+            document.getElementById('total-loss-amount').innerText = dynamicMockData[timeline].totalLoss;
+
+            // Pastki ingredient dropdownini ham moslashtirib qo'yish
+            document.getElementById('ing-select-filter').value = timeline;
+            filterIngredients(timeline);
+        }
+
+        function filterIngredients(timeline) {
+            document.getElementById('ing-beef-val').innerText = dynamicMockData[timeline].beef;
+            document.getElementById('ing-oil-val').innerText = dynamicMockData[timeline].oil;
+        }
+
+        // Sahifa yuklanishi bilan ishga tushirish
+        window.onload = function() {
+            buildDashboardCharts();
+        };
+    </script>
+</body>
+</html>
