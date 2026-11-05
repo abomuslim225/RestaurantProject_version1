@@ -8,8 +8,8 @@ from email.mime.multipart import MIMEMultipart
 
 
 def send_email(receiver_email, code):
-    sender_email = "lelouchvibrittany808@gmail.com"
-    password = "lrrqyriabozfzmbo"
+    sender_email = os.getenv('SENDER_EMAIL')
+    password = os.getenv('EMAIL_PASSWORD')
 
     message = MIMEMultipart("alternative")
     message["Subject"] = "Restaurant kirish kodi"
